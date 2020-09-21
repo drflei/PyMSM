@@ -1,0 +1,30 @@
+To compile/build:
+
+ 	$ make -f msm.mak
+
+To run:
+
+Before your first run, you have to un-tar the maps_xxxxx.tz file to have the MAPS ready, e.g.
+
+	$ tar xfz maps_20140319.tz  
+
+There are two ways to supply the inputs needed for the execution: 
+
+1) Via the namelist file "msm.nml". The user has to update this file before
+execution. To use the namelist option, simply run msm without any argument at
+the command line, i.e. 
+   	$ ./msm
+
+2) inputs on the command line:
+
+   	$ ./msm orbit-file kp output-file directory-name-of-the-maps (optial: a_err b_err)
+
+The directory-name-of-the-maps is where the pre-calculated maps are,
+e.g. the root of the "MAPS" path. 
+
+The a_err b_err are optional arguments for user specified parameters for calculating the 
+transmission function errors. If not suppled, the defaults a_err=5., b=0.1, i.e. 5% and 0.1 GV,
+will be used.
+
+   
+
