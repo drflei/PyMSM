@@ -1,8 +1,0 @@
- $msmlist
-  filein='test_orbit.txt'
-  fileout='test-out.txt'
-  dir='./'
-  fkpidx=9.1
-  a_err=5.
-  b_err=0.1
- $end
