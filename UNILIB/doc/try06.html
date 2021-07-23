@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: try06.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      Example 6
+   === --> 
+<!--meta name="keywords" content="Interactive Data Language,example,magnetic drift shell"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Example 6 - visualisation of a drift shell
+</h1> <h6>
+ [ <a href="#description">Description</a>
+ | <a href="#source">Source</a>
+ | <a href="#results">Results</a>
+ <!-- *** Navigation *** -->  
+] </h6>
+<h2> <a name="description"> Description </a> </h2> <ul>
+  Magnetic drift shells can be built with the help
+  of the subroutines <a href="ud310.html">UD310</a>
+  or <a href="ud317.html">UD317</a>.
+  To visualize the drift shells, the subroutine
+  <a href="ut992.html">UT992</a> can be used to print
+  the drift shell data into a file.  A graphical tool
+  can then be used to display the shell.
+  <p>
+  In the exemple below, we took advantage that,
+  under VMS, the library
+  can be directly linked to IDL (see FAQ <a href="faq06.html">G.06</a>
+  and <a href="fat05.html">T.05</a>).
+  The IDL routines listed in the next section make use of
+  the subroutine <a href="ut985.html">UT985</a> to read the
+  magnetic drift shell stored in the common blocks
+  <a href="uc110.html">UC110</a>, <a href="uc120.html">UC120</a> 
+  and <a href="uc110.html">UC130</a>. 
+  In the source code of both subroutines, it is assumed that the
+  library has been correctly initialized, the different structures
+  have been fully declared, and the drift shell has been successfully
+  built by the subroutine <a href="ud310.html">UD310</a>
+  or the subroutine <a href="ud317.html">UD317</a>.
+  Note that the IDL routine 
+  <a href="fat05.html#illustration"><code>unilib_init</code></a>
+  can be used to declare the useful structures.
+  <p>
+  The source code listed below include two IDL routines:
+  <code>spl_fieldline</code> and <code>shade_shell</code>.
+  The routine <code>spl_fieldline</code> uses natural
+  splines to tabulate a magnetic field line segment with
+  a given number of points.  The routine <code>shade_shell</code> 
+  makes successive calls to the subroutine <a href="ut985.html">UT985</a>
+  and the routine <code>spl_fieldline</code> in order to return
+  a set of vertices and polygons which describe the magnetic drift shell.
+  These vertices and polygons can be then directly use with the IDL
+  function <code>POLYSHADE</code> to produce a shaded-surface 
+  representation of one or more magnetic drift shells. 
+</ul> <h2> <a name="source"> Source </a> </h2> <pre>
+PRO <a name="spl_fieldline">spl_fieldline</a>, field_line, tabulated_line, $
+                   number=number, bmax=bmax, shade=shade
+;
+;   <b>Purpose:  Tabulate a magnetic field line segment with equidistant points.</b>
+;   <b>Arguments:</b>   
+;             <b>field_line     = an array of <a href="structure.html#zseg">zseg</a> structures</b>
+;             <b>tabulated_line = a (3,n) array containing the X, Y, and Z</b> 
+;                              <b>coordinates of each point</b>
+;   <b>Keywords:</b>   
+;             <b>number         = number of equidistant points (default, 20)</b>
+;             <b>bmax           = value of the magnetic field intensity at</b>
+;                              <b>the mirror points</b>
+;             <b>shade          = an array, with the same number of elements</b>
+;                              <b>as tabulated_line, that will contained the</b>
+;                              <b>magnetic field intensity at each point</b>    
+;
+     IF NOT KEYWORD_SET( number ) THEN number = 20
+     n      = N_ELEMENTS( field_line )
+;
+;    <b>Convert to cartesian coordinates</b>
+;
+     xyz    = CV_COORD( /degrees, /to_rect,                                  $
+               from_sphere = TRANSPOSE( [[  field_line.beg.coord.elong ],    $
+                                        [ 90-field_line.beg.coord.colat ],   $
+                                        [  field_line.beg.coord.radius  ]] ) )
+;
+     b      = field_line.beg.b.dnrm
+     arcl   = field_line.arcl
+;
+;
+     IF KEYWORD_SET(bmax) THEN BEGIN
+;
+;      <b>Constraint fieldline between mirror points</b>
+;
+       k    = WHERE( fieldline.beg.b.dnrm LE bmax )
+       IF k(0) LT 0 THEN k=[0] 
+       xyz  = xyz(*,k)
+       arcl = arcl(k)
+       b    = b(k)
+       n    = N_ELEMENTS( k )
+;
+     ENDIF
+;
+;
+     IF n LE 1 THEN BEGIN
+;
+       tabulated_line = xyz(*,0) # ( 1 + FLTARR( number ) )
+       shade          = FLTARR( number ) + b(0)
+;
+     ENDIF ELSE BEGIN 
+;
+;      <b>Use natural splines to tabulate the field line segment</b>
+;
+       arcl = arcl(n-1) + arcl(0) - arcl 
+;
+       s    = arcl(0) + FINDGEN( number ) / ( number-1 ) * ( arcl(n-1)-arcl(0) )
+       x    = SPL_INTERP( arcl, xyz(0,*), SPL_INIT( arcl, xyz(0,*) ), s )
+       y    = SPL_INTERP( arcl, xyz(1,*), SPL_INIT( arcl, xyz(1,*) ), s )
+       z    = SPL_INTERP( arcl, xyz(2,*), SPL_INIT( arcl, xyz(2,*) ), s )
+;
+       tabulated_line = TRANSPOSE( [ [x], [y], [z] ])
+       shade          = SPL_INTERP( arcl, b, SPL_INIT( arcl, b ), s )
+;
+     ENDELSE
+;
+;
+END
+
+PRO <a name="poly_shell">poly_shell</a>, vertices, polygons, $
+                number=number, bmax=bmax, shade=shade
+;
+;   <b>Purpose:  Transfer a magnetic drift shell from UNILIB to IDL in the form of</b>
+;             <b>a shaded surface</b>
+;   <b>Arguments:</b>   
+;             <b>vertices       = a (3,n) array containing the X, Y, and Z</b>
+;                              <b>coordinates of each vertex of the drift shell</b>
+;             <b>polygons       = a longword array containing the indices</b> 
+;                              <b>of the vertices for each polygon. The vertex</b>
+;                              <b>description of each polygon is a vector of</b>
+;                              <b>the form: [3,i0,i1,i2].</b>
+;   <b>Keywords:</b>   
+;             <b>number         = keyword passed to <a href="#spl_fieldline"</a>spl_fieldline</a></b>
+;             <b>bmax           = value of the magnetic field intensity at</b>
+;                              <b>the mirror points</b>
+;             <b>shade          = an array that will contained the magnetic</b>
+;                              <b>field intensity on the drift shell</b>    
+;
+     IF NOT KEYWORD_SET(bmax) THEN bmax=0
+     IF NOT KEYWORD_SET(number) THEN number=20
+;
+;    <b>Init. a list of polygon vertices</b>
+;
+     k          = INDGEN( 2 * number - 2 )
+     polygon    = TRANSPOSE( [ [             3 + 0*k                ],  $
+                               [          number + (k+1)/2          ],  $
+                               [                k/2                 ],  $
+                               [ 1 + k/2 + number * ( 1 - k mod 2 ) ] ] )
+;
+;    <b>Retrieve the first field line segment</b>
+;   
+     length     = 100L
+     mdata      = REPLICATE( {<a href="structure.html#zseg">zseg</a>}, length )
+;
+     kindex     = -1L
+     klength    = length
+     status     = CALL_EXTERNAL( 'unilib', '<a href="ut985.html">UT985</a>', kindex, klength, mdata)
+     IF klength LE -999999990L THEN MESSAGE, 'call to UT985 failed'
+;
+     IF klength LE 0 THEN BEGIN
+;
+;      <b>Adjust the size of mdata</b>
+;
+       length   = 10L - klength
+       mdata    = REPLICATE( {<a href="structure.html#zseg">zseg</a>}, length )
+       status   = CALL_EXTERNAL( 'unilib', '<a href="ut985.html">UT985</a>', kindex, klength, mdata)
+       IF klength LT 0L THEN MESSAGE, 'call to UT985 failed'
+;
+     ENDIF
+;                 
+;
+     kend       = kindex
+     <a href="#spl_fieldline"</a>spl_fieldline</a>, mdata( 0: klength-1 ), vertices, $
+                    number=number, bmax=bmax, shade=shade
+     polygons   = -1L
+;
+;    <b>Loop on the next field lines</b>
+;
+     REPEAT BEGIN
+;
+;      <b>Load a magnetic field line segment</b>
+;
+       klength  = length
+       status   = CALL_EXTERNAL( 'unilib', '<a href="ut985.html">UT985</a>', kindex, klength, mdata)
+       IF klength LE -999999990L THEN MESSAGE, 'call to UT985 failed'
+;
+       IF klength LE 0 THEN BEGIN
+         length = 10L - klength
+         mdata  = REPLICATE( {<a href="structure.html#zseg">zseg</a>}, length )
+         status = CALL_EXTERNAL( 'unilib', '<a href="ut985.html">UT985</a>', kindex, klength, mdata)
+         IF klength LT 0L THEN MESSAGE, 'call to UT985 failed'
+       ENDIF
+;                 
+     <a href="#spl_fieldline"</a>spl_fieldline</a>, mdata( 0: klength-1 ), thisline, $
+                    number=number, bmax=bmax, shade=thisshade
+;
+     IF kindex NE kend THEN BEGIN
+;
+;      <b>Append the field line segment and vertex polygons</b>
+;
+       vertices = [ [vertices], [thisline] ]
+       shade    = [ [shade], [thisshade] ]
+;
+       IF polygons(0) LT 0 THEN polygons = polygon $
+                           ELSE polygons = [ [polygons], [polygon] ]
+;
+;      <b>Adapt polygon for the next segment</b>
+;
+       polygon(1: 3, *) = polygon(1: 3, *) + number
+;
+     ENDIF ELSE BEGIN
+;
+;      <b>Back to the first field line segment</b>
+;
+       k                = WHERE( polygon ge polygon(1,0) )
+       polygon(k)       = polygon(k) - polygon(1,0)
+       polygons         = [ [polygons], [polygon] ]
+;
+     ENDELSE
+;
+;
+  ENDREP UNTIL kindex EQ kend  
+;
+END
+</pre> <h2> <a name="results"> Results </a> </h2> <ul>
+The above IDL subroutines have been used to produce the following picture
+where three magnetic drift shells are represented. For the sake of clarity,
+the shells have been cut by a plane.
+<p><center><img src="try06.gif">
+<br>
+<font size="-2">Courtesy of B. Quaghebeur (BIRA)</font></center>
+<p>
+The drift shells are characterized by a shell parameter set to
+2, 4 and 6, respectively,  and a value of 
+<i>B</i><sub>m</sub>/<i>B</i><sub>0</sub>
+fixed to 7. The cut view is realized by the plane
+<i>x</i> + <i>y</i> = 6,500 km (in GEO coordinates).
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

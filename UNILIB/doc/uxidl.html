@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uxidl.html 25 2015-09-08 14:06:14Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UXIDL
+   === --> 
+<!--meta name="keywords" content="Interactive Data Language"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UXIDL 
+</h1> <h6>
+ [ <a href="#name">Name</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      UXIDL - Interface to IDL (UNIX)
+</ul>  <h2> <a name="description"> Description </a> </h2> <ul>
+      The routine UXIDL provides an interface between 
+      the major UNILIB routines and IDL (Interactive Data 
+      Language) for Unix systems on which the
+      <code>CALL_EXTERNAL</code> function is supported.
+      This function is only available in IDL on
+      systems supporting dynamic linking. The routine
+      UXIDL provides a C (<i>argc</i>,<i>argv</i>) calling
+      convention for routines of the library, the list of which
+      is given in the table below.
+<p><center><table border=1><tr><td><table border=0 cellpadding=10>
+<tr><td><a href="ul220.html">UL220</a></td>
+    <td><a href="ud310.html">UD310</a></td>
+    <td><a href="ud317.html">UD317</a></td>
+    <td><a href="ud330.html">UD330</a></td>
+    <td><a href="uf410.html">UF410</a></td>
+    <td><a href="uf420.html">UF420</a></td></tr>
+<tr><td><a href="um510.html">UM510</a></td>
+    <td><a href="um520.html">UM520</a></td>
+    <td><a href="um530.html">UM530</a></td>
+    <td><a href="um535.html">UM535</a></td>
+    <td><a href="um536.html">UM536</a></td>
+    <td><a href="um539.html">UM539</a></td></tr>
+<tr><td><a href="ut540.html">UT540</a></td>
+    <td><a href="ut541.html">UT541</a></td>
+    <td><a href="ut542.html">UT542</a></td>
+    <td><a href="ut545.html">UT545</a></td>
+    <td><a href="ut546.html">UT546</a></td>
+    <td><a href="ut547.html">UT547</a></td></tr>
+<tr><td><a href="ut550.html">UT550</a></td>
+    <td><a href="ut555.html">UT555</a></td>
+    <td><a href="ut556.html">UT556</a></td>
+    <td><a href="ua610.html">UA610</a></td>
+    <td><a href="ua630.html">UA630</a></td>
+    <td><a href="ut980.html">UT980</a></td></tr>
+<tr><td><a href="ut990.html">UT990</a></td>
+    <td><a href="ut998.html">UT998</a></td></tr>
+</table></table></center>
+    <p>The routine UXIDL can easily be used as a root to
+       build a sharable object library. See FAQ 
+       <a href="fat08.html">T.08</a> for additional details.
+    <p>Note: The type of the <i>argc</i> and <i>argv</i> argument to UXIDL must
+    match the size of the integer used for passing parameters to IDL and
+    depend on the architecture (either 32bit or 64bit).
+</ul> <h4> History </h4> <ul>
+       The routine interface UXIDL is not part of version 2.02 and 
+       earlier of the library.
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre> 
+  status = CALL_EXTERNAL( <i>Image</i>, 'uxidl_', <i>Entry [</i>, <i>P1</i>, <i>...</i>, <i>Pn]</i> )
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+<dt><i>Image</i>
+<dd>The name of the UNILIB sharable object library (<code>unilib.sl</code>
+    or <code>unilib.so</code>)
+<dt><i>Entry</i>
+<dd>Name of the UNILIB routine to be interfaced.
+<dt><i>P1, ..., Pn</i>
+<dd>List of arguments of the selected subroutine
+(it is the responsability of the user to check that 
+ the IDL variables are initialized to the correct data
+ type. ).
+</dl> 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> <ul>
+None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="fat05.html">T.05</a> How to pass correctly the subroutine 
+                                   arguments in IDL ? <br>
+      <a href="fat08.html">T.08</a> How to link the library in IDL/PV-WAVE ?
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.mag-unilib.eu/">UNILIB site</a></li>
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-09-08 15:06:14 +0100 (Tue, 08 Sep 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

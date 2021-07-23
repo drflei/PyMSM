@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uf423.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UF423
+   === --> 
+<!--meta name="keywords" content="internal subroutine,Runge-Kutta"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UF423
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UF423 -  Runge Kutta step 
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      REAL*8    scale, rc, pb, palt   
+      INTEGER*4 ifail 
+         
+      CALL UF423 (scale, rc, pb, palt, ifail)     
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code>scale</code> <dd>
+      Scale factor [in]
+      <dt> <code>rc</code> <dd>
+      Radius of curvature [in/out]
+      <dt> <code>pb</code> <dd>
+      Magnetic field intensity at the reached point [out]
+      <dt> <code>palt</code> <dd>
+      Altitude of the reached point [out]
+      <dt> <code>ifail</code> <dd>  
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UF423 carries out a Runge-Kutta step along a magnetic 
+      field line.  The initial conditions and results of the Runge-Kutta step
+      are stored in the common block <a href="uc170.html">UC170</a>.  The index
+      <code>kgp</code> of this common block defines the starting point.
+      <p>
+      The step size is proportional to the radius of curvature <code>rc</code>
+      and to the scale factor <code>scale</code>, with a possible correction to
+      comply with a minimum and maximum value.  The arguments
+      <code>prop</code>, <code>stpmin</code> and <code>stepx</code> of the
+      common block <a href="uc190.html">UC190</a> define the factor of
+      proportionality, the minimum and the maximum of the step size,
+      respectively.
+      <p>
+      Note that the argument <code>rc</code> is re-evaluated for the next step.
+      <p>
+      The subroutine uses the Gill's method to apply a fourth-order Runge-Kutta
+      step. When the subroutine returns the error flag <code>ifail</code> equal
+      to -42305 or -42306, it has correctly applied the Runge-Kutta step,
+      but possible causes of uncertainties have been detected. 
+      <p>
+      The table below indicates in which way the arguments of the common block
+      <a href="uc170.html">UC170</a> are used.  Note that when the subroutines
+      succeeds, the index <code>kgp</code> is increased by 1. 
+      <center><br><table border=1 cellspacing=0 width="80%">
+      <tr><td align=center> <code>mele(kgp).beg.coord</code></td><td align=center>input</td>
+          <td align=center> geographic location of the starting point</td>
+      <tr><td align=center> <code>mele(kgp).beg.b</code></td><td align=center>input</td>
+          <td align=center> magnetic vector at the starting point</td>
+      <tr><td align=center> <code>mele(kgp).arcl</code></td><td align=center>input</td>
+          <td align=center> arc length to the starting point</td> 
+      <tr><td align=center> <code>mele(kgp).beg.rcurv</code></td><td align=center>output</td>
+          <td align=center> Radius of curvature at the starting point</td>     
+      <tr><td align=center> <code>mele(kgp).rkstp</code></td><td align=center>output</td>
+          <td align=center> intermediate points of Runge-Kutta step</td>      
+      <tr><td align=center> <code>mele(kgp+1).beg.coord</code></td>
+          <td align=center> output</td> <td align=center>geographic location of the next point</td> 
+      <tr><td align=center> <code>mele(kgp+1).beg.b</code></td><td align=center>output</td>
+          <td align=center> magnetic vector at the next point</td>   
+      <tr><td align=center> <code>mele(kgp+1).arcl</code></td><td align=center>output</td>
+          <td align=center> arc length to the next point</td>            
+             
+      </table></center>
+</ul> <h4> References </h4> <ul>
+      <li>Davis, P.J. and Polonsky, I.,<i>Numerical interpolation,
+      differentiation and integration</i>, in Handbook of Mathematical
+      Functions, edited by Abramowitz, M. and Stegun, I.A., 875
+      <li>Gill, S., <i>A process for the step-by-step integration of
+      differential equations in an automatic digital computing machine</i>,
+      Proceedings of the Cambridge philosophical society <b>47</b> (1951)
+      96-108 
+</ul> <h4> History </h4> <ul>
+      The error codes -42304 to -42306 are not generated in version 2.02
+      ans earlier.
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="42301">-42301</a>, 
+      no more place in the common block <a href="uc170.html">UC170</a> <br>
+      <a name="42302">-42302</a>,
+      too small value of the <code>scale</code> argument <br>
+      <a name="42303">-42303</a>,
+      too large value of the <code>scale</code> argument <br>     
+      <a name="42304">-42304</a>,
+      uncertainties on the magnetic field vector evaluation
+      (see error flag -53004 of subroutine
+       <a href="um530.html">UM530</a>) <br>     
+      <a name="42305">-42305</a>,
+      uncertainties on the magnetic field vector evaluation
+      (see error flag -53002 or -53003 of subroutine
+       <a href="um530.html">UM530</a>) <br>     
+      <a name="42306">-42306</a>,
+      uncertainties on the validity of the Runge Kunta step <br>     
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc160.html">UC160</a>,
+      general constants<br>
+      <a href="uc170.html">UC170</a>,
+      temporary magnetic field line<br> 
+      <a href="uc190.html">UC190</a>,
+      control parameters, set 1<br>      
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="ud328.html">UD328</a>,
+      evaluate the second derivative of <i>B</i> <br>
+      <a href="uf422.html">UF422</a>,
+      follow a field line until a boundary condition is reached <br>
+      <a href="uf424.html">UF424</a>,
+      search the lowest B value <br>
+      <a href="uf426.html">UF426</a>,
+      interpolating an extremum of B <br>
+      <a href="uf427.html">UF427</a>,
+      interpolating a value of B <br>
+      <a href="uf428.html">UF428</a>,
+      interpolating an altitude <br>
+      <a href="ut998.html">UT998</a>,
+      evaluate the magnetic field vector and the normal to the field line <br>
+</ul> <h4> Calls </h4> <ul>
+      <a href="um530.html">UM530</a>, 
+      evaluate the magnetic field vector<br>    
+      <a href="uf425.html">UF425</a>, 
+      evaluate the curvature of the field lines <br>    
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

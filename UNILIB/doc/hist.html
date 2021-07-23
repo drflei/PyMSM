@@ -1,0 +1,403 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: hist.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - History
+   === --> 
+<!--meta name="keywords" content="miscellaneous"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      History
+</h1> <h6>
+ [ <a href="#actual">Current version</a> 
+ | <a href="#previous">Changes</a> 
+ | <a href="#future">Future improvements</a>
+ | <a href="#time">Release Date</a> 
+<!-- *** Navigation *** -->  
+] </h6>  <h2> <a name="actual"> Current version </a> </h2> <ul> 
+    The current version of the UNILIB libray results from
+    corrections and improvements of <b>Version 2.09</b>,
+    which is documented here, except for:
+    <ul><li> The FORTRAN 77 extensions <code>STRUCTURE</code> and 
+    <code>RECORD</code> are replaced by FORTRAN 90 <code>TYPE</code>
+    declarations. The <a href="structure.html">structure</a> of
+    the derived types have been checked against version 2.20.
+    </ul>
+    Version 2.09 has been compiled and delivered for 
+    DecAlpha(VMS), PC(MS-Windows), HP9000(HPUX) and 
+    SPARC(SunOS) platforms on July 1, 2002.
+    <p>
+</ul> <h2> <a name="previous"> Changes </a> </h2> <ul>
+<dl>
+    <dt>From <b>v2.20</b> to <b>v2.21</b>
+    <dd><ul><li> addition of model DGRF/IGRF 2010
+          in <a href="um513.html">UM513</a>
+        </ul> 
+    <dt>From <b>v2.09</b> to <b>v2.20</b>
+    <dd><ul><li> Changes between these revisions <b>are not
+            documented yet</b>
+          <li> Problems have been discovered in subroutine 
+            <a href="um510.html">UM510</a> when
+            the argument <code>kint</code> is set to 4 (evaluation of
+            DGRF/IGRF by the Kluge algorithm).
+        </ul> 
+    <dt>From <b>v2.05</b> to <b>v2.09</b>
+    <dd><ul><li>Several small anomalies have been fixed. 
+        </ul> 
+    <dt>From <b>v2.03</b> to <b>v2.05</b>
+    <dd><ul><li>The subroutines <a href="ut550.html">UT550</a> 
+      (coordinate transformation) has been corrected for an
+      oversight affecting GSE coordinate system.
+    </ul>
+    <dt>There is no version <b>v2.04</b>
+    <dt>From <b>v2.02</b> to <b>v2.03</b>
+    <dd><ul>
+        <li>The subroutines <a href="ul225.html">UL225</a> and 
+            <a href="um538.html">UM538</a>
+            have
+            been introduced to compute
+            the invariant radius and latitude (<i>R</i>,<i>lambda</i>), and
+            the magnetic local time (MLT), respectively.
+        <li>The subroutine <a href="uxidl.html">UXIDL</a> has been
+            created in order to allow the access to the library
+            from IDL on UNIX platforms as well as MS-Windows 
+            computers. This subroutine provides an interface to
+            several UNILIB routines.
+        <li>Oversights have been corrected in a few subroutines
+            relating to the argument <code>lbint</code> of subroutine
+            <a href="um510.html">UM510</a>, the computation of
+            multiple <i>L</i> values with subroutine 
+            <a href="ul220.html">UL220</a> and the accuracy of
+            subroutine <a href="ul242.html">UL242</a>.  
+        <li>The algorithm of subroutine <a href="uf423.html">UF423</a>
+            has been slightly modified such that,
+            when some of the diagnostics of subroutine UM530 are generated,
+            the Runge-Kutta step is nevertheless completely applied and
+            new error codes are generated.
+</ul>
+    <dt>From <b>v2.01</b> to <b>v2.02</b>
+    <dd><ul>
+        <li>The external magnetic field model Tsyganenko 89a 
+            (argument <code>kext</code> = 4 in subroutine 
+            <a href="um520.html">UM520</a>)
+            has been replaced in <a href="ext530.html">EXT530</a> 
+            by the Tsyganenko 89c model.
+        <li>An oversight, present in version 2.00 and 2.01, has
+            been corrected in subroutine 
+            <a href="um520.html">UM520</a>.  Due to this oversight, the
+            parameters of external field models (passed in the argument 
+           <code>param</code>) were forced to their default values. 
+            This erroneous behaviour
+            affects user applications using external magnetic field
+            models except the Olson & Pfitzer 
+            quiet [1977] model (<code>kext</code>=5).
+     </ul>
+    <dt>From <b>v2.00</b> to <b>v2.01</b>
+    <dd><ul>
+        <li>The number of field line segments generated by
+            subroutine <a href="ud317.html">UD317</a> when tracing
+            a magnetic drift shell has been increased by about 50%.
+        <li>The argument <code>kflag(39)</code> of common block
+            <a href="uc150.html">UC150</a> is active and initialized
+            to 1 by subroutine <a href="ut990.html">UT990</a>. The
+            argument is used to control, in subroutine 
+            <a href="ua633.html">UA633</a>, the dependance of the IRI
+            model either on the Sun spot numbers (default)
+            or on the F<sub>10.7</sub> radio flux.
+        <li>The synopsis of the argument <code>zsub</code> of the subroutines
+            <a href="ud320.html">UD320</a> and <a href="ud321.html">UD321</a>
+            has been modified, as well as the synopsis of the
+            subroutine <a href="ua636.html">UA636</a>. The new synopsis
+            is:<pre>
+      TYPE(<a href="structure.html#zgeo">zgeo</a>)mpos
+      TYPE(<a href="structure.html#zgeo">zvec</a>)mb
+      INTEGER*4     kpar1, ktrl, ifail
+      REAL*8        rpar2, eng, fct, rmass
+c      
+      CALL ZSUB (kpar1, rpar2, mpos, mb, fct, ifail)      
+      CALL UA636 (ktrl, eng, mpos, mb, rmass, ifail)</pre>        
+             It includes the argument <code>mb</code> corresponding to
+             the magnetic field vector at location <code>mpos</code>. Note
+             that the value of argument <code>mb</code> does not affect
+             the behaviour of subroutine <a href="ua636.html">UA636</a>.
+        <li>The entries <a href="ud322.html">UD322</a> and 
+            <a href="ud323.html">UD323</a> have been implemented in subroutines
+            <a href="ud320.html">UD320</a> and <a href="ud321.html">UD321</a>,
+            respectively.
+        <li>The subroutine <a href="ul242.html">UL242</a> has been
+            corrected for a lack of accuracy at low <i>I</i>.
+        <li>The diagnostic messages of subroutine <a href="ut980.html">UT980</a>
+            have been simplified. As a consequence, the subroutines 
+            <a href="ut981.html">UT981</a> and <a href="ut982.html">UT982</a>
+            have been removed from the library.
+        <li>Errors in the algorithm of subroutine <a href="ud327.html">UD327</a>
+            have been fixed and the synopsis of the subroutine have been
+            changed. The new synopsis is: <pre>
+      TYPE(<a href="structure.html#zxyz">zgeo</a>) mgp1, mgp2, mgp3, mextr
+      REAL*8        fct1, fct2, fct3, est
+      INTEGER*4     ifail
+
+      CALL UD327 (mgp1, mgp2, mgp3, fct1, fct2, fct3, mextr, est, ifail)</pre>
+            It includes the argument <code>est</code> to return an
+            estimation of the function. The errors affected the behaviour
+            of the subroutine <a href="ud315.html">UD315</a> which returns
+            the mirror point with the lowest altitude on a magnetic drift
+            shell.
+         <li>An error in passing local time to the atmospheric models MSIS
+             and IRI-90 has been fixed in subroutines 
+             <a href="ua632.html">UA632</a> and <a href="ua633.html">UA633</a>,
+             respectively.
+         <li>Delivery of a PC/Linux version using the PGI Fortran compiler.
+             Note that the g77 compiler do not support the
+             <code>STRUCTURE</code> and <code>RECORD</code> statements. 
+         </ul>
+    <dt>From <b>v1.13</b> to <b>v2.00</b>
+    <dd><ul>
+        <li>The algorithm of subroutines <a href="uf420.html">UF420</a>,
+            <a href="uf422.html">UF422</a> and <a href="uf427.html">UF427</a>
+            has been improved for the tracing of field line segment
+            with small value of their integral invariant <i>I</i>.
+        <li>The new subroutines <a href="ud317.html">UD317</a> and 
+            <a href="uf417.html">UF417</a> have been created in order
+            to replace the (always existing) subroutines 
+            <a href="ud310.html">UD310</a> and 
+            <a href="uf410.html">UF410</a>, respectively. This replacement
+            should improve the drift shell tracing, specially in
+            near-equatorial regions. FORTRAN programs using
+            subroutine <a href="ud310.html">UD310</a> can be
+            adapted by the insertion of the following lines:<pre>
+C     <b>to be included in the declaration part</b>
+C
+      TYPE(<a href="structure.html#zlbl">zlbl</a>) mlab0
+      REAL*8        altmin
+C 
+C     <b>to replace the calling sequence</b>
+C        <b>CALL UD310 (fbm0, flm0, falt, knfl, ktyplus, ifail)</b>
+C
+      mlab0.lbmp = .TRUE.
+      mlab0.llmi = .TRUE.
+      mlab0.linv = .FALSE.
+      mlab0.fbmp = fbm0
+      mlab0.flmi = flm0
+      CALL <a href="ud317.html">UD317</a> (mlab0, falt, ktyplus, altmin, ifail)
+C
+C     <b>note that </b><code>knfl</code><b> is ignored by UD317</b>
+C     <b>      and </b><code>altmin</code><b> is an output argument</b>
+C
+</pre>  <li>Coordinate transformation to/from the Geocentric Solar
+            Ecliptic coordinate system has been included in
+            subroutine <a href="ut550.html">UT550</a>.
+        <li>The library documentation has been reviewed: for each 
+            argument of every subroutine, a tag have been added
+            to clearly distinguish between input, output and modifiable
+            arguments.
+        </ul>
+    <dt>From <b>v1.12</b> to <b>v1.13</b>
+    <dd><ul>
+        <li>The synopsis of subroutine <a href="ut986.html">UT986</a>
+            has been modified. FORTRAN programs using previous
+            versions of the library can be adapted by the insertion of
+            the following lines:<pre>
+C     <b>to be included in the declaration part</b>
+C
+      REAL*8   bsun
+C 
+C     <b>to replace the old calling sequence</b>
+C        <b>CALL UT986 (gm, colat, elong, msun, re)</b>
+C
+      CALL <a href="ut986.html">UT986</a>(gm, colat, elong, msun, re, bsun)
+</PRE>  <li>The algorithm of subroutines <a href="uf420.html">UF420</a>,  <a href="uf422.html">UF422</a>, 
+            <a href="uf427.html">UF427</a> and <a href="uf428.html">UF428</a>
+            have been reviewed and improved. Due to these modifications, the
+            subroutines <a href="ul220.html">UL220</a> 
+            and <a href="ud310.html">UD310</a> have a much better behaviour than
+            in version 1.10 or 1.11,
+            especially near the magnetic equator region and at large <i>L</i>. 
+        </ul>
+    <dd><b>Note:</b>gm, colat, elong, msun, re the help page <a href="fat07.html">T.07</a> has been added
+        in the library FAQ.
+    <dt>From <b>v1.11</b> to <b>v1.12</b>
+    <dd><ul>
+        <li>A bug present in the algorithms of the subroutine
+            <a href="uf426.html">UF426</a>,  <a href="uf427.html">UF427</a> and
+            <a href="uf428.html">UF428</a> subroutine has been corrected
+            (see <a href="bug03.html">R.3</a>).
+        <li>An error in the <code>FORMAT</code> statements of
+            the subroutine <a href="um520.html">UM520</a> has been
+            corrected.
+        <li>The subroutines <a href="um520.html">UM520</a> and 
+            <a href="um532.html">UM532</a>, and the package
+            <a href="ext530.html">EXT530</a> have been extended
+            in order to implement the external magnetic field
+            model of Ostapenko &amp; Maltsev [1997].
+        <li>Due to problems with some Fortran compilers (e.g.
+            Microsoft PowerStation), the DATA statements of the block data 
+            <a href="dgrfbd.html">DGRFBD</a> have been directly included
+            in the subroutine <a href="um513.html">UM513</a>. 
+            The common block <code>DGRF</code> has been removed.
+        </ul>
+    <dt>From <b>v1.10</b> to <b>v1.11</b>
+    <dd>
+        <b>Note</b>: The version v1.11 has not been distributed.
+        <ul>
+        <li>The sizes of the common blocks <a href="uc120.html">UC120</a>, 
+            <a href="uc120.html">UC130</a> and <a href="uc120.html">UC170</a>
+            have been increased to <code>nx120</code>= 500,  
+            <code>nx130</code>= 20000,
+            and <code>nx170</code>= 500, respectively. This change 
+            affects the include file <a href="structure.html">structure.h</a>.
+        <li>The parameter <code>nx170</code> is used instead of
+            the argument <code>nxstp</code> of
+            the common block <a href="uc190.html">UC190</a>. This last argument
+            has been removed from the common block.
+        <li>The argument <code>kum533</code> has been added to the
+            common block <a href="uc190.html">UC190</a> to control the 
+            behaviour of subroutine <a href="um533.html">UM533</a>. 
+            When the argument <code>kum533</code> is set to a value 
+            less or equal to 0, the subroutine <a href="um533.html">UM533</a> 
+            does not check if the current geocentric location is or is not
+            beyond the magnetopause.
+        <li>In subroutine <a href="ut990.html">UT990</a>, the initialisation 
+            of common blocks <a href="uc190.html">UC190</a> and 
+            <a href="uc192.html">UC192</a> has been modified in order to
+            improve the precision of the library. The old and new values
+            of the corresponding arguments are shown in the table below.
+      <p><center><table cellspacing=0 border=1>
+      <tr><th>Argument</th><th>v1.10 and earlier</th><th>New value</th></tr>
+      <tr><td valign=top><code>stepx</code></td><td>0.4</td><td>0.075</td></tr>
+      <tr><td valign=top><code>stpmin</code></td><td>5.0</td><td>2.0</td></tr>
+      <tr><td valign=top><code>epskm</code></td><td>0.25</td><td>0.20</td></tr>
+      <tr><td valign=top><code>stplst</code></td><td>25.0</td><td>15.0</td></tr>
+      <tr><td valign=top><code>dltlat</code></td><td>2.0</td><td>1.0</td></tr>
+      </table></center><p>
+        </ul>
+    <dt>From <b>v1.07</b> to <b>v1.10</b>
+    <dd><ul>
+        <li>Print formats in subroutines <a href="um520.html">UM520</a> and
+            <a href="ut993.html">UT993</a> have been modified.
+        <li>Bugs in the coordinate transformation (subroutine
+            <a href="ut550.html">UT550</a>) have been fixed.
+        <li>Note that the Postscript and the PDF versions of the
+            documentation have been rebuilt.
+        </ul>
+    <dt>There are no versions <b>v1.08</b> and <b>v1.09</b>
+    <dt>From <b>v1.06</b> to <b>v1.07</b>
+    <dd><ul>
+        <li>Bugs in the implementation of the external magnetic field
+            models have been fixed (<a href="bug02.html">R.02</a>).
+        <li>The Tsyganenko T96 external magnetic field model has
+            been included (<a href="ext530.html">EXT530</a>).
+        <li>The synopsis of subroutine <a href="um520.html">UM520</a>
+            has been modified. FORTRAN programs using previous
+            versions of the library can be adapted by the insertion of
+            the following lines:<pre>
+C     <b>to be included in the declaration part</b>
+C
+      REAL*8   param(10)
+      DATA     param/ 10*0.0d0/
+C 
+C     <b>to replace the old calling sequence</b>
+C        <b>CALL UM520(kext, amjd, dst, fkp, swd, swv, lbext, kunit, ifail)</b>
+C
+      param(1) =  fkp
+      param(2) =  dst
+      param(4) =  swd
+      param(5) =  swv
+      CALL <a href="um520.html">UM520</a>(kext, amjd, param, lbext, kunit, ifail)
+</PRE>  <li>The declaration of the structure 
+            /<a href="structure.html#zemf">zemf</a>/ has been modified. 
+            Consequently the include file
+            <code>structure.h</code> is changed and <b>has to be
+            reloaded</b>.
+        <li>A drift shell printing subroutine has been added
+            (<a href="ut993.html">UT993</a>). 
+        <li>The DGRF/IGRF block data has been declared
+            as <code>REAL*8</code> instead of <code>REAL*4</code>
+            (<a href="dgrfbd.html">DGRFBD</a>).
+    </ul><p>
+    <dt>From <b>v1.05</b> to <b>v1.06</b>
+    <dd><ul>
+        <li>Subroutines for coordinate transformations and conversions
+            have been included (<a href="ut550.html">UT550</a>,
+            <a href="ut555.html">UT555</a>, <a href="ut556.html">UT556</a>,
+            <a href="ut541.html">UT541</a>, <a href="ut542.html">UT542</a>,
+            <a href="ut546.html">UT546</a>, <a href="ut547.html">UT547</a>).
+        <li>Subroutines to calculate averages over a drift shell have
+            been included (<a href="ud320.html">UD320</a>,
+            <a href="ud321.html">UD321</a>, <a href="ud328.html">UD328</a>,
+            <a href="ud329.html">UD329</a>, <a href="ud327.html">UD327</a>).
+        <li>Subroutines for interfacing with IDL are provided
+            (<a href="ut986.html">UT986</a>,
+            <a href="try06.html">TRY06</a>).
+        <li>The ionospheric model IRI-90 is part of the distribution 
+            (<a href="ext635.html">EXT635</a>).
+        <li>Some bugs have been fixed (<a href="bug01.html">R.01</a>,
+             <a href="ut985.html">UT985</a>).
+    </ul><p>
+    <dt>Version <b>v1.05</b>
+    <dd>The version 1.05 is the first official version of the library.
+</dl></ul> <h2> <a name="future"> Future improvements </a> </h2> <ul>
+  <li> To be determined
+</ul> <h2> <a name="time"> Release Date </a> </h2> <ul>
+   A new version of the library will probably not be delivered 
+   before December 1999.
+   The table below shows the release date of the previous  versions.
+<center><br><table cellspacing=0 border=1 cellpadding=5>
+<tr><td>v2.05</td><td>November 1999</td><td>v1.11</td><td>December 1997</td></tr>   
+<tr><td>v2.02</td><td>March 1999</td>   <td>v1.10</td><td>November 1997</td></tr>   
+<tr><td>v2.01</td><td>January 1999</td> <td>v1.07</td><td>September 1997</td></tr>  
+<tr><td>v2.00</td><td>June 1998</td>    <td>v1.06</td><td>September 1997</td></tr>  
+<tr><td>v1.13</td><td>February 1998</td><td>v1.05</td><td>August 1997</td></tr>     
+<tr><td>v1.12</td><td>January 1998</td> <td>&nbsp;</td><td>&nbsp;</td></tr> 
+</table></center>
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

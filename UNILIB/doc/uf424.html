@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uf424.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UF424
+   === --> 
+<!--meta name="keywords" content="Runge-Kutta,local magnetic equator,drift velocity,radius of curvature"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UF424
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UF424 - search the lowest B value 
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INTEGER*4     ifail
+      REAL*8        pb, palt
+      TYPE(<a href="structure.html#zpnt">zpnt</a>) mgp
+      TYPE(<a href="structure.html#zvec">zvec</a>) mxnb
+      
+      UF424 ( mgp, pb, palt, mxnb, ifail )
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> mgp  </code> <dd>
+      Point with lowest <i>B</i> value (geographic position, magnetic
+      field vector,...) [out]
+      <dt> <code> pb   </code> <dd>
+      Value of the magnetic field intensity [out]
+      <dt> <code> palt </code> <dd>
+      Altitude at <code>mgp</code> [out]
+      <dt> <code> mxnb </code> <dd>
+      Vector pointing to the binormal vector of the magnetic field line at
+      <code>mgp</code> [out]
+      <dt> <code> ifail  </code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UF424 searches for the point in the common block 
+      <a href="uc170.html">UC170</a> with the lowest magnetic field intensity.
+      The index <code>kgp</code> of the common block is set to the point.
+      <p>
+      The point found by the subroutine UF424 corresponds generally to the
+      location with the lowest magnetic field intensity along the field line.
+      At this location the radius of curvature is re-evaluated by the help of 
+      two Runge-Kutta steps.
+      <p>
+      The subroutine also evaluates the vector <code>mxnb</code> proportional 
+      to the local drift vector of a particle bouncing between the two mirror
+      points of the magnetic field line segment.  The factor of proportionality
+      depends mainly on the energy of the particle (...).  The vector <code>mxnb</code>
+      is parallel to the binormal vector of the field line, and is inversely
+      proportional to the local magnetic field intensity and curvature radius.      
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="42401">-42401</a>, need few place in the common block
+      <a href="uc170.html">UC170</a> <br>      
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc160.html">UC160</a>,
+      general constants<br>
+      <a href="uc170.html">UC170</a>,
+      temporary magnetic field line<br> 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="uf420.html">UF420</a>, 
+      trace a magnetic field line segment passing through a given position<br> 
+</ul> <h4> Calls </h4> <ul>
+      <a href="uf423.html">UF423</a>, 
+      Runge Kutta step<br>    
+      <a href="uf425.html">UF425</a>, 
+      evaluate the curvature of the field lines <br>     
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      Lew, Journal of Geophysical Research.
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

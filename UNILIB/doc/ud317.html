@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ud317.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UD317
+   === --> 
+<!--meta name="keywords" content="magnetic drift shell,third invariant,foot point,mirror point,local magnetic equator"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UD317
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UD317 - trace a magnetic drift shell (new)
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      TYPE(<a href="structure.html#zlbl">zlbl</a>) mlab0
+      REAL*8    falt, altmin
+      INTEGER*4 ifail, ktyplus
+
+      CALL UD317 (mlab0, falt, ktyplus, altmin, ifail)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> mlab0      </code> <dd>
+      Magnetic parameter of the drift shell, i.e.
+      the magnetic field intensity at mirror point <i>B</i><sub>m</sub>
+      and the integral invariant <i>I</i>  [in]
+      <dt> <code> falt      </code> <dd>
+      Boundary condition on the altitude [in]
+      <dt> <code> ktyplus   </code> <dd>
+      Controlling parameter [in]
+      <dt> <code> altmin   </code> <dd>
+      Altitude of the lowest mirror point [out]
+      <dt> <code> ifail      </code> <dd> 
+      Error flag (passed by <a href="#dependencies">dependents</a>)
+      [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UD317 traces a magnetic drift shell and has the
+      same functionality as subroutine <a href="ud310.html">UD310</a>.  
+      The drift shell is
+      defined as a set of magnetic field line segments where all the segments
+      are characterized by the same integral invariant <i>I</i> and the same 
+      mirror-point magnetic field intensity.  Both values of <i>I</i>
+      and <i>B</i><sub>m</sub> are fixed by the argument
+      <code>mlab0</code>. When the value of <i>I</i> is not validated,
+      the subroutine <a href="ul242.html">UL242</a> is used to compute
+      it from the value of the shell parameter <i>L</i>. 
+      The number of field line segments to be traced by the subroutine 
+      can not be defined by the user: the number fluctuates between
+      96 and 108. The subroutine UD317 seems to be better suited than
+      subroutine <a href="ud310.html">UD310</a> to trace drift shell
+      near the equatorial region. 
+      <p>
+      The arguments <code>falt</code> and <code>ktyplus</code> are passed to the
+      subroutines <a href="uf417.html">UF417</a> and <a href="ud319.html">UD319</a>, 
+      respectively.  As a result:
+      <ul>
+          <li>when <code>falt</code> is greater than -500, the foot points of 
+              each magnetic field line segment are computed for the altitude 
+              defined by the value in km of <code>falt</code>.  Otherwise
+              the foot points are not computed;
+         <li>for each magnetic field line segment computed, the part of the segment
+              transferred in the common blocks <a href="uc120.html">UC120</a> and
+              <a href="uc130.html">UC130</a> is function of the value of
+              <code>ktyplus</code> (see table below).
+      </ul>
+      <center><br><table border=1 cellspacing=0 width="80%">
+       <tr><th>Value of <code>ktyplus</code></th><th>Description</th></tr>
+       <tr><td><center>1</center></td><td>All the field line segments are
+                        completely transferred.  When <code>falt</code> >-500, it 
+                        includes the foot points and also the intermediate points 
+                        on the field line situated below the mirror points and above 
+                        the foot prints.           
+                     </td></tr>
+       <tr><td><center>2</center></td><td>For each field line segment, only the 
+                        points comprised between the mirror points are transferred.
+                        When <code>falt</code> >-500, the foot points of the segment
+                        are transferred but not the intermediate points between them
+                        and the mirror points.
+                     </td></tr>
+       <tr><td><center>3</center></td><td>The only points transferred from each field
+                        line segment are the mirror points, the point with the lowest
+                        magnetic field intensity and the foot points when 
+                        <code>falt</code> >-500.
+                     </td></tr>
+      </table></center>
+      <p>
+      The option <code>ktyplus</code>=3 can be used when the only sought information
+      is related to the mirror, equatorial or foot points.  It cannot be used
+      if all the points along the drift shell are needed, e.g. to evaluate
+      drift shell averaged atmospheric density. 
+</ul> <h4> History </h4> <ul>
+      The subroutines UD317 and <a href="uf417.html">UF417</a> do not exist
+      in version 1.13 and earlier.  From version 2.00 to version 2.01,
+      the number of generated field lines have been increased, and the 
+      diagnostics associated to negative values of argument <code>ifail</code>
+      have been changed. <p>
+      In version 2.01 and 2.02, only the error code -31702 is generated instead
+      of both -31701 and -31702. 
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="31701">-31701</a>, the magnetic drift shell has been
+      successfully traced, but the subroutine encountered some
+      problems to determine the foot point locations (see
+      <a href="uf417.html#diagnostics">-41704 and -41706</a>)   <br>
+      <a name="31702">-31702</a>, value of <i>B</i><sub>m</sub>
+      not validated in argument <code>mlab0</code>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc120.html" rev=toc>UC120</a>,
+      magnetic field line description<br> 
+      <a href="uc160.html" rev=toc>UC160</a>, 
+      general constants<br>        
+      <a href="uc170.html" rev=toc>UC170</a>, 
+      temporary magnetic field line<br>        
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      None
+</ul> <h4> Calls </h4> <ul>
+      <a href="ul240.html" rev=toc>UL240</a>,
+           evaluate the Hilton's function<br>
+      <a href="ul242.html" rev=toc>UL242</a>,     
+           inverse the Hilton function  <br>
+      <a href="uf417.html">UF417</a>, 
+      search the geographic position of a magnetic field line (new)<br>
+      <a href="ud319.html">UD319</a>, 
+      transfer a field line segment from common block <a href="uc170.html">UC170</a> 
+      to <a href="uc130.html">UC130</a>  <br> 
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="uc110.html">UC110</a>, magnetic drift shell description<br>
+      <a href="uc120.html">UC120</a>, magnetic field line description<br>
+      <a href="uc130.html">UC130</a>, set of magnetic field line segments<br>
+      <a href="ud330.html">UD330</a>, evaluate the third invariant<br>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      <a href="try03.html">#3</a>, evaluation of the third invariant<br>
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

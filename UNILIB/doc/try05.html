@@ -1,0 +1,409 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: try05.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      Example 5
+   === --> 
+<!--meta name="keywords" content="initialisation,namelist,example"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Example 5 - namelist to initialize UNILIB
+</h1> <h6>
+ [ <a href="#description">Description</a>
+ | <a href="#source">Source</a>
+ | <a href="#results">Results</a>
+ <!-- *** Navigation *** -->  
+] </h6>
+<h2> <a name="description"> Description </a> </h2> <ul>
+      This examle illustrates the use of a namelist to input
+      data to initialize UNILIB. Namelists were often implemented in FORTRAN 77
+      and a r a feature of FORTRAN since FORTRAN 90
+      A namelist specifies a list of variables whose values may be easily read
+      or written in an ASCII file. Namelist input takes the form:
+      <pre><code> &group-name variable = </code><i>value</i> <b>[</b><code>,variable = </code><i>value</i> ,<b>...]</b><code>/</code></pre>
+      where <code>group-name</code> is the name of the namelist that contains
+      the different variables. The namelist is defined in the Fortran program
+      with the statement <code>NAMELIST</code>.
+      <p>
+      In this example, a namelist is defined to initialize the UNILIB libray
+      . The namelist includes all the data useful to call the
+      subroutines <a href="um510.html">UM510</a>, <a href="um520.html">UM520</a>
+      and <a href="ua610.html">UA610</a>. A specific feature of the Fortran
+      namelists allows to define default values for the different variables:
+      when a variable is omitted in the namelist file, its value is not
+      modified by the <code>READ</code> statement. The initialisation of
+      UNILIB is realised by the subroutine <code>initul</code>. The argument
+      <code>kunit</code> corresponds to the unit number of the namelist file 
+      and <code>klist</code> to a switch to control the printing of the
+      namelist contents. The namelist is called <code>unilib</code> and 
+      all its variable are listed in the table below.
+      Note that other variables, such as the solar wind pressure, can be added in the 
+      namelist.
+<p>
+      <center><br><table width="80%" border=1 cellspacing=0>
+      <tr> <th>Variable</th> <th>Default</th> <th>Description</th> 
+      </tr>
+      <tr><td> <code>kinner</code>      </td><td>    0
+          </td><td>Internal magnetic field model number  </td></tr>
+      <tr><td> <code>bltime</code>      </td><td> 1995.0
+          </td><td>Epoch for internal magnetic field model  </td></tr>
+      <tr><td> <code>kouter</code>      </td><td>    0
+          </td><td>External magnetic field model number  </td></tr>
+      <tr><td> <code>datemagn</code> </td><td> 1995, 1, 1, 0, 0, 0
+          </td><td>Date and time for magnetic evaluation (Y,M,D,h,m,s) </td></tr>
+      <tr><td> <code>val_kp</code>      </td><td>    0.0
+          </td><td>Geomagnetic activity index K<sub>p</sub>  </td></tr>
+      <tr><td> <code>dst</code>         </td><td>  -30.0
+          </td><td>Geomagnetic activity index D<sub>st</sub>  </td></tr>
+      <tr><td> <code>winddens</code>    </td><td>   25.0
+          </td><td>Density of solar wind  </td></tr>
+      <tr><td> <code>windvel</code>     </td><td>  300.0
+          </td><td>Velocity of solar wind  </td></tr>
+      <tr><td> <code>kmflg</code>       </td><td>    0
+          </td><td>Control of the magnetic moment  </td></tr>
+      <tr><td> <code>katmo</code>       </td><td>    1
+          </td><td>Atmospheric model number  </td></tr>
+      <tr><td> <code>dateatmo</code> </td><td> 1995, 1, 1, 0, 0, 0
+          </td><td>Date and time for atmospheric evaluation (Y,M,D,h,m,s)  </td></tr>
+      <tr><td> <code>rzss</code>        </td><td>   80.0
+          </td><td>Sun spots number  </td></tr>
+      <tr><td> <code>f107</code>,  <code>f107a</code> </td><td>   70.0, 50.0
+          </td><td>Solar radio flux, dayly and averaged  </td></tr>
+      <tr><td> <code>max_kp</code>      </td><td>    3.0
+          </td><td>Maximum value of K<sub>p</sub>  </td></tr>
+      <tr><td> <code>ap()</code>       </td><td>   20.0, 20.0, 20.0, 20.0, 20.0, 20.0
+          </td><td>Activity index A<sub>p</sub>  </td></tr>
+      <tr><td> <code>kflag</code>       </td><td> see <a href="uc150.html">UC150</a>
+          </td><td>Internal switches for the atmospheric models (MSIS, IRI, ...)  </td></tr>
+      </table></center> 
+</ul> <h2> <a name="source"> Source </a> </h2> <pre>
+      PROGRAM example5
+C
+      INTEGER*4    kunit
+      LOGICAL*4    list
+C
+C     <b>open the namelist file <a href="ex5.nml">ex5.nml</a></b>
+C
+      kunit = 1
+      OPEN( UNIT=kunit, FILE='<a href="ex5.nml">ex5.nml</a>', STATUS='old') 
+C
+C     <b>initialize the library</b>
+C
+      list  = .TRUE.
+      CALL <a href="#initul">initul</a> (kunit, list)
+C
+C     <b>close the namelist file</b>
+C
+      CLOSE (kunit)
+C
+      END
+C     <b>-----------------------------------------------------------------</b>
+      <a name="initul">SUBROUTINE initul (kunit, list)</a>
+C
+C     <b>initialisation of UNILIB with a namelist</b>
+C
+C          kunit : <b>unit number of the namelist file</b>
+C          list  : <b>when set to true, prints the namelist contents</b>
+C
+      INCLUDE '<a href="structure.html">structure.h</a>'
+C
+      INTEGER*4     kunit
+      LOGICAL*4     list
+C
+C     <b>common blocks <a href="uc150.html">UC150</a> and <a href="uc190.html">UC190</a></b>
+C
+      COMMON /<a href="uc150.html">UC150</a>/matm, ntspec, nnspec, kspec, kflag
+C 
+      TYPE(<a href="structure.html#zatm">zatm</a>) matm
+      INTEGER*4     ntspec, nnspec, kspec(30)
+      INTEGER*4     kflag(50)
+C
+      COMMON /<a href="uc190.html">UC190</a>/ prop, stepx, stpmin, umsq, upsq, uk2, uk3, 
+     :               epskm, epsrel, stplst, xclat, kmflg, nxstp       
+C
+      REAL*8        prop, stepx, stpmin
+      REAL*8        umsq, upsq, uk2, uk3
+      REAL*8        epskm, epsrel, stplst, xclat
+      INTEGER*4     kmflg, nxstp
+C
+C     <b>definition of the namelist 'unilib'</b>
+C
+C       <b>note that </b>datemagn<b> and </b>dateatmo<b> are integer and</b>
+C       max_kp<b> is a float</b>
+C
+      INTEGER*4     kinner, kouter, datemagn(6), katmo, dateatmo(6)
+      REAL*8        bltime, dst, val_kp, winddens, windvel
+      REAL*8        rzss, f107, f107a, max_kp, ap(6) 
+C
+      NAMELIST /unilib/ kinner, bltime, kouter, datemagn, val_kp, dst,
+     :                  winddens, windvel, kmflg, katmo, dateatmo,
+     :                  rzss, f107, f107a, max_kp, ap, kflag
+C
+C     <b>other variables</b>
+C
+      INTEGER*4     kout, kini, ifail
+      CHARACTER*32  label
+      TYPE(<a href="structure.html#zdat">zdat</a>) mdm, mda
+      REAL*8        param(10)
+C
+C     <b>initialize UNILIB</b>
+C
+      kout        =    6
+      kini        =    1
+C
+      CALL <a href="ut990.html">UT990</a> (kout, kini, ifail)
+      IF( ifail .LT. 0 )THEN
+        WRITE(kout,1000) 'UT990',ifail
+        STOP
+      ENDIF
+C
+C     <b>set the default values</b>
+C
+C       <b>note that </b>kmflg<b> and </b>kflag<b> values are set by</b>
+C       <b>the subroutine UT990</b>
+C
+      kinner      =    0
+      bltime      = 1995.0
+      kouter      =    0
+      datemagn(1) = 1995
+      datemagn(2) =    1
+      datemagn(3) =    1
+      datemagn(4) =    0
+      datemagn(5) =    0
+      datemagn(6) =    0
+      val_kp      =    0.0
+      dst         =  -30.0
+      winddens    =   25.0
+      windvel     =  300.0
+      katmo       =    1
+      dateatmo(1) = 1995
+      dateatmo(2) =    1
+      dateatmo(3) =    1
+      dateatmo(4) =    0
+      dateatmo(5) =    0
+      dateatmo(6) =    0
+      rzss        =   80.0
+      f107        =   70.0
+      f107a       =   50.0
+      max_kp      =    3.0
+      ap(1)       =   20.0
+      ap(2)       =   20.0
+      ap(3)       =   20.0
+      ap(4)       =   20.0
+      ap(5)       =   20.0
+      ap(6)       =   20.0
+C
+C     <b>read the namelist</b>
+C
+      READ(kunit,unilib,IOSTAT=ifail)
+      IF( ifail.ne.0 )THEN
+        WRITE(kout,1010) ifail
+        STOP
+      ENDIF
+C
+C     <b>transform the date</b>
+C
+      mdm%iyear   = datemagn(1)
+      mdm%imonth  = datemagn(2)
+      mdm%iday    = datemagn(3)
+      mdm%ihour   = datemagn(4)
+      mdm%imin    = datemagn(5)
+      mdm%secs    = datemagn(6)
+      CALL <a href="ut540.html">UT540</a> (mdm)
+C
+      mda%iyear   = dateatmo(1)
+      mda%imonth  = dateatmo(2)
+      mda%iday    = dateatmo(3)
+      mda%ihour   = dateatmo(4)
+      mda%imin    = dateatmo(5)
+      mda%secs    = dateatmo(6)
+      CALL <a href="ut540.html">UT540</a> (mda)
+C
+C     <b>set the different models</b>
+C
+      CALL <a href="um510.html">UM510</a> (kinner, bltime, label, kout, ifail)
+      IF( ifail .LT. 0 )THEN
+        WRITE(kout,1000) 'UM510',ifail
+        STOP
+      ENDIF
+C
+      param(1)    = val_kp
+      param(2)    = dst
+      param(3)    = 0.0d0
+      param(4)    = winddens
+      param(5)    = windvel
+      param(6)    = 0.0d0
+      param(7)    = 0.0d0
+      param(8)    = 0.0d0
+      param(9)    = 0.0d0
+      param(10)   = 0.0d0
+C
+      CALL <a href="um520.html">UM520</a> (kouter, mdm%amjd, param,
+     :           label, kout, ifail)
+      IF( ifail .LT. 0 )THEN
+        WRITE(kout,1000) 'UM520',ifail
+        STOP
+      ENDIF
+C
+      CALL <a href="ua610.html">UA610</a> (katmo, mda, rzss, f107a, f107, max_kp,
+     :            ap(1), ap(2), ap(3), ap(4), ap(5), ap(6),
+     :            label, kout, ifail)
+      IF( ifail .LT. 0 )THEN
+        WRITE(kout,1000) 'UA610',ifail
+        STOP
+      ENDIF
+C
+C     <b>print the namelist</b>
+C
+      IF( list )then
+        WRITE(kout,1020)
+        WRITE(kout,unilib)
+        WRITE(kout,1020)
+      ENDIF
+C
+C     <b>format</b>
+C
+ 1000 FORMAT(' *** Error in subroutine ',a5,', IFAIL =',i7,' ***')
+ 1010 FORMAT(' *** Error in the namelist, IOSTAT =',i7,' ***')
+ 1020 FORMAT(25('-'))
+C
+      END
+</pre> <h2> <a name="results"> Results </a> </h2> <pre>
+
+                                    SPENVIS
+                                 UNILIB Library
+                                 Version 2.22_YCH_initPrep
+                           Generated by SPENVIS team
+
+
+ --- Main control parameters ---
+
+      UC160 (general constants):
+                      Geoid major axis = 6378.16     km
+                      Geoid minor axis = 6356.77     km
+                Mean Earth radius (Re) = 6371.20     km
+                  Ecliptic inclination =   23.441512 deg
+                 McIlwain Earth dipole =    0.311653 G/Re^3
+
+      UC190 (field line tracing):
+                     Maximum step size =  477.8      km at one Re
+              Maximum "last" step size =   15.0      km
+                     Minimum step size =    2.0      km
+                    Altitude precision =  200.       m
+              Magnetic field precision =    0.0006   %
+
+      UC192 (magnetic field evaluation):
+             Max. geomagnetic latitude =   85.0      deg
+                        Minimum radius =    0.157    Re
+            (drift shell tracing):
+                        Precision on L =    0.10000  %
+            Precision on the longitude =    0.05     deg
+
+ --- Geomagnetic field model ---
+
+      Model ( 0): DGRF 1995                          Epoch 1995.
+                             Order + 1 =   11
+                     Calculation epoch = 1995.0      year
+         Colatitude of the dipole pole =   10.68     deg
+          Longitude of the dipole pole =  -71.42     deg
+                   Earth dipole moment =    0.302151 G/Re^3
+          Correction for the SAA drift =    0.00     deg
+
+ --- External magnetic field model ---
+
+      Model ( 0): None                            
+           Planetary activity index Kp =    0.0      (magnetopause check)
+
+                                  Date =  01-Jan-1995
+                        Universal Time =    0.00     hrs
+            Greenwich angle of equinox =  100.18     deg
+           GEO direction of the Sun, X =   -0.9200
+                                     Y =   -0.0129
+                                     Z =   -0.3917
+                     Dipole tilt angle =  -25.91     deg
+
+ --- Atmospheric model ---
+
+       Model (1): MSISE-90 neutral atmosphere     
+                     Calculation epoch = 1995.0      year
+                        Universal Time =   0.00     deg
+                      Sun spots number =    80.
+        Daily radio flux F10.7 (day-1) =   70.0      10-22 W m-2 Hz
+         81-Day avrg. radio flux F10.7 =   50.0      10-22 W m-2 Hz
+           Max. value of the 3-hour Kp =    3.0
+                  Different Ap indices = 20. 20. 20. 20. 20. 20. 20.
+                       Neutral species =   H  He  Ar  N2  O2  O.  N.    
+                       Ionized species =                                
+-------------------------
+ <b>&amp;UNILIB
+ KINNER  =           0,
+ BLTIME  =   1995.00000000000     ,
+ KOUTER  =           0,
+ DATEMAGN        =        1995, 2*1, 3*0,
+ VAL_KP  =  0.000000000000000E+000,
+ DST     =  -30.0000000000000     ,
+ WINDDENS        =   25.0000000000000     ,
+ WINDVEL =   300.000000000000     ,
+ KMFLG   =           0,
+ KATMO   =           1,
+ DATEATMO        =        1995, 2*1, 3*0,
+ RZSS    =   80.0000000000000     ,
+ F107    =   70.0000000000000     ,
+ F107A   =   50.0000000000000     ,
+ MAX_KP  =   3.00000000000000     ,
+ AP      = 6*20.0000000000000        ,
+ KFLAG   = 24*1, 2*0, 12*-1,           1, 11*0
+ /</b>
+-------------------------
+</pre> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

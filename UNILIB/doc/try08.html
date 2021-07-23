@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: try08.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	
+	<!-- === UNILIB Library  -
+      Example 8
+   === -->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Example 8 - effect of the magnetic field model parameters on 
+                  the (<i>B</i>, <i>L</i>) coordinates
+</h1> <h6>
+ [ <a href="#description">Description</a>
+ | <a href="#source">Source</a>
+ | <a href="#results">Results</a>
+ <!-- *** Navigation *** -->  
+] </h6>
+<h2> <a name="description"> Description </a> </h2> <ul>
+<FORM METHOD=POST ACTION="http://rumba.gsfc.nasa.gov/cgi-bin/omniweb/dx.cgi">
+  The effect of the magnetic field model parameters on 
+                  the (<i>B</i>, <i>L</i>) coordinates
+  is illustrated with the help of the Olson and Pfitzer
+  dynamical external field model (combined with a DGRF/IGRF 
+  geomagnetic model) for a given geographic
+  location. The model parameters (Dst, solar wind velocity
+  and density) are initialized by values
+  downloaded 
+  from Omniweb at NSSDC for the period from 10 to 11
+  March 1998 
+  <INPUT TYPE="hidden" value="plot"   name="activity">
+  <INPUT TYPE="hidden" VALUE="980310" NAME="start_date">
+  <INPUT TYPE="hidden" VALUE="980311" NAME="end_date">
+  <INPUT TYPE="hidden" value="hour"   name="res">
+  <INPUT TYPE="hidden" VALUE="25"     NAME="vars">
+  <INPUT TYPE="hidden" VALUE="26"     NAME="vars">
+  <INPUT TYPE="hidden" VALUE="37"     NAME="vars">
+  <input TYPE="hidden" value="http"   name="delivery_method">
+  <input TYPE="hidden" value="ASCII"  name="data_format">
+  <input TYPE="hidden" value="0"      name="view">
+  <input TYPE="hidden" value="1"      name="paper">
+  <input TYPE="hidden" value="Linear" name="scale">
+  <input TYPE="hidden" value="2"      name="xstyle">
+  <input TYPE="hidden" value="2"      name="ystyle">
+  <input TYPE="hidden" value="0"      name="symbol">
+  <input TYPE="hidden" value="1"      name="nsum">
+  <input TYPE="hidden" value="1"      name="smooth">
+  <input TYPE="hidden" value="solid"  name="linestyle">
+  <input TYPE="hidden" value="999"    name="maxdays">
+  <input TYPE="hidden" value="0"      name="table">
+  <input TYPE="hidden" value="640"    name="imagex">
+  <input TYPE="hidden" value="480"    name="imagey">
+  <input TYPE="hidden" value="001"    name="color">
+  <input TYPE="hidden" value="255"    name="back">
+(<INPUT TYPE="submit" VALUE="OmniWeb">) and stored in an ASCII
+  file. 
+  The geographic location
+  is set in geocentric coordinates at:
+<center><table border=0><tr><td>radius</td><td>= 42000 km</td></tr>
+<tr><td>longitude</td><td>= 225 deg.</td></tr>
+<tr><td>latitude</td><td>= 0 deg.</td></tr>
+</table></center> 
+  Note that the epoch of the geomagnetic field model is forced
+  at 1998.
+</form></ul> <h2> <a name="source"> Source </a> </h2> <pre>
+      PROGRAM example8
+C
+      INCLUDE '<a href="structure.html">structure.h</a>'
+C
+      INTEGER*4    kunit, kinit, ifail, kint, kext, nfbm, i, noprint
+      INTEGER*4    kprint, kfile
+      CHARACTER*32 lbint, lbext
+      CHARACTER*3  lmon, months(12)
+      REAL*8       year, param(10), alpha
+      REAL*8       fbm, flm, fkm, fsm, fbeq, fs
+      TYPE(<a href="structure.html#zdat">ZDAT</a>) mdate
+      TYPE(<a href="structure.html#zgeo">ZGEO</a>) mpos
+C
+C     <b>initialisation</b>
+C
+      DATA kunit, kinit, kint, kext, nfbm, noprint/ 6, 1, 0, 6, 1, -1/
+      DATA kfile, param, alpha/ 1, 10*-999.0d0, 90.0d0/
+      DATA months/ 'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug',
+     :             'Sep','Oct','Nov','Dec'/
+C
+      OPEN( unit=kfile,file='<a href="try08.txt">try08.txt</a>',status='old',form='formatted')
+      READ(kfile,*)
+      READ(kfile,*)
+      year          = 1998.0D0
+C
+      kprint        = kunit
+      CALL <a href="ut990.html">UT990</a> (kprint, kinit, ifail)
+      IF( ifail .LT. 0 )STOP
+C     
+      mpos%radius   =42000.0d0
+      mpos%colat    =   90.0d0
+      mpos%elong    =  225.0d0        
+      mdate%imonth  =    1
+      mdate%secs    =    0.0d0
+C
+C     <b>Loop</b>
+C
+  100 CONTINUE
+C
+C     <b>reading input data</b>
+C
+      READ(kfile,1000,end=500) mdate%iday, lmon, mdate%iyear,
+     : mdate%ihour, mdate%imin, param(4), param(5), param(2)
+      do i = 1, 12
+        if( lmon .eq. months(i) ) mdate%imonth = i
+      enddo
+C
+      CALL <a href="ut540.html">UT540</a> (mdate)          
+C
+C     <b>setting the magnetic field model</b>
+C
+      CALL <a href="um510.html">UM510</a> (kint, year, lbint, kprint, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+      CALL <a href="um520.html">UM520</a> (kext, mdate%amjd, param,
+     :           lbext, kprint, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>evaluating the (<i>B</i>, <i>L</i>) coordinates</b>
+C
+      CALL <a href="ul220.html">UL220</a> (mpos, alpha, nfbm, fbm, flm, fkm, fsm, fbeq, 
+     :              fs, ifail)
+C
+C     <b>writing the result</b>
+C
+      if( kprint.gt.0 )  WRITE(kprint,1020)
+      WRITE(kunit,1010)  mdate%amjd, param(4), param(5), param(2), 
+     :                   fbm, flm, ifail
+C
+      kprint        = noprint
+      GOTO 100
+  500 CONTINUE
+      WRITE(kunit,*)
+C
+ 1000 FORMAT(i2,1x,a3,1x,i4,1x,i2,1x,i2,1x,f5.1,1x,f5.0,1x,f5.0)
+ 1010 FORMAT(f12.5,f6.1,2f6.0,f8.5,f7.3,i7)
+ 1020 FORMAT(/'Mod.Jul.day | SWD | SWV | Dst |   B   |  Lm  | ifail')
+      END
+</pre> <h2> <a name="results"> Results </a> </h2> <pre>
+1
+                                 UNILIB Library
+                                  Version  2.02
+                         Developed by BIRA/IASB for ESA
+
+                                0500-020000-0500
+
+
+ --- Main control parameters ---
+
+      UC160 (general constants):
+                      Geoid major axis = 6378.16     km
+                      Geoid minor axis = 6356.77     km
+                Mean Earth radius (Re) = 6371.20     km
+                  Ecliptic inclination =   23.441512 deg
+                 McIlwain Earth dipole =    0.311653 G/Re^3
+
+      UC190 (field line tracing):
+                     Maximum step size =  477.8      km at one Re
+              Maximum "last" step size =   15.0      km
+                     Minimum step size =    2.0      km
+                    Altitude precision =  200.       m
+              Magnetic field precision =    0.0006   %
+
+      UC192 (magnetic field evaluation):
+             Max. geomagnetic latitude =   85.0      deg
+                        Minimum radius =    0.157    Re
+            (drift shell tracing):
+                        Precision on L =    0.10000  %
+            Precision on the longitude =    0.05     deg
+
+ --- Geomagnetic field model ---
+
+      Model ( 0): IGRF 1995                          Epoch 1995.
+                             Order + 1 =   11
+                     Calculation epoch = 1998.0      year
+         Colatitude of the dipole pole =   10.60     deg
+          Longitude of the dipole pole =  -71.61     deg
+                   Earth dipole moment =    0.301439 G/Re^3
+          Correction for the SAA drift =    0.00     deg
+
+ --- External magnetic field model ---
+
+      Model (6): Olson-Pfitzer dynamic           
+              Storm activity index Dst =   -6.0      nT
+                    Solar wind density =   19.5      1/cm^3
+                   Solar wind velocity =  277.0      km/s
+                     Standoff distance =    9.2      Re
+           Planetary activity index Kp =    0.0      (magnetopause check)
+                        Universal Time =    0.00     hrs
+            Greenwich angle of equinox =  167.47     deg
+           GEO direction of the Sun, X =   -0.9962
+                                     Y =   -0.0457
+                                     Z =   -0.0744
+                     dipole tilt angle =   -7.06     deg
+
+Mod.Jul.day | SWD | SWV | Dst |   B   |  Lm  | ifail
+ 17600.00000  19.5  277.   -6. 0.00119  6.451      0
+ 17600.04167  29.0  282.   -1. 0.00117  6.483      0
+ 17600.08333  37.9  291.    4. 0.00113  6.566      0
+ 17600.12500  37.1  292.    9. 0.00106  6.713      0
+ 17600.16667  39.8  305.   10. 0.00094  6.991      0
+ 17600.20833  41.4  311.    9. 0.00079  7.428      0
+ 17600.25000  34.7  317.    1. 0.00068  7.822      0
+ 17600.29167  24.3  325.  -13. 0.00065  7.988      0
+ 17600.33333  23.1  342.  -23. 0.00064  8.034      0
+ 17600.37500  41.6  369.   -8. 0.00061  8.144      0
+ 17600.41667  44.3  376.    5. 0.00061  8.144      0
+ 17600.45833  28.6  384.  -14. 0.00057  8.329      0
+ 17600.50000  28.0  386.  -18. 0.00057  8.339      0
+ 17600.54167  13.7  444.  -22. 0.00072  7.702      0
+ 17600.58333  16.8  437.  -26. 0.00082  7.357      0
+ 17600.62500  14.7  486.  -37. 0.00089  7.134      0
+ 17600.66667  12.4  515.  -72. 0.00083  7.314      0
+ 17600.70833  10.6  512. -114. 0.00072  7.706      0
+ 17600.75000  11.7  486. -112. 0.00085  7.248      0
+ 17600.79167  11.0  534. -118. 0.00101  6.827      0
+ 17600.83333  10.3  521. -121. 0.00105  6.731      0
+ 17600.87500   9.3  525. -126. 0.00102  6.786      0
+ 17600.91667   7.2  509. -123. 0.00097  6.919      0
+ 17600.95833   7.2  491. -119. 0.00093  7.005      0
+ 17601.00000   8.1  532. -112. 0.00089  7.123      0
+ 17601.04167   6.1  534. -105. 0.00075  7.586      0
+ 17601.08333   6.6  516.  -97. 0.00072  7.685      0
+ 17601.12500   6.2  534.  -92. 0.00076  7.543      0
+ 17601.16667   8.1  542.  -90. 0.00075  7.597      0
+ 17601.20833   6.2  518.  -95. 0.00064  8.014      0
+ 17601.25000   5.4  501.  -88. 0.00054  8.517      0
+ 17601.29167   7.6  517.  -78. 0.00049  8.846      0
+ 17601.33333   6.4  527.  -83. 0.00054  8.541      0
+ 17601.37500   5.0  529.  -77. 0.00062  8.124      0
+ 17601.41667   5.3  523.  -75. 0.00059  8.258      0
+ 17601.45833   5.1  515.  -72. 0.00055  8.481      0
+ 17601.50000   5.4  523.  -70. 0.00056  8.445      0
+ 17601.54167   5.3  536.  -68. 0.00066  7.943      0
+ 17601.58333   5.4  542.  -71. 0.00077  7.506      0
+ 17601.62500   5.2  540.  -72. 0.00082  7.346      0
+ 17601.66667   5.4  521.  -68. 0.00082  7.359      0
+ 17601.70833   5.4  515.  -66. 0.00084  7.284      0
+ 17601.75000   5.4  511.  -66. 0.00093  7.034      0
+ 17601.79167   5.2  517.  -61. 0.00104  6.752      0
+ 17601.83333   5.2  528.  -61. 0.00109  6.633      0
+ 17601.87500   5.1  532.  -62. 0.00110  6.625      0
+ 17601.91667   5.2  545.  -70. 0.00108  6.653      0
+ 17601.95833   4.9  517.  -64. 0.00105  6.728      0
+
+</pre>
+
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

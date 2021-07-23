@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: fat04.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ T.04
+   === --> 
+<!--meta name="keywords" content="Roederer shell parameter,McIlwain shell parameter,magnetic moment,third invariant,example"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1><h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="question"> Question </a> </h2> <ul> 
+      T.04 - Why are Roederer's <i>L</i><sup>*</sup>
+      and McIlwain's <i>L</i> parameters different ?
+</ul> <h2> <a name="answer"> Answer </a> </h2> <ul>
+      In a magnetic dipole field, the parameter <i>L</i>
+      is defined as the distance from the center of the dipole to
+      the equatorial point (or minimum <i>B</i> value) of the field line. 
+      The parameter <i>L</i> is given in units of Earth's radii and,
+      in a dipole field, a particle remains during its bounce and drift motion
+      on magnetic field lines having the same <i>L</i>.
+      <p>
+      For a non-dipolar geomagnetic field, e.g. IGRF, coordinate systems
+      based on adiabatic invariants are used. To provide a familiar
+      and easy-to-interpret variable, Roederer and McIlwain have related
+      adiabatic invariants to the parameter <i>L</i>: McIlwain's parameter
+      (<i>L</i><sub>m</sub>) is a function of the magnetic field intensity 
+      <i>B</i><sub>m</sub>
+      at the mirror point, the integral invariant function <i>I</i>
+      and the magnetic moment <i>M</i> of the dipole field while Roederer's 
+       parameter
+      <i>L</i><sup>*</sup> is a function of the third adiabatic invariant 
+      and the magnetic moment <i>M</i>. When the magnetic field 
+      model is fixed
+      and frozen, a particle has  constant <i>L</i><sub>m</sub> and
+      constant <i>L</i><sup>*</sup> values during its bounce and drift motion.
+      Generally, both values of <i>L</i> are different, except in the case of
+      a dipole magnetic field model where both values should be the same.
+      <p>
+      In the UNILIB libray, for historical reasons, the dipole magnetic
+      moment used to evaluate the parameters <i>L</i><sub>m</sub> and 
+      <i>L</i><sup>*</sup> is not equal to the magnetic moment of the
+      magnetic field but is fixed to <i>M</i><sub>0</sub> = 
+      0.311653 Gauss R<sub>e</sub><sup>-3</sup>
+      (see common block <a href="uc160.html">UC160</a>,
+       argument <code>gmagmo</code>).
+      Due to this feature, the two parameters are different even with
+      a magnetic dipole. The argument <code>kmflg</code> of the
+      common block <a href="uc190.html">UC190</a> allows to control
+      the evaluation of the <i>L</i> parameters in the subroutines
+      <a href="ul240.html">UL240</a>, <a href="ul242.html">UL242</a> and
+      <a href="ud330.html">UD330</a>. When the variable <code>kmflg</code>
+      is set to 0 or 10, the magnetic moment <i>M</i><sub>0</sub> is
+      used, while when the variable is set to 1 or 11, the magnetic moment
+      of the magnetic field is used. Note that this last moment is
+      stored in the common block <a href="uc140.html">UC140</a>
+      (argument <code>mint.gmmo</code>).   
+</ul> <h4> References </h4> <ul>
+      <li>McIlwain, C.E., <i>Coordinates for mapping the distribution of
+      magnetically trapped particles</i>, JGR <b>66</b> (1961) 3681-3691 
+      <li>Roederer, J.G., <i>Dynamics of geomagnetically trapped radiation</i>,
+      1970, Springer-Verlag, New York
+</ul> <h2> <a name="illustration"> Illustration </a> </h2> <ul>
+      The use of the variable <code>kmflg</code> is illustrated 
+      with a sample program based on example <a href="try03.html">#3</a>
+      (evaluation of the third invariant).  In this example,
+      a magnetic dipole field is selected and a drift shell 
+      is defined with the help of the 
+      (<i>B</i><sub>m</sub>,<i>L</i><sub>m</sub>) parameter values:
+      <i>B</i><sub>m</sub> = 0.19 Gauss and <i>L</i><sub>m</sub> = 2.00.
+      The Roederer's <i>L</i><sup>*</sup> 
+      parameter is then evaluated successively with the magnetic moment 
+      <i>M</i><sub>0</sub> and with the true magnetic field moment.
+      The results are 2.06 and 2.01, respectively. The difference of
+      0.5% between the last result and <i>L</i><sub>m</sub> provides
+      a measure of the error in the evaluation of the third invariant
+      by the subroutine <a href="ud330.html">UD330</a>.     
+</ul> <h4> Source </h4> <pre>
+      PROGRAM faqt04
+C             (based on <a href="try03.html#source">example3</a>)
+C
+      INCLUDE '<a href="structure.html">structure.h</a>'
+C
+      COMMON /<a href="uc190.html">UC190</a>/ prop, stepx, stpmin, umsq, upsq, uk2, uk3, 
+     :               epskm, epsrel, stplst, xclat, kmflg, nxstp       
+C
+      REAL*8       prop, stepx, stpmin
+      REAL*8       umsq, upsq, uk2, uk3
+      REAL*8       epskm, epsrel, stplst, xclat
+      INTEGER*4    kmflg, nxstp      
+C
+      INTEGER*4    kunit, kinit, ifail, kint, kext, noprint
+      CHARACTER*32 lbint, lbext
+      REAL*8       year, param(10), amjd
+      INTEGER*4    knfl, ktyplus
+      REAL*8       fbm0, flm0, falt, phi, star0, star1
+C
+C     <b>initialize variables</b>
+C
+      DATA kunit, kinit, noprint/ 6, 1, -6/
+      DATA kint, kext/ 3, 0/
+      DATA year, amjd, param/ 1995.0d0, 0.0d0, 10*0.0d0/
+C
+C     <b>initialize the library and the magnetic dipole field</b>
+C
+      CALL <a href="ut990.html">UT990</a> (noprint, kinit, ifail)
+      IF( ifail .LT. 0 )STOP
+      CALL <a href="um510.html">UM510</a> (kint, year, lbint, kunit, ifail)
+      IF( ifail .LT. 0 )STOP
+      CALL <a href="um520.html">UM520</a> (kext, amjd, param,
+     :           lbext, noprint, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>trace the drift shell and evaluate the third invariant</b>
+C     <b>in the STANDARD case</b>
+C
+      fbm0          =    0.19d0
+      flm0          =    2.0d0
+      falt          =    0.0d0
+      knfl          =  120
+      ktyplus       =    3
+C
+      CALL <a href="ud310.html">UD310</a> (fbm0, flm0, falt, knfl, 
+     :           ktyplus, ifail)
+          IF( ifail .LT. 0 )STOP
+      CALL <a href="ud330.html">UD330</a> (phi, star0, ifail) 
+          IF( ifail .LT. 0 )STOP
+C
+C     <b>trace the drift shell and evaluate the third invariant</b>
+C     <b>when KMFLG is set to one</b>
+C
+      kmflg         =    1
+C
+      CALL <a href="ud310.html">UD310</a> (fbm0, flm0, falt, knfl, 
+     :           ktyplus, ifail)
+          IF( ifail .LT. 0 )STOP
+      CALL <a href="ud330.html">UD330</a> (phi, star1, ifail) 
+          IF( ifail .LT. 0 )STOP
+C
+C     <b>write the result</b>
+C
+      WRITE(*,*) star0, star1
+C
+      END
+</pre> <h4> Results </h4> <pre>
+
+--- Geomagnetic field model ---
+
+     Model ( 3): Dipolar magnetic field             Epoch 1995.
+                            Order + 1 =    2
+                    Calculation epoch = 1995.0      year
+        Colatitude of the dipole pole =   10.70     deg
+         Longitude of the dipole pole =  -71.41     deg
+                  Earth dipole moment =    0.302077 G/Re^3
+         Correction for the SAA drift =    0.00     deg
+<b>  2.06304946287526        2.01249780345246</b>
+</pre> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

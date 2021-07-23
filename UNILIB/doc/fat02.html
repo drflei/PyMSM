@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: fat02.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ T.02
+   === --> 
+<!--meta name="keywords" content="IRI"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1> <h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6>  <h2> <a name="question"> Question </a> </h2> <ul> 
+      T.02 - Why is the object IRIS12 not resolved ? 
+ 
+</ul> <h2> <a name="answer"> Answer </a> </h2> <ul>
+The IRI model is not distributed within the UNILIB package. Nevertheless,
+   the 1990 version of IRI may be selected and used with the UNILIB libray.
+The IRI-90 package may be retrieved from NSSDC's anonymous FTP site.
+ The UNILIB package make calls to the <code>IRIS12</code>
+   subroutine.
+<p><b>The IRI model is included in the library since version 1.06.</b><p>
+ When the IRI-90 model is not needed, a dummy subroutine <code>IRIS12</code> may
+   be written to avoid warnings during the link phase (see illustration).
+</ul> <h2> <a name="illustration"> Illustration </a> </h2> <ul>
+     Listing of a dummy subroutine <code>IRIS12</code>:<pre>
+      SUBROUTINE IRIS12 (jf, jmag, alati, along, rz12, mmdd, dhour,
+     :             heibeg, heiend, heistp, outf, oarr)
+C
+C     <b>Dummy subroutine to avoid warning during link phase</b>
+C     <b>Subroutine IRIS12 is called by</b>
+C     <b>            <a href="ua633.html">UA633</a>, IRI-90 ionosphere</b>
+C
+      LOGICAL*4      jf(12)
+      INTEGER*4      jmag, mmdd, dhour
+      REAL*4         alati, along, rz12, heibeg, heiend, heistp
+      REAL*4         outf(11,50), oarr(30)
+C
+      END
+</pre></ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="faq04.html">FAQ G.04</a>, International Reference Ionosphere (IRI)
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

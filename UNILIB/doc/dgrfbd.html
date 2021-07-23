@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: dgrfbd.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      DGRFBD
+   === --> 
+<!--meta name="keywords" content="spherical harmonic expansion,IGRF,external subroutine"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      DGRFBD 
+</h1> <h6>
+ [ <a href="#name">Name</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Common block DGRF - coefficients for DGRF/IGRF models
+</ul>  <h2> <a name="description"> Description </a> </h2> <ul>
+The International Geomagnetic Reference Field (IGRF) model is the 
+empirical representation of the Earth's magnetic field recommended for 
+scientific use by the International Association of Geomagnetism and 
+Aeronomy (IAGA). The IGRF model represents the main (core) field without 
+external sources. They employ the usual spherical harmonics expansion
+of the scalar potential in geocentric coordinates. The IGRF model
+coefficients are based on all available data sources including geomagnetic 
+measurements from observatories, ships, aircrafts and satellites. 
+The coefficients may be retrieved from NSSDC's anonymous FTP site
+and are maintained by
+<ul><address>
+R. A. Langel (<a
+href="mailto:langel@geomag.gsfc.nasa.gov">langel@geomag.gsfc.nasa.gov</a>) <br> 
+NASA/GSFC, Code 921 Greenbelt <br>
+Maryland 20771, USA
+</address></ul>
+
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> 
+<h4>History</h4><ul>
+    In version 1.11 and earlier, the coefficients for the DGRF/IGRF models
+    are stored in a common block which is initialized by the use of a
+    specific block data (DGRFBD). The synopsis of this common block is 
+<pre> 
+      COMMON /DGRF/ TZERO, LABEL, GG, GGT, NMAX
+
+      REAL*8        TZERO(11)
+      REAL*8        GG(11,13,13), GGT(11,13,13)
+      INTEGER*4     NMAX(11)
+      CHARACTER*32  LABEL(11)
+</pre>
+In version 1.06 and earlier, the synopsis of the common block is 
+slightly different:
+the arguments <code>GG</code> and <code>GGT</code> are defined as
+<code>REAL*4</code>.
+<p>
+      Since some Fortran compilers (e.g. Microsoft PowerStation) are not
+      able to link correctly such block data, the DATA statements have been 
+      included in the subroutine <a href="um513.html">UM513</a> directly.
+      The current version of the library does not include anymore the
+      common block and its corresponding block data.
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="um510.html">UM510</a>, 
+           select a geomagnetic field model <br>
+      <a href="um530.html">UM530</a>, 
+           evaluate the magnetic field vector <br>
+      <a href="http://www.ngdc.noaa.gov/IAGA/vmod/igrf.html" target="x">IGRF Model</a>
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

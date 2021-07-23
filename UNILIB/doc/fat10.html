@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: fat10.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ T.10
+   === --> 
+<!--meta name="Keywords" content="Interactive Data Language"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1><h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="question"> Question </a> </h2> <ul> 
+      T.10 -  How to call the library from a Win32 application ?
+</ul> <h2> <a name="answer"> Answer </a> </h2> <ul>
+
+The library has been successfully compiled using Microsfot compiler
+<p>
+For more information on load-time and/or run-time dynamic linking,
+please consult the manual of your favorite compiler and linker.
+The sample C code included in the distribution and discussed below
+ has been test using
+Microsoft <i>Visual C++</i>.
+
+</ul> <h2> <a name="illustration">Illustration </a> </h2> <ul>
+
+Before accessing the Unilib subroutines, their synopsis has  to be
+defined in an include file.
+For example, the Fortran sypnopsis of the subroutine 
+<a href=um510.html>UM510</a> is <pre>
+<font color=green>      INTEGER*4      kint, kunit, ifail
+      REAL*8         year
+      <font color=red>CHARACTER*32   lbint</font>
+      CALL UM510 (kint, year, <font color=red>lbint</font>, kunit, ifail)</font></pre>  
+In C, it can be translated as<ul><pre>
+<font color=green>void CALLBACK UM510 (long*, double*, <font color=red>char*, unsigned long</font>, long*, long*);</font></pre></ul>  
+For strings, note that Win32 Fortran passes a hidden length argument  
+by value that has to be provided by the C programme.  The other arguments are
+always passed by reference. When defining a TYPE structure, e.g 
+<code><a href="structure.html#zgeo">TYPE(zgeo)</a></code>, the order of the variable
+list has to be the same as in the header file, i.e.<ul><pre>
+<font color=green>typedef struct UNILIB_TYPE_ZGEO
+   { double RADIUS;
+     double COLAT;
+     double ELONG; } TYPE_ZGEO; 
+</font></pre></ul>
+<p>
+Some subroutines, such as <a href=um510.html>UM510</a>, generate
+text output through Fortran <code>WRITE</code> statements. The Win32
+application has to define a handle for the <i>standard output</i> in order
+to intercept the messages sent to file unit 6.  This can be done
+by allocating a console by a call to the Win32 function 
+<code><font color=green>AllocConsole()</font></code>.
+<p>
+Inside the Win32 application, a typical call to <a href=um510.html>UM510</a>
+reads<ul><pre>
+<font color=green>    long   kunit=6, ifail=0, kint=0;
+    double year=1985.; 
+    char   label[33];  <font color=gray>// Fortran strings are not null-terminated:</font>
+    label[32] = '\0';  <font color=gray>// reserved 33 bytes and set the null character.</font>
+
+    <font color=gray>/* ... */</font>
+
+    UM510(&kint, &year, label, 32, &kunit, &ifail);
+    if ( ifail < 0 ) exit(-1);
+</font></pre></ul>
+Be aware to reserve and pass the correct length  when string
+arguments are used.  Fortran strings are not null-terminated, and are 
+padded with blank spaces.
+<p>
+
+</ul> <h2> <a name="seealso">See Also </a> </h2> <ul>
+
+<a href=fat07.html>T.07</a> &nbsp; Which subroutines are mandatory?  <P>
+
+<a 
+href="http://msdn.microsoft.com/library/devprods\vs6\visualc/vccore/_core_dlls.3a_.overview.htm" 
+target="x"><i>MSDN Library</i>, DLLs overview  (Microsoft Visual C++)</a>
+  <br>
+
+<a 
+href="http://msdn.microsoft.com/library/devprods\vs6\visualc/vccore/_core_handling_data_types_in_multiple_languages.htm" 
+target="x"><i>MSDN Library</i>, Handling Data Types in Multiple Languages
+  (Microsoft Visual C++)</a>
+  <br>
+
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

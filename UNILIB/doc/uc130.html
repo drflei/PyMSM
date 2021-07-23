@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uc130.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UC130
+   === --> 
+<!--meta name="keywords" content="magnetic drift shell,magnetic field line segment,Runge-Kutta,radius of curvature,elementary segment"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UC130
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Common block UC130 - set of magnetic field line segments
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INCLUDE 'structure.h'
+     
+      COMMON /UC130/ nbrsg, kursg, mseg
+
+      INTEGER*4      nbrsg, kursg
+      TYPE(<a href="structure.html#zseg">zseg</a>)  mseg(<a href="structure.html#description">nx130<a>)     
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code>nbrsg</code> <dd>
+      Number of elementary segments already computed
+      <dt> <code>kursg</code> <dd>
+      Indice of the current elementary segment
+      <dt> <code>mseg</code> <dd>
+      Set of elementary field line segments
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The common block UC130 is part of a set of three common blocks:
+      <ul> <li><a href="uc110.html">UC110</a>, magnetic drift shell description; <br>
+           <li><a href="uc120.html">UC120</a>, magnetic field line description; <br>
+           <li>UC130, set of magnetic field line segments.<br>
+      </ul>
+      This set of common blocks is used to store a magnetic drift shell which is
+      defined by a set of magnetic field line segments.
+      <p>
+      The common block UC130 includes the whole set of elementary segments of the 
+      magnetic drift shell: each magnetic field line segment is described by a set of
+      elementary segments.
+      <p>
+      As sample, the first magnetic field segment of the drift shell is stored in the 
+      argument <code>mseg</code> from index <code>mfl(k1st)%ind%jbeg</code> to 
+      <code>mfl(k1st)%ind%jend</code>.  The geographic position of the southern mirror
+      point of this field line segment is stored in
+      <code>mseg(mfl(k1st)%ind%jmirps)%beg%coord</code>.   
+      Note that the common block 
+      <a href="uc170.html">UC170</a> has a similar structure (argument <code>mele</code>).    
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Used by </h4> <ul> <dl>
+      <dt><a href="ud315.html">UD315</a>
+      (search the mirror point with the lowest altitude): 
+      <dd> <code> mseg </code> <br>
+      <dt><a href="ud319.html">UD319</a>
+      (transfer a field line segment from common block <a href="uc170.html">UC170</a>
+       to <a href="uc130.html">UC130</a>): 
+      <dd> <code> nbrsg</code> <br>
+      <dt><a href="ud320.html">UD320</a>
+      (evaluate a double time integral over a drift shell):
+      <dd> <code>mseg</code> <br>
+      <dt> <a href="ut985.html">UT985</a>
+      (transfer a field line of the drift shell to IDL): 
+      <dd> <code> mseg </code> <br>
+      <dt> <a href="ut992.html">UT992</a>
+      (print the magnetic drift shell): 
+      <dd> <code> mseg </code> <br>
+      <dt> <a href="ut993.html">UT993</a>
+      (store a magnetic field drift shell): 
+      <dd> <code> mseg </code> <br>
+</dl> </ul> <h4> Modified by </h4> <ul> <dl>
+      <dt><a href="ud319.html">UD319</a>
+      (transfer a field line segment from common block <a href="uc170.html">UC170</a>
+       to <a href="uc130.html">UC130</a>): 
+      <dd> <code> nbrsg</code>, <code>kursg</code> and <code>mseg</code> <br>
+      <dt><a href="ut990.html">UT990</a>
+      (initialize the UNILIB libray): 
+      <dd> <code>nbrsg</code> and <code>kursg</code> <br>
+</dl> </ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="uc110.html">UC110</a>, magnetic drift shell description <br>
+      <a href="uc120.html">UC120</a>, magnetic field line description <br>
+      <a href="uc170.html">UC170</a>, temporary magnetic field line <br>
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

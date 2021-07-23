@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ua634.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UA634
+   === --> 
+<!--meta name="keywords" content="atmospheric densities,proton cross sections,atmospheric mass density"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UA634
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UA634 - compute mass density from number density
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      REAL*8    dens(30), cs(30), tmass
+      INTEGER*4 nsp, ksp(30), kflg, ifail
+      
+      CALL UA634 (dens, nsp, ksp, kflg, cs, tmass, ifail) 
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> dens      </code> <dd>
+      Number density (see <a href="ua630.html#note">note</a> of subroutine
+      UA630) [in]       
+      <dt> <code> nsp </code> <dd>
+      Number of species [in]
+      <dt> <code> ksp    </code> <dd>
+      List of species code [in]
+      <dt> <code> kflg     </code> <dd>
+      Control parameter [in]
+      <dt> <code> cs     </code> <dd>
+      Cross section (see <a href="ua630.html#note">note</a> of subroutine
+      UA630) [in]       
+      <dt> <code> tmass   </code> <dd>
+      Averaged mass [out]
+      <dt> <code> ifail     </code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UA634 averages the number densities of atmospheric
+      component with different weighting.  The weighting algorithm is selected
+      by the argument <code>kflg</code>:
+      <ul> <li> when <code>kflg</code>=0, the number densities are weighted
+      with the atomic mass of the constituents and argument <code>tmass</code>
+      corresponds to the total mass;
+           <li> when <code>kflg</code>=1, the number densities are weighted 
+      by the atomic mass of the constituents and the factor stored in argument
+      <code>cs</code>;
+           <li> when <code>kflg</code>=2, the number densities are only
+      weighted by the factor stored in argument <code>cs</code>. 
+      </ul>
+      Generally the argument <code>cs</code> is used to specify a particle
+      cross section. 
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="63401">-63401</a>, invalid species code <br>
+      <a name="63402">-63402</a>, invalid value for <code>kflg</code> <br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc160.html">UC160</a>,
+      general constants<br> 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="ua630.html">UA630</a>, 
+      evaluate the atmospheric densities <br>
+      <a href="ua636.html">UA636</a>, 
+      evaluate a weighted atmospheric mass<br>
+</ul> <h4> Calls </h4> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

@@ -1,0 +1,277 @@
+/*
+ * Main CSS file
+ */
+
+/***********************/
+/*** Core HTML Setup ***/
+/***********************/
+
+html {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+body {
+    font-family: verdana, lucida, arial, helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 14px;
+    color: #336699;
+    background-color: #ffffff;
+}
+
+p, h1, h2, h3, h4, h5, h6, dl, ul, ol, li, div, form {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+p {
+    padding: 0 0 .5em 0;
+}
+
+ul, ol, dl {
+    padding: 0 0 1em 2em;
+}
+
+a:link, a:visited {
+    color: #e9a600;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+a:hover {
+    color: #e9a600;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+input.button { cursor: pointer; }
+
+h1, h2, h3, h4, h5, h6 { 
+    color: #04406a; 
+    text-align: left;
+}
+
+img { border: 0 none; }
+
+td { padding: .2em; }
+
+.red { color: #e8281c; }
+
+.small { /* Also used in Joomla! for 'Written by, etc' */
+    font-size: 75%;
+    font-weight: normal;
+    text-align: left;
+}
+
+/************************/
+/*** Layout Position  ***/
+/************************/
+
+
+div#topbar1 {
+    position: relative;
+    padding: .1em;
+    background-color: #f3f3f3;
+}
+
+div#topbar1 h3 {    
+    position: static;
+    text-align: right;
+}
+
+div#rightcolumn {
+    width: 100%;
+    float: right;
+    margin: 0 0 0 -12em;    
+    background-color: #f3f3f3;
+}
+
+div#content {
+    margin: 0 0 0 12em;
+    padding: 1em;
+    background-color: #ffffff;
+}
+
+div#leftcolumn {
+    width: 12em;
+    float: right;
+    padding: 24px 0 0 0;
+    background-color: #f3f3f3;
+}
+
+div#footer {
+    clear: both;
+    background-color: #f3f3f3;
+}
+
+div#leftfooter {
+     float: left;
+     width: 12em;
+}
+
+div#rightfooter {
+    border-top: 1px solid #e9a600;
+    padding: .2em;
+    margin: 0 0 0 12em;
+    text-align: right;
+}
+
+
+/*************************/
+/*** Side Menu Styling ***/
+/*************************/
+
+div.moduletable_menu {
+    text-align: left;
+}
+
+div.moduletable_menu h3 {
+    background-color: #4b7ca3;    
+    color: #ffffff;
+    text-align: center;
+    padding: .1em;
+}
+
+div.moduletable_menu ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+div.moduletable_menu li {
+    background-image: none;
+}
+
+div.moduletable_menu ul li a:link, div.moduletable_menu ul li a:visited {
+    color: #336699;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+div.moduletable_menu ul li a:hover {
+    text-decoration: underline;
+    font-weight: normal;
+    color: #e9a600;
+}
+
+img.resize {
+    width: 95%;
+}
+
+a[href ^="http://"] {
+   padding-left: 18px;
+   background: transparent url(img/world_go.png) no-repeat center left;
+}
+
+a[href *=".mag-unilib.eu/"] {
+   padding-left: 18px;
+   background: transparent url(img/unilib_icon_logo000_16x16.png) no-repeat center left;
+}
+
+a[href *=".aeronomie.be/"] {
+   padding-left: 18px;
+   background: transparent url(img/aeronomie_icon_logo_16x16.png) no-repeat center left;
+}
+
+a[href *=".spenvis.oma.be/"] {
+   padding-left: 18px;
+   background: transparent url(img/spenvis_icon_logo000_16x16.png) no-repeat center left;
+}
+
+a[href ^="mailto:"] {
+   padding-left:   0px;
+   padding-right: 18px;
+   background: transparent url(img/email.png) no-repeat center right;
+}
+
+a[href $='.pdf'] { 
+   padding-left:   0px;
+   padding-right: 18px;
+   background: transparent url(img/page_white_acrobat.png) no-repeat center right;
+}
+
+a[href $='.zip'] { 
+   padding-left:   0px;
+   padding-right: 18px;
+   background: transparent url(img/page_white_zip.png) no-repeat center right;
+}
+
+a[target] {
+   padding-left:   0px;
+   padding-right: 18px;
+   background: transparent url(img/application_double.png) no-repeat center right;
+}
+
+a.aeronomie {
+   padding-left: 18px;
+   padding-right: 0px;
+   background: transparent url(img/aeronomie_icon_logo_16x16.png) no-repeat center left;
+}
+
+a.error {
+   padding-left: 0px;
+   padding-right: 18px;
+   background: transparent url(img/link_break.png) no-repeat center right;
+}
+
+
+/*
+ * forcing style into left menu bar
+ */
+
+ul.menu a {
+   padding-left: 18px;
+   background: transparent url(img/bullet_orange.png) no-repeat center left;
+}
+
+ul.menu a[href ^="http://"] {
+   padding-left: 18px;
+   background: transparent url(img/world_go.png) no-repeat center left;
+}
+
+ul.menu a[href *=".mag-unilib.eu/"] {
+   padding-left: 18px;
+   background: transparent url(img/unilib_icon_logo000_16x16.png) no-repeat center left;
+}
+
+ul.menu a[href *=".aeronomie.be/"] {
+   padding-left: 18px;
+   background: transparent url(img/aeronomie_icon_logo_16x16.png) no-repeat center left;
+}
+
+ul.menu a[href *=".spenvis.oma.be/"] {
+   padding-left: 18px;
+   background: transparent url(img/spenvis_icon_logo000_16x16.png) no-repeat center left;
+}
+
+ul.menu a[href ^="mailto:"] {
+   padding-left:   0px;
+   padding-right: 18px;
+   background: transparent url(img/email.png) no-repeat center right;
+}
+
+ul.menu a[href $='.pdf'] { 
+   padding-left:   0px;
+   padding-right: 18px;
+   background: transparent url(img/page_white_acrobat.png) no-repeat center right;
+}
+
+ul.menu a[href $='.zip'] { 
+   padding-left:   0px;
+   padding-right: 18px;
+   background: transparent url(img/page_white_zip.png) no-repeat center right;
+}
+
+ul.menu a.bullet {
+   padding-left: 18px;
+   background: transparent url(img/bullet_orange.png) no-repeat center left;
+}
+
+ul.menu a.aeronomie {
+   padding-left: 18px;
+   background: transparent url(img/aeronomie_icon_logo_16x16.png) no-repeat center left;
+}

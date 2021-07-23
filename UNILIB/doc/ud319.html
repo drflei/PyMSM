@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ud319.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UD319
+   === --> 
+<!--meta name="keywords" content="magnetic field line segment,elementary segment"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UD319
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UD319 - transfer a field line segment from common block <a href="uc170.html">UC170</a> 
+      to <a href="uc130.html">UC130</a>
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INTEGER*4     kind, ifail, ktyp
+      REAL*8        flm, fbm
+      
+      CALL UD319 (flm, fbm, kind, ktyp, ifail)  
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> flm     </code> <dd>
+      McIlwain's parameter of the field line segment [in]     
+      <dt> <code> fbm      </code> <dd>
+      Magnetic field intensity at the mirror points of the field line segment [in]    
+      <dt> <code> kind      </code> <dd>
+      Field line index  [in]
+      <dt> <code> ktyp      </code> <dd>
+      Controlling parameter [in]
+      <dt> <code> ifail     </code> <dd>
+       Error flag (see <a href="#diagnostics">diagnostics</a>) [out] 
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UD319 transfers fully or partialy a magnetic field 
+      line segment stored in the common block <a href="uc170.html">UC170</a>
+      into the set of common blocks <a href="uc110.html">UC110</a>,
+      <a href="uc120.html">UC120</a> and <a href="uc130.html">UC130</a>
+      which is used to store a drift shell.  The transfer is controled by 
+      the arguments <code>kind</code> and <code>ktyp</code>.
+      <p>
+      When the argument <code>kind</code> is set to the value -1, the subroutine
+      UD319 initializes the common blocks <a href="uc110.html">UC110</a>,
+      <a href="uc120.html">UC120</a> and <a href="uc130.html">UC130</a>.  In 
+      particular, the value of the arguments <code>flm</code> and <code>fbm</code>
+      are stored in the argument <code>mlbl</code> of the common block
+      <a href="uc110.html">UC110</a>.
+      <p>
+      To add a field line segment to the set of segments already stored in the 
+      common blocks, the argument <code>kind</code> is used to specify the index
+      of an already-stored segment of which the new segment has to be eastern
+      (the indices refer to the argument <code>mfl</code> of the common block
+      <a href="uc120.html">UC120</a>).  As output, the argument <code>kind</code>
+      is updated to the index of the added segment.
+      <p>
+      The way that the field line segment stored in the common block 
+      <a href="uc170.html">UC170</a> is transfered into the common block
+      <a href="uc130.html">UC130</a> is controled by the argument <code>ktyp</code>:
+      <ul>
+      <li>When <code>ktyp</code>=1, all the field line segments are completely
+      transfered. When <code>falt</code> >-500, it  includes the foot points and also
+      the intermediate points  on the field line situated below the mirror points and 
+      above the foot prints.           
+      <li>When <code>ktyp</code>=2, for each field line segments, only the 
+      points comprised between the mirror points are transfered.
+      When <code>falt</code> >-500, the foot points of the segment are transfered
+      but not the intermediate points between them and the mirror points.
+      <li>When <code>ktyp</code>=3, the only points transfered from each field
+      line segments are the mirror points, the point in the lowest
+      magnetic field intensity and the foot points when <code>falt</code> >-500.
+      </ul>
+      <p>
+      Note that, except when an error occurs, the argument <code>ifail</code>
+      is used to return the number of elementary segments involved in the transfer.
+      This number is function of the contents of the common block 
+      <a href="uc170.html">UC170</a> and of the value of <code>ktyp</code>.
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="31901">-31901</a>,
+      no segment, or no (<i>B</i>,<i>I</i>) coordinates of the field line<br>
+      <a name="31902">-31902</a>, no (<i>B</i>,<i>I</i>) coordinates of the
+      drift shell <br>
+      <a name="31903">-31903</a>, problem with the coordinate <i>B</i> <br>
+      <a name="31904">-31904</a>, problem with the coordinate <i>I</i> <br>
+      <a name="31905">-31905</a>, too many field lines for the common block
+      <a href="uc120.html">UC120</a><br>
+      <a name="31906">-31906</a>, too many field line segments for the common
+      block <a href="uc130.html">UC130</a><br>
+      <a name="31907">-31907</a>, bad argument <code>ktyp</code><br>
+      <a name="31908">-31908</a>, argument <code>kind</code> greater than
+      the number of computed field lines <br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc110.html">UC110</a>,
+      magnetic drift shell description <br> 
+      <a href="uc120.html">UC120</a>,
+      magnetic field line description<br> 
+      <a href="uc130.html">UC130</a>,
+      set of magnetic field line segments<br> 
+      <a href="uc160.html">UC160</a>,
+      general constants<br>
+      <a href="uc170.html">UC170</a>,
+      temporary magnetic field line<br>
+      <a href="uc190.html">UC190</a>,
+      control parameters, set 1<br> 
+      <a href="uc192.html">UC192</a>,
+      control parameters, set 2<br>         
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="ud310.html">UD310</a>,
+      trace a magnetic drift shell <br> 
+      <a href="ud317.html">UD317</a>,
+      trace a magnetic drift shell (new)<br>         
+</ul> <h4> Calls </h4> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+   
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

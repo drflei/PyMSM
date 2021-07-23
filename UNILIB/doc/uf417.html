@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uf417.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UF417
+   === --> 
+<!--meta name="keywords" content="magnetic field line segment,mirror point,McIlwain shell parameter"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UF417
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UF417 - search the geographic position of a 
+      magnetic field line (new)
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      REAL*8        fim, fbm, glon, guess, falt
+      INTEGER*4     ifail
+      TYPE(<a href="structure.html#zgeo">zgeo</a>) mpos   
+      
+      CALL UF470 (fim, fbm, glon, guess, mpos, falt, ifail)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> fim      </code> <dd>
+      Value of the integral invariant <i>I</i> [in]
+      <dt> <code> fbm      </code> <dd>
+      Magnetic field intensity at the mirror points [in]
+      <dt> <code> glon      </code> <dd>
+      Equatorial longitude [in]
+      <dt> <code> guess      </code> <dd>
+      Equatorial radius [in/out]
+      <dt> <code> mpos      </code> <dd>
+      Equatorial location [out]
+      <dt> <code> falt      </code> <dd>
+      Boundary condition on the altitude [in]
+      <dt> <code> ifail      </code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]    
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UF417 searches iteratively a magnetic field line
+      segment for which the integral invariant <i>I</i>, the magnetic field
+      intensity <i>B</i><sub>m</sub> at the mirror points and the longitude
+      of the point with the lowest magnetic field intensity are fixed.
+      The values of  <i>I</i>, <i>B</i><sub>m</sub> and longitude are passed
+      through the arguments <code>fim</code>, <code>fbm</code> and
+      <code>glon</code>, respectively. The functionality of subroutine
+      UF417 is very similar to the one of subroutine <a
+      href="uf410.html">UF410</a> which depends on the shell parameter
+      <i>L</i> instead of <i>I</i>. The subroutine UF417 seems to be
+      better suited for equatorial field line segment (<i>I</i>=0).
+<p>
+      The argument <code>guess</code> can be used to guess the geocentric
+      radius of the point with the lowest magnetic field intensity.
+      As a result, the magnetic field line segment is returned in the common
+      block <a href="uc170.html">UC170</a>, the argument <code>guess</code>
+      is set to the current geocentric radius and the argument
+      <code>mpos</code> contains the geographic location of the local 
+      magnetic equator.  
+      Note that the argument <code>falt</code> can be used such that the 
+      subroutine traces the field line till the foot points.
+</ul> <h4> History </h4> <ul>
+      The subroutines UF417 and <a href="ud317.html">UD317</a> do not 
+      exist in version 1.13 and earlier.
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="41701">-41701</a>,
+      field line segment not found, probably the value of <i>B</i><sub>m</sub> 
+      is less than  <i>B</i><sub>0</sub> <br>
+      <a name="41702">-41702</a>,
+      field line segment not found<br>
+      <a name="41703">-41703</a>,
+      too many iterations<br>
+      <a name="41704">-41704</a>,
+      field line segment found, but problem with the altitude boundary <br>
+      <a name="41705">-41705</a>,
+      invalid value of <code>flm</code> or <code>fbm</code> argument <br>
+      <a name="41706">-41706</a>,
+      field line segment found, but the field line is passing below the
+      altitude boundary <br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc160.html">UC160</a>,
+      general constants<br>
+      <a href="uc190.html">UC190</a>,
+      control parameters, set 1<br> 
+      <a href="uc192.html">UC192</a>,
+      control parameters, set 2<br> 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="ud317.html">UD317</a>,
+      trace a magnetic drift shell <br>
+</ul> <h4> Calls </h4> <ul>
+      <a href="uf411.html">UF411</a>, 
+      search a local magnetic equator <br>
+      <a href="uf415.html">UF415</a>, 
+      rebuild the labels of the field line<br>     
+      <a href="uf420.html">UF420</a>, 
+      trace a magnetic field line segment passing through a given
+      position<br>     
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ul220.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UL220
+   === --> 
+<!--meta name="keywords" content="B-L coordinates,magnetic field line,local magnetic equator,McIlwain shell parameter,Kaufmann invariant,pitch angle"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UL220
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UL220 - get information on a magnetic field line segment 
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      TYPE(<a href="structure.html#zgeo">zgeo</a>) mpos
+      INTEGER*4     ifail, nfbm
+      REAL*8        alpha(nfbm), fbm(nfbm), flm(nfbm)
+      REAL*8        fkm(nfbm), fsm(nfbm), fbeq, fs(nfbm)
+      
+      CALL UL220 (mpos, alpha, nfbm, fbm, flm, fkm, fsm, fbeq, fs, ifail)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> mpos      </code> <dd>
+      Geographic location (GEO)  [in]
+      <dt> <code> alpha     </code> <dd>
+      Local pitch angles [in]
+      <dt> <code> nfbm      </code> <dd>
+      Number of pitch angles [in]
+      <dt> <code> fbm      </code> <dd>
+      Magnetic field intensity at the mirror points [out]
+      <dt> <code> flm     </code> <dd>
+      McIlwain's shell parameter  [out]
+      <dt> <code> fkm      </code> <dd>
+      Kaufman parameter <i>K</i> [out]
+      <dt> <code> fsm      </code> <dd>
+      Arc length of the field line segment between the mirror points [out]
+      <dt> <code> fbeq      </code> <dd> 
+      Lowest magnetic field intensity along the field line [out]
+      <dt> <code> fs     </code> <dd>
+      Arc length of the field line segment from the northern mirror point to 
+      <code>mpos</code> [out]
+      <dt> <code> ifail      </code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]   
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UL220 computes magnetic coordinates such as <i>B</i><sub>m</sub> 
+      and <i>L</i> associated to a magnetic field line segment passing through the 
+      geographic position <code>mpos</code>.
+      The subroutine accepts as input a list of local pitch angles.  Note that the values 
+      set in the argument <code>alpha</code> must be sorted by increasing order (from 0 to
+      90 degree).
+      The magnetic field line passing through the position <code>mpos</code> is traced 
+      until all the mirror points are encountered.  For each value of argument
+      <code>alpha</code>, a pair of mirror points are determined and the corresponding
+      arguments <code>fbm</code>, <code>flm</code>, <code>fkm</code>, <code>fsm</code>,
+      <code>fs</code> are evaluated.
+      <p>
+      Note that some errors may occur during the process for a subset of local pitch 
+      angles.  As far as possible, the subroutine UL220 does not stop on these errors
+      and continues the process for the other pitch angle values.  As a trace of such
+      an error, the corresponding value of argument <code>flm</code> is set to a negative
+      value.  The list of possible errors are given in the table below.
+      <center><br><table border=1 cellspacing=0 width="80%">
+       <tr><th>Value of <code>flm</code></th><th>error diagnostic</th></tr>
+       <tr><td>-1 </td><td>The magnetic field line reaches too high geomagnetic latitude
+                          (see diagnostic <a href="um530.html#diagnostics">-53003</a>)   </td></tr>
+       <tr><td>-2 </td><td>The magnetic field crosses the magnetopause 
+                          (see diagnostic <a href="um533.html#diagnostics">-53301</a>) </td></tr>
+       <tr><td>-3 </td><td>The reached magnetic field intensity is outside valid
+                           limits (see diagnostic <a href="um530.html#diagnostics">-53002</a>) </td></tr>
+       <tr><td>-4 </td><td>Maximum number of steps along the magnetic field line has been
+                           reached (see diagnostic <a href="uf420.html#diagnostics">-42009</a>) </td></tr>
+       <tr><td>-5 </td><td>The magnetic field line goes too deep inside the Earth
+                            (see diagnostics <a href="um530.html#diagnostics">-53001</a>
+                             and <a href="um530.html#diagnostics">-53004</a>)</td></tr>
+       <tr><td>-6 </td><td>Out of allocated memory (see diagnostics 
+                           <a href="uf423.html#diagnostics">-42301</a>
+                            and <a href="uf424.html#diagnostics">-42401</a>)</td></tr>
+       <tr><td>-7 </td><td>The magnetic field line pass through a local maximum
+                            </td></tr>
+       <tr><td>-8 </td><td>An error occurred in the interpolation routine (see diagnostics 
+                          <a href="uf428.html#diagnostics">-428**</a> and
+                          <a href="uf426.html#diagnostics">-426**</a>)</td></tr>
+       <tr><td>-9 </td><td>An error occurred in the evaluation of <i>I</i> (see diagnostics 
+                          <a href="ul230.html#diagnostics">-230**</a> and
+                          <a href="ul240.html#diagnostics">-240**</a>)
+                            </td></tr>
+       <tr><td>-10</td><td>Not documented </td></tr>
+      </table></center>
+</ul><h4> References </h4> <ul>
+     <li>Heynderickx, D., Lemaire, J., and Daly, E.J.,
+     <i>Historical review of the different procedures used to compute the L
+     parameter</i>, Aeronomica Acta A-Nb <b>380</b> (1994),
+     J. Nuclear Tracks Radiat. Meas. (1995)                   
+     <li>McIlwain, C.E., <i>Coordinates for mapping the distribution of magnetically
+     trapped particles</i>, JGR <b>66</b> (1961) 3681-3691 
+     <li>Roederer, J.G., <i>Dynamics of geomagnetically trapped radiation</i>,
+     Springer-Verlag (1970)               
+</ul><h4> History </h4> <ul>
+     In version 2.02 in earlier, some <i>L</i> values are not evaluated
+     when more than one local pitch angle is requested.
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="22001">-22001</a>, Invalid value of alpha <br>
+      <a name="22002">-22002</a>, Values of alpha are not increasing or invalid values <br>
+      <a name="22003">-22003</a>, Do not find a pair of mirror points <br>
+      <a name="22004">-22004</a>, Unable to trace correctly the field line segment <br>   
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc160.html">UC160</a>,
+      general constants<br>
+      <a href="uc170.html">UC170</a>,
+      temporary magnetic field line<br>
+      <a href="uc190.html">UC190</a>,
+      control parameters, set 1<br>     
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      None
+</ul> <h4> Calls </h4> <ul>
+      <a href="um530.html">UM530</a>, 
+      evaluate the magnetic field vector <br>
+      <a href="uf420.html">UF420</a>, 
+      trace a magnetic field line segment passing through a given position <br>
+      <a href="ul230.html">UL230</a>, 
+      evaluate the integral invariant coordinate <i>I</i> <br>
+      <a href="ul240.html">UL240</a>, 
+      evaluate the Hilton's function <br>      
+</ul> <h2> <a name="seealso"> See also </a> </h2><ul> 
+      <a href="faq05.html">FAQ G.05</a> Which are the coordinates and units used ? <br>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      <a href="try02.html">#2</a>, evaluation of the (<i>B</i>, <i>L</i>) 
+                                  coordinates<br>   
+    <a href="try07.html">#7</a>, iso-contour of the shell parameter<br>
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

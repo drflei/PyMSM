@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uc170.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UC170
+   === --> 
+<!--meta name="keywords" content="radius of curvature,magnetic field line segment,McIlwain shell parameter,Kaufmann invariant,integral invariant,foot point,mirror point,local magnetic equator,Runge-Kutta,elementary segment"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UC170
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Common block UC170 - temporary magnetic field line
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INCLUDE 'structure.h'
+      
+      COMMON /UC170/ nsg, kgp, mlab, mlin, mele
+      
+      INTEGER*4      nsg, kgp
+      TYPE(<a href="structure.html#zlbl">zlbl</a>)  mlab
+      TYPE(<a href="structure.html#zfln">zfln</a>)  mlin
+      TYPE(<a href="structure.html#zseg">zseg</a>)  mele(<a href="structure.html#description">nx170<a>) 
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> nsg    </code> <dd>
+      Number of elementary segment already computed
+      <dt> <code> kgp   </code> <dd>
+      Indice of the current elementary segment
+      <dt> <code> mlab  </code> <dd>
+      Label of the field line segment
+      <dt> <code> mlin  </code> <dd>
+      Global description of the field line segment
+      <dt> <code> mele   </code> <dd>
+      Set of the elementary field line segments
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The common block UC170 provides a way to store a magnetic
+      field line segment.  The magnetic field line segment is defined as a set of elementary
+      segments.  The elementary segments are stored in the argument <code>mele</code> of the
+      common block.  The arguments <code>mlab</code> and <code>mlin</code> are used to store
+      general information on the magnetic field line segments.
+      <p>
+      The description of an elementary segment includes:
+      <ul><li>a start point defined by its geographic position,
+              <code>mele()%beg%coord</code>;
+          <li>the magnetic field vector at this point, <code>mele()%beg%b</code>;
+          <li>the local radius of curvature of the magnetic field line, 
+              <code>mele()%beg%rcurv</code>;
+          <li>the arc length along the magnetic field line from a fixed point to the 
+              start point <code>mele()%arcl</code>;
+          <li>the cosine of the local pitch-angle of any particle mirroring at the magnetic
+              field intensity <code>mlab%fbmp</code>, <code>mele()%csalp</code>;
+          <li>the intermediate values of the magnetic field intensity obtained during the
+              Runge-Kutta step, <code>mele()%rkstp</code>.
+      </ul>
+      <p>
+      The pointers of the argument <code>mlin</code> correspond to the first and last 
+      segments of the field line segment (<code>mlin%ind%jbeg</code> and
+      <code>mlin%ind%jend</code>) and to both mirror points (<code>mlin%ind%jmirpn</code>
+      and <code>mlin%ind%jmirps</code>).
+      <p>
+      Note that a similar structure is used with the common blocks <a href="uc110.html">UC110</a>, 
+      <a href="uc120.html">UC120</a>, and <a href="uc130.html">UC130</a>.
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Used by </h4> <ul> <dl>
+      <dt><a href="ul220.html">UL220</a>
+      (get information on a magnetic field line segment): 
+      <dd><code>kgp</code>, <code>mlin</code>, <code>mlab</code>, 
+      <code>mele()%arcl</code>, <code>mele()%beg%b%dnrm</code> and
+      <code>mele()%beg%coord </code> <br>  
+      <dt><a href="ul230.html">UL230</a>
+      (evaluate the integral invariant coordinate <i>I</i> ): 
+      <dd> <code> mlin%ind%jmirpn</code>, <code>mlin%ind%jmirps</code>,
+      <code>mele()%beg%b%dnrm</code>, <code>mele()%rkstp</code>,
+      <code>mele()%csalp</code>, <code>mele()%arcl</code>,
+      <code>mlab%lbmp</code> and <code>mlab%fbmp</code> <br>
+      <dt> <a href="ud317.html">UD317</a>
+      (trace a magnetic drift shell - new):
+      <dd> <code>mele()%beg</code>, <code>mlin%ind</code>    
+      <dt><a href="ud319.html">UD319</a>
+      (transfer a field line segment from common block <a href="uc170.html">UC170</a>
+      to <a href="uc130.html">UC130</a>): 
+      <dd> <code>nsg</code>, <code>mlab%lbmp</code>, <code>mlab%linv</code>,
+      <code>mlab%fbmp</code>, <code>mlab%finv</code>, <code>mlin</code> and
+      <code>mele</code> <br>
+      <dt><a href="ud328.html">UD328</a>
+      (evaluate the second derivative of <i>B</i>):
+      <dd><code>kgp</code>, <code>nsg</code> and <code>mele()%arcl</code><br> 
+      <dt><a href="uf411.html">UF411</a>
+      (search a local magnetic equator): 
+      <dd> <code>mlin%equat</code> and <code>mlab</code> <br>
+      <dt><a href="uf415.html">UF415</a>
+      (rebuild the labels of the field line): 
+      <dd> <code>mele()%beg%b%dnrm</code> <br>
+      <dt><a href="uf421.html">UF421</a>
+      (initialize and close a field line segment ): 
+      <dd> <code>kgp</code> <br>
+      <dt><a href="uf422.html">UF422</a>
+      (follow a field line until a boundary condition is reached): 
+      <dd> <code>kgp</code>, <code>mele()%beg%coord</code>,
+      <code>mele()%beg%rcurv</code> and <code>mele()%beg%b%dnrm</code> <br>
+      <dt><a href="uf423.html">UF423</a>
+      (Runge Kutta step): 
+      <dd> <code>kgp</code>, <code>mele()%beg%coord</code>,
+      <code>mele()%beg%b</code> and <code>mele()%arcl</code> <br>
+      <dt><a href="uf424.html">UF424</a>
+      (search the lowest <i>B</i> value): 
+      <dd> <code>nsg</code> and <code>mele()%beg</code> <br>
+      <dt><a href="uf426.html">UF426</a>
+      (interpolating an extremum of <i>B</i>): 
+      <dd> <code>kgp</code> and <code>mele</code>  <br>
+      <dt><a href="uf427.html">UF427</a>
+      (interpolating a value of <i>B</i>): 
+      <dd> <code>kgp</code>, <code>mele()%beg%coord</code>
+      and <code>mele()%beg%b</code><br>
+      <dt><a href="uf428.html">UF428</a>
+      (interpolating an altitude): 
+      <dd> <code>kgp</code>, <code>mele()%beg%coord</code>
+      and <code>mele()%beg%b</code><br>
+      <dt><a href="uf429.html">UF429</a>
+      (transpose a field line segment): 
+      <dd> <code> mele</code> <br>
+      <dt><a href="ut985.html">UT985</a>
+      (transfer a field line of the drift shell to IDL ): 
+      <dd> <code>mlin%ind%jbeg</code>, <code>mlin%ind%jend</code>,
+      <code>mlin%ind%jmirps</code>, <code>mlin%ind%jmirpn</code> and
+      <dd> <code>mele</code> <br>
+      <dt><a href="ut991.html">UT991</a>
+      (print the magnetic field line): 
+      <dd> <code>nsg</code>, <code>kgp</code>, <code>mlab</code>,
+      <code>mlin</code> and <code>mele</code><br>
+      <dt><a href="ut998.html">UT998</a>
+      (evaluate the magnetic field vector and the normal to the field line): 
+      <dd> <code>nsg</code>, <code>kgp</code>, <code>mele()%beg%coord</code>
+      and <code>mele()%beg%b</code><br>
+</dl> </ul> <h4> Modified by </h4> <ul> <dl>
+      <dt><a href="ul220.html">UL220</a>
+      (get information on a magnetic field line segment): 
+      <dd> <code>mlin</code> and <code>mlab</code> <br>
+      <dt><a href="ul230.html">UL230</a>
+      (evaluate the integral invariant coordinate <i>I</i> ): 
+      <dd><code>mlab%linv</code> , <code>mlab%lkauf</code> ,
+      <code>mlab%finv</code> , <code>mlab%fkauf</code>, <code>mlab%lbmp</code>,
+      <code>mlab%fbmp</code> and <code>mele()%csalp</code> <br>
+      <dt><a href="ud328.html">UD328</a>
+      (evaluate the second derivative of <i>B</i>):
+      <dd> <code>mele()%beg%coord</code>, <code>mele()%arcl</code>, 
+      <code>mele()%beg%b</code> and <code>kgp</code> <br>
+      <dt><a href="uf415.html">UF415</a>
+      (rebuild the labels of the field line): 
+      <dd> <code>mlab%linv</code>, <code>mlab%lbmp</code>, <code>mlab%lkauf</code>,  
+      <code>mlab%llmi</code>, <code>mlab%lalp0</code>, <code>mlab%lphi</code>,  
+      <code>mlab%ltim</code> and <code>mlab%fbmp</code> <br>
+      <dt><a href="uf420.html">UF420</a>
+      (trace a magnetic field line segment passing through a given
+       position): 
+      <dd> <code>kgp</code>,  <code>mlab%linv</code>,
+      <code>mlab%llmi</code>, <code>mlab%lkauf</code>,
+      <code>mlab%fbmp</code>, <code>mlab%lbmp</code>,
+      <code>mlin%ind</code>, <code>mlin%keast</code>,
+      <code>mlin%kwest</code>, <code>mlin%equat%coord</code>,
+      <code>mlin%footpn</code>, <code>mlin%footps</code>,
+      <code>mlin%dtdft</code> and <code>mlin%drift</code> <br>
+      <dt><a href="uf421.html">UF421</a>
+      (initialize and close a field line segment ): 
+      <dd> <code>nsg</code>, <code>kgp</code>, <code>mele()%beg%coord</code>,
+      <code>mele()%beg%b</code>, <code>mele()%beg%rcurv</code>,
+      <code>mele()%arcl</code> and <code>mele()%rkstp()</code> <br>
+      <dt><a href="uf422.html">UF422</a>
+      (follow a field line until a boundary condition is reached): 
+      <dd> <code>kgp</code> and <code>mele()%beg%rcurv</code> <br>
+      <dt><a href="uf423.html">UF423</a>
+      (Runge Kutta step): 
+      <dd> <code>kgp</code>, <code>mele()%rkstp</code>, <code>mele()%beg%coord</code>, 
+      <code>mele()%beg%b</code>, <code>mele()%arcl</code>, 
+      <code>mele()%beg%rcurv</code> and <code>mele()%dtbnd</code><br>
+      <dt><a href="uf424.html">UF424</a>
+      (search the lowest <i>B</i> value): 
+      <dd> <code>kgp</code> and <code>mele()%beg%rcurv</code>  <br>
+      <dt><a href="uf426.html">UF426</a>
+      (interpolating an extremum of <i>B</i>): 
+      <dd> <code>kgp</code> and <code>mele</code> <br>
+      <dt><a href="uf427.html">UF427</a>
+      (interpolating a value of <i>B</i>): 
+      <dd> <code> kgp </code>, <code> mele()%beg%coord </code>
+      and  <code> mele()%beg%b </code><br>
+      <dt><a href="uf428.html">UF428</a>
+      (interpolating an altitude): 
+      <dd> <code> kgp </code>, <code> mele()%beg%coord </code>
+      and  <code> mele()%beg%b </code><br>
+      <dt><a href="uf429.html">UF429</a>
+      (transpose a field line segment): 
+      <dd> <code> mele</code>, <code>mlin%ind%jmirps</code> and
+      <code>mlin%ind%jmirpn</code> <br>
+      <dt><a href="ut998.html">UT998</a>
+      (evaluate the magnetic field vector and the normal to the field line): 
+      <dd> <code>kgp</code>, <code>mele()%beg%coord</code>, 
+      <code>mele()%beg%b</code>, <code>mele()%beg%rcurv</code>
+      and <code>mele()%arcl</code> <br>
+</dl> </ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

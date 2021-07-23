@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: um510.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UM510   
+   === --> 
+<!--meta name="keywords" content="geomagnetic field model,initialisation,IGRF,Jensen &amp; Cain,GSFC 12/66,magnetic field vector,printing"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UM510
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+]  </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UM510 - select a geomagnetic field model
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INTEGER*4      kint, kunit, ifail
+      REAL*8         year
+      CHARACTER*32   lbint
+
+      CALL UM510 (kint, year, lbint, kunit, ifail)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> kint      </code> <dd>
+      Index of the geomagnetic field model (-2, -1, 0, 1, 2, 3 or 4) [in]
+      <dt> <code> year      </code> <dd>
+      Epoch of the geomagnetic field calculation expressed in year [in]
+      <dt> <code> lbint     </code> <dd>
+      Label of the geomagnetic field model [out]
+      <dt> <code> kunit     </code> <dd>
+      File unit for the summary table
+                   (see <a href="ut990.html#note">note</a> of subroutine UT990) [in]
+      <dt> <code> ifail     </code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UM510 may be used to initialize the geomagnetic
+      field description inside the common block <a href="uc140.html">UC140</a>. 
+      The <code>kint</code>
+      argument allows to choose between four models as listed below.
+      <center><br><table border=1 cellspacing=0 width="80%">
+        <tr><th width="50"><code>kint</code></th>
+            <th width="200">Geomagnetic field model</th>
+            <th>Remarks</th></tr>
+        <tr><td align=center>0</td><td align=center>DGRF/IGRF 1900-2015</td>
+            <td align=center> - </td></tr>
+        <tr><td align=center>1</td><td align=center>Jensen & Cain (1962)</td>
+            <td>fixed to epoch 1960</td></tr>
+        <tr><td align=center>-1</td><td align=center>Jensen & Cain (1962)</td>
+            <td>fixed to epoch 1960 and corrected for the SAA 
+                westward drift</td></tr>
+        <tr><td align=center>2</td><td align=center>GSFC 12/66 </td>
+            <td align=center> - </td></tr>
+        <tr><td align=center>-2</td><td align=center>GSFC 12/66 </td>
+            <td>fixed to epoch 1970 and corrected for the 
+                SAA westward drift</td></tr>
+        <tr><td align=center>3</td><td align=center>Dipole magnetic field</td>
+            <td align=center> - </td></tr>
+        <tr style=font-style:italic><td align=center>4</td><td align=center>DGRF/IGRF 1900-2015</td>
+            <td><b>deprecated</b> use the Kluge algorithm to evaluate
+                the geomagnetic field </td></tr>
+      </table><br></center>
+      The dipole magnetic field model is obtained from the DGRF/IGRF model
+      by a truncation to the second order of the expansion coefficient.
+      The <code>year</code> argument specifies the epoch used to evaluate the
+      geomagnetic field model. The Jensen & Cain model does not depend on
+      time and has its epoch fixed to 1960.
+      When <code>kunit</code> is greater than zero, a summary table is
+      written by the subroutine.
+      As result, the <code>lbint</code> argument contains a string with the
+      label of the selected internal magnetic field model.
+      <p>
+       The Jensen & Cain model has been used to produce the NASA trapped 
+       radiation belt models AP-8 MIN, AE-8 MIN and AE-8 MAX. The
+       GSFC 12/66 model, updated to 1970, has been used to generate AP-8
+       MAX model. Since these NASA models were built more than twenty years 
+       ago, the location of the South Atlantic Anomaly (SAA) has shifted 
+       considerably to the West compared to its location predicted by the two
+       old magnetic field models, due to the secular variation of
+       the geomagnetic field distribution. When the <code>kint</code> argument
+       is set to -1 or -2, the effect of this drift will be compensated by 
+       applying an eastward rotation to the geographic coordinates before
+       the evaluation of the internal magnetic field.
+</ul> <h4> References </h4> <ul>
+      <li>Cain, J.C., Hendricks, S.J., Langel, R.A. and Hudson, W.V.,
+      <i>A proposed model for the international geomagnetic reference
+      field-1965</i>, J.Geomag.Geoelectr. <b>19</b> (1967) 335-355
+      <li>Heynderickx, D., <i>Comparison between methods to compensate for
+      the secular motion of the south atlantic anomaly</i>, Aeronomica Acta
+      <b>385</b> (1994) 
+      <li>Jensen, D.C. and Cain, J.C., <i>An interim geomagnetic field</i>,
+      JGR <b>67</b> (1962) 3568
+</ul> <h4> History </h4> <ul>
+      <li>In version 2.02 and earlier the string returned  by argument
+      <code>lbint</code> is not correctly copied in the argument
+      <code>mint.label</code> of common block <a href="uc140.html">UC140</a>.</li>
+      <li> In version 2.22 and earlier, problems have been discovered in 
+             subroutine UM510 when the argument <code>kint</code> is set to 4
+             (evaluation of DGRF/IGRF by the Kluge algorithm).
+             This option is now disabled</li> 
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="51001">-51001</a>, invalid geomagnetic field model index <br>
+      <a name="51002">-51002</a>, geomagnetic field uncorrectly loaded <br>
+      <a name="51003">-51003</a>, error on output device <br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc140.html">UC140</a>,
+      magnetic field description<br> 
+      <a href="uc160.html">UC160</a>, 
+      general constants<br>        
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      None
+</ul> <h4> Calls </h4> <ul>
+      <a href="um511.html">UM511</a>, 
+           set the Jensen & Cain 1960 model coefficients <br>
+      <a href="um512.html">UM512</a>, 
+           set the GSFC 12/66 model coefficients <br>
+      <a href="um513.html">UM513</a>, 
+           set the DGRF/IGRF model coefficients <br>
+      <a href="um517.html">UM517</a>, 
+           transform from Schmidt to Kluge normalisation <br>
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="um520.html">UM520</a>, 
+           select an external magnetic field model <br>
+      <a href="um530.html">UM530</a>, 
+           evaluate the magnetic field vector <br>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      <a href="try01.html">#1</a>, evaluation of the magnetic field vector<br>
+      <a href="try02.html">#2</a>, evaluation of the (<i>B</i>, <i>L</i>) 
+                                  coordinates<br>   
+      <a href="try03.html">#3</a>, evaluation of the third invariant<br>
+      <a href="try04.html">#4</a>, search the point with the lowest altitude 
+                                  on a magnetic drift shell<br>
+      <a href="try05.html">#5</a>, namelist to initialize UNILIB<br>
+      <a href="try07.html">#7</a>, iso-contour of the shell parameter<br>
+      <a href="faq06.html">G.06</a> How to start using the UNILIB library ?<br>
+      <a href="fat03.html">T.03</a> How to customize the magnetic field
+                                   model used by the library ? <br>
+      <a href="fat04.html">T.04</a> Why are Roederer's <i>L</i><sup>*</sup>
+                                   and McIlwain's <i>L</i> parameters
+                                   different ? <br>
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: bug01.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - Bug report
+   === --> 
+<!--meta name="Keywords" content="bug report"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Bug Report
+</h1><h6>
+ [ <a href="#sign">Signature</a> 
+ | <a href="#diag">Diagnostic</a> 
+ | <a href="#solu">Solution</a> 
+ | <a href="#hist">History</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="sign"> Signature </a> </h2> <ul> 
+      R.01 - Anomalous return of subroutine UD310 with error code -41108
+</ul> <h2> <a name="diag"> Diagnostic </a> </h2> <ul>
+      When the subroutine <a href="ud310.html">UD310</a> is called
+      several times with a fixed value of the shell parameter 
+      (argument <code>flm0</code>) and increasing value of the
+      magnetic field intensity at the mirror points (argument
+      <code>fbm0</code>), sometimes the subroutine returns with
+      an error flag set to <code>-41108</code>.  The problem
+      is illustrated below where <i>L</i> is fixed at 3.05 and
+      <i>B</i><sub>m</sub> is varying from 0.15 to 0.17. The error
+      occurs when <i>B</i><sub>m</sub> is equal to 0.15825.
+      <p>
+      The error code -41108 is produced by the subroutine 
+      <a href="uf411.html">UF411</a> (<i>search a local magnetic equator</i>)
+      when an error has occured in the subroutines
+      <a href="uf426.html">UF426</a> (<i>interpolating an extremum of B</i>),
+      <a href="uf427.html">UF427</a> (<i>interpolating a value of B</i>)
+      or
+      <a href="uf428.html">UF428</a> (<i>interpolating an altitude</i>).
+      These three subroutines are used to determine the location of the
+      local magnetic equator, the mirror points and the foot points,
+      respectively.  In the case of the illustration, the error occurs
+      in subroutine <a href="uf427.html">UF427</a> with the error
+      code -42702 (<i>too many iterations</i>). In version 1.05, the
+      subroutine stops with an error after 10 iterations.
+</ul> <h4> Source </h4> <pre>
+      PROGRAM prob_01
+C
+      INCLUDE 'structure.h'
+C
+      INTEGER*4       kunit, kinit, ifail, kint, kext, noprint
+      CHARACTER*32    lbint, lbext
+      REAL*8          year, dst, fkp, swd, swv, amjd
+      REAL*8          gm, bb0(5), fbm, flm, falt
+      INTEGER*4       knfl, ktyplus, i
+C
+      COMMON /<a href="uc190.html">UC190</a>/  prop, stepx, stpmin, umsq, upsq, uk2, uk3, 
+     :                epskm, epsrel, stplst, xclat, kmflg, nxstp       
+      REAL*8          prop, stepx, stpmin, umsq, upsq, uk2, uk3, 
+     :                epskm, epsrel, stplst, xclat
+      INTEGER*4       kmflg, nxstp
+C
+      DATA kunit, kinit, kint, kext, noprint/ 6, 1, 0, 0, -6/
+      DATA year, dst, fkp, swd, swv, amjd/ 1995.0d0, 5*0.0d0/
+      DATA gm, flm, falt/ 0.311653d0, 3.05d0, -999.9d0/
+      DATA ktyplus, knfl/ 3, 60/
+      DATA bb0/ 13.70163d0, 14.05445d0, 14.40727d0, 14.76010d0,
+     :          15.11292d0/
+C
+      CALL <a href="ut990.html">UT990</a> (kunit, kinit, ifail)
+      IF( ifail .LT. 0 )STOP
+      CALL <a href="um510.html">UM510</a> (kint, year, lbint, noprint, ifail)
+      IF( ifail .LT. 0 )STOP
+      CALL <a href="um520.html">UM520</a> (kext, amjd, dst, fkp, swd, swv,
+     :           lbext, noprint, ifail)
+C     <b>Be aware thar the synopsis of subroutine UM520 has changed.</b>
+      IF( ifail .LT. 0 )STOP
+C
+      WRITE (kunit,1020)epsrel*100
+      WRITE (kunit,1000)
+      DO i=1,5
+        fbm   = bb0(i) * gm / flm**3
+        ifail = 0
+        CALL <a href="ud310.html">UD310</a> (fbm, flm, falt, knfl, ktyplus, ifail)
+        WRITE (kunit,1010) i, flm, bb0(i), fbm, ifail
+      ENDDO
+C
+      epsrel  = epsrel*2
+      WRITE (kunit,1020)epsrel*100
+      WRITE (kunit,1000)
+      DO i=1,5
+        fbm   = bb0(i) * gm / flm**3
+        ifail = 0
+        CALL <a href="ud310.html">UD310</a> (fbm, flm, falt, knfl, ktyplus, ifail)
+        WRITE (kunit,1010) i, flm, bb0(i), fbm, ifail
+      ENDDO
+C
+ 1000 FORMAT(' #   L     B/B0    B      IFAIL')
+ 1010 FORMAT(i2,f5.2,f9.5,f8.5,i7)
+ 1020 FORMAT(/' Magnetic field precision set to',f11.4,' %')
+C
+      END
+</pre> <h4> Result </h4> <pre>
+                                UNILIB Library
+                                 Version  1.05
+                        Developed by BIRA/IASB for ESA
+
+                               0500-002000-0500
+
+
+--- Main control parameters ---
+
+     UC160 (general constants):
+                     Geoid major axis = 6378.16     km
+                     Geoid minor axis = 6356.77     km
+               Mean Earth radius (Re) = 6371.20     km
+                 Ecliptic inclination =   23.441512 deg
+                McIlwain Earth dipole =    0.311653 G/Re^3
+
+     UC190 (field line tracing):
+                    Maximum step size = 2548.5      km at one Re
+             Maximum "last" step size =   25.0      km
+                    Minimum step size =    5.0      km
+                   Altitude precision =  250.       m
+             Magnetic field precision =    0.00     %
+                  Maximum step number =  400
+
+     UC192 (magnetic field evaluation):
+            Max. geomagnetic latitude =   80.0      deg
+                       Minimum radius =    0.157    Re
+           (drift shell tracing):
+                       Precision on L =    0.10000  %
+           Precision on the longitude =    0.05     deg
+
+Magnetic field precision set to     0.0006 %
+#   L     B/B0    B      IFAIL
+1 3.05 13.70163 0.15050      1
+2 3.05 14.05445 0.15438      1
+3 3.05 14.40727 0.15825 <b>-41108</b>
+4 3.05 14.76010 0.16213      1
+5 3.05 15.11292 0.16600      1
+
+Magnetic field precision set to     0.0012 %
+#   L     B/B0    B      IFAIL
+1 3.05 13.70163 0.15050      1
+2 3.05 14.05445 0.15438      1
+3 3.05 14.40727 0.15825      1
+4 3.05 14.76010 0.16213      1
+5 3.05 15.11292 0.16600      1
+</pre> <h2> <a name="solu"> Solution </a> </h2> <ul>
+      The iterations in subroutine <a href="uf427.html">UF427</a>
+      are controlled by the precision on the magnetic
+      field intensity defined by the argument <code>epsrel</code>
+      of the common block <a href="uc190.html">UC190</a>.
+      Increasing the value of the argument <code>epsrel</code>
+      can solve the problem.
+      <p>
+      Note that the argument <code>epskm</code>
+      of the common block <a href="uc190.html">UC190</a> is used
+      to control the iterations of subroutine <a href="uf428.html">UF428</a>
+      in the same way.
+      <p>
+      The maximum number of iterations in the subroutines
+      <a href="uf426.html">UF426</a>, <a href="uf427.html">UF427</a> 
+      and <a href="uf428.html">UF428</a> will be increased to 20
+      in future versions.                        
+</ul> <h2> <a name="hist"> History </a> </h2> <ul>
+August 26, 1997 - Bug reported by D. Heynderickx<br>
+September 4, 1997 - Bug fixed in version 1.06
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

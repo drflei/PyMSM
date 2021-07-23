@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ext630.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      EXT630
+   === --> 
+<!--meta name="keywords" content="MSIS,external subroutine,resources"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      EXT630 
+</h1> <h6>
+ [ <a href="#name">Name</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Package EXT630 - neutral Atmosphere Empirical Model MSISE-90
+</ul>  <h2> <a name="description"> Description </a> </h2> <ul>
+      The Mass-Spectrometer-Incoherent-Scatter (MSIS) model describes the 
+      neutral temperature and densities in the upper atmosphere (above 
+      about 100 km). MSIS-86 constitutes the upper part of the COSPAR 
+      International Reference Atmosphere (CIRA) 1986. The MSIS model is 
+      based on the extensive data compilation and analysis work of 
+      A.E. Hedin and his collegues.
+      Data sources include measurements from 
+      several rockets, satellites (OGO 6, San Marco 3, AEROS-A, AE-C, AE-D, 
+      AE-E, ESRO 4, and DE 2), and incoherent scatter radars 
+      (Millstone Hill, St. Santin, Arecibo, Jicamarca, and Malvern). 
+      The MSISE-90 model is an upgrade of the previous model and is
+      extended to the middle and lower atmosphere.
+      Below 72.5 km the model is primarily based on the  tabulation of zonal
+      average temperature and pressure by Barnett and Corney, which was also 
+      used for the CIRA-86. Below 20 km these data were supplemented with 
+      averages from the National Meteorological Center. In addition, pitot 
+      tube, falling sphere, and grenade sounder rocket measurements from 
+      1947 to 1972 were taken into consideration. Above 72.5 km MSISE-90 
+      is essentially a revised MSIS-86 model taking into account data 
+      derived from space shuttle flights and newer incoherent
+      scatter results.
+      <p>
+      The MSIS models are maintained by
+      <ul><address>
+          A.E. Hedin (<a href="mailto:hedin@mite.gsfc.nasa.gov">hedin@mite.gsfc.nasa.gov</a>)  <br>
+          NASA/GSFC, Code 914, Greenbelt <br>
+          Maryland 20771 - USA
+      </address></ul>
+      and may be retrieved from NSSDC's anonymous FTP site.
+      The model implemented in the UNILIB libray is an optimized version
+      of MSISE-90. The code has been modified (but not the data sets)
+      in order to make it clearer and faster to execute.
+      A mistake in the original code, which caused small discontinuities 
+      when passing from a day to the following,  was corrected.
+      These modifications have been made by
+      <ul><address>
+          S. Chabrillat (<a href="mailto:simonc@oma.be">simonc@oma.be</a>)  <br>
+          IASB, avenue circulaire 3 <br>
+          B-1180 Uccle - Belgium
+      </address></ul>
+</ul> <h4> References </h4> <ul>
+      <li> Hedin, A.E., <i>MSIS-86 thermospheric model</i>, JGR <b>92</b>
+           (1987) 4649-4662 
+      <li> Hedin, A.E., <i>Extension of the MSIS thermosphere model 
+           into the lower atmosphere</i>, JGR <b>96</b> (1991) 1159-1172
+      <li> Chabrillat, S., <i>Optimisation and use of Hedin's atmospheric
+           empirical model MSIS</i>, Aeronomica Acta <b>55</b> (1995)
+        
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>    
+      INTEGER*4      iyd, mass, iw(26)
+      REAL*4         alt, glat, glong, stl, f107a, f107
+      REAL*4         ap(7), d(8), t(2)
+
+      CALL NWGTD6 (iyd, alt, glat, glong, stl, f107a, f107,
+     :             ap, mass, d, t, iw)
+</pre> <h2> <a name="dependencies"> Dependencies </a> </h2> <ul>
+      The different subroutines, functions and common blocks
+      used by the subroutine <code>NWGTD6</code> are listed
+      in the table below    
+      <center> <br> <table border=1 cellspacing=0 width="80%">
+        <tr><th colspan=3>Common blocks</th></tr>
+        <tr><td>CSW </td><td>FIXALT </td><td>FIXDATA </td></tr>
+        <tr><td>FIXINPUT </td><td>FIXTEMP </td><td>LOWER6 </td></tr>
+        <tr><td>LPOLY </td><td>MAVG6 </td><td>SPLIN1 </td></tr>
+        <tr><td>PARM6 </td><td>PHYSCTE </td><td> </td></tr>
+        <tr><th colspan=3>Subroutines</th></tr>
+        <tr><td>CALCDENSUP </td><td>CALCTEMP </td><td>GHP6 </td></tr>
+        <tr><td>GLATF </td><td>SETSWITCH </td><td>SPLINE </td></tr>
+        <tr><td>TESTINPUT </td><td> </td><td> </td></tr>
+        <tr><th colspan=3>Functions</th></tr>
+        <tr><td>BATESDENS </td><td>CCOR </td><td>DNET </td></tr>
+        <tr><td>GLOB6S </td><td>GLOBE6 </td><td>SPLINDENS </td></tr>
+        <tr><td>SPLINI </td><td>SPLINT </td><td>TOTMASSDENS </td></tr>
+      </table> </center>
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="http://ccmc.gsfc.nasa.gov/modelweb/" target="x">Catalog of Space Physics Model</a>
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

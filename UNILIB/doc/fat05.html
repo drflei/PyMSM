@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: fat05.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ T.05
+   === --> 
+<!--meta name="Keywords" content="Interactive Data Language"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1><h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="question"> Question </a> </h2> <ul> 
+      T.05 - How to pass correctly the subroutine arguments in IDL ?
+</ul> <h2> <a name="answer"> Answer </a> </h2><ul> 
+<center><b>This FAQ is specific to the OpenVMS operating system,
+please check FAQ <a href="fat08.html">T.08</a> and routine 
+<a href="uxidl.html">UXIDL</a> for its adaptation to
+other operating systems</b></center>
+    <br>
+      In IDL, under the operating systems VAX/VMS and OpenVMS/AXP,
+      the <code>CALL_EXTERNAL</code> function provides an easy-to-use
+      access to routines of the sharable image <code>unilib.exe</code>.
+      Briefly, the synopsis of <code>CALL_EXTERNAL</code> is as
+      follows:<pre>
+      status = CALL_EXTERNAL( 'unilib', 'U<i>Xiii</i>', <i>P0</i>, ..., <i>Pn</i> )</pre>
+      where <code>U</code><i>Xiii</i> is the name of the UNILIB routine and
+      <i>P0</i> to <i>Pn</i> are the <i>n</i>+1 parameters of the subroutine.
+      The parameters are passed by reference. Be aware that it is the
+      responsability of the user to check that the IDL variables are
+      initialized to the correct data type. The floating-point variables
+      have to be of type <code>DOUBLE</code> (corresponding to the FORTRAN
+      type <code>REAL*8</code>) and the integer variables of the type
+      <code>LONG</code> (corresponding to the FORTRAN
+      type <code>INTEGER*4</code>).  The same rule has to be applied for
+      the structure (see <a href="#illustration">illustration</a>).
+      Neglecting this rule, may lead to unpredictible behaviours
+      of IDL. Note that, for string arguments, IDL passes to the
+      library the string descriptor which includes the length of
+      the string.
+</ul> <h4> References </h4> <ul>
+      <li> IDL Reference Guide, Research Systems Inc., Boulder
+</ul> <h2> <a name="illustration"> Illustration </a> </h2> <ul>
+      The small IDL code showed below<ol>
+      <li>verifies that the logical <code>unilib</code> is defined;
+      <li>initializes the definition of the main structures used by the UNILIB
+          library;
+      <li>calls the subroutine <a href="ut990.html">UT990</a>.
+      </ol>
+</ul> <h4> Source </h4> <pre>
+; <b>unilib_init.pro</b>
+;
+ PRO unilib_init
+;
+;    <b>Check that a logical is defined</b>
+;
+     testdef  =  TRNLOG( 'unilib', content) mod 2  
+     IF NOT testdef THEN BEGIN
+        PRINT, 'The logical UNILIB has to be defined before running IDL'
+        PRINT, 'Please type the following DCL command:'
+        PRINT, '$ DEFINE UNILIB my_disk:[my_directory]UNILIB.EXE'
+        EXIT
+     ENDIF
+     MESSAGE,  'File '+ strtrim( content, 2)+ ' linked', /informational
+;
+;    <b>Define the different structures</b>
+;
+     dummy = {<a href="structure.html#zxyz">zxyz</a>, x:      0.0d0, y:         0.0d0, z:     0.0d0}
+     dummy = {<a href="structure.html#zgeo">zgeo</a>, radius: 0.0d0, colat:     0.0d0, elong: 0.0d0}       
+     dummy = {<a href="structure.html#zvec">zvec</a>, dnrm:   0.0d0, rho:       0.0d0, theta: 0.0d0,     $
+                    phi:    0.0d0}
+     dummy = {<a href="structure.html#zpnt">zpnt</a>, coord: {<a href="structure.html#zgeo">zgeo</a>}, b:        {<a href="structure.html#zvec">zvec</a>}, rcurv: 0.0d0}
+     dummy = {<a href="structure.html#zseg">zseg</a>, beg:   {<a href="structure.html#zpnt">zpnt</a>}, arcl:      0.0d0, csalp: 0.0d0,     $
+                    dtbnd:  0.0d0, rkstp: dblarr(3)}
+     dummy = {<a href="structure.html#zlbl">zlbl</a>, label:     <font color="red">0b</font>, linv:         0b, lbmp:     0b,     $
+                    lkauf:     0b, llmi:         0b, lalp0:    0b,     $
+                    lphi:      0b, ltim:         0b, finv:  0.0d0,     $
+                    fbmp:   0.0d0, fkauf:     0.0d0, flmi:  0.0d0,     $
+                    falp0:  0.0d0, fphi:      0.0d0, ftim:  0.0d0}
+     dummy = {<a href="structure.html#zdat">zdat</a>, iyear:  1950L, imonth:       1L, iday:     1L,     $
+                    ihour:     0L, imin:         0L, secs:  0.0d0,     $
+                    amjd:   0.0d0}
+;
+;    <b>Call UT990 to initialize the UNILIB libray</b>
+;
+;    <b>Note that the argument </b>version<b> is set to the correct type</b>
+;    <b>before the use of the function </b>CALL_EXTERNAL<b>.</b>
+;
+     version = 0L
+     status  = CALL_EXTERNAL( 'unilib', '<a href="ut990.html">UT990</a>', -6L, 1L, version)
+     IF version LT 0 THEN MESSAGE, 'Unable to initialize'+             $
+                                   ' the Unirad Library'
+     MESSAGE, 'Unirad Library v'+ STRCOMPRESS( STRING(                 $
+                       version*0.01, format= '(f10.2)'), /remove_all), $
+              /informational
+;
+ END
+</pre> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="faq06.html">G.06</a> How to start using the UNILIB library ?
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

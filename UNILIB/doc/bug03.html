@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: bug03.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - Bug report
+   === --> 
+<!--meta name="Keywords" content="bug report"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Bug Report
+</h1><h6>
+ [ <a href="#sign">Signature</a> 
+ | <a href="#diag">Diagnostic</a> 
+ | <a href="#solu">Solution</a> 
+ | <a href="#hist">History</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="sign"> Signature </a> </h2> <ul> 
+      R.03 - Malfunction of subroutine UF426
+</ul> <h2> <a name="diag"> Diagnostic </a> </h2> <ul>
+      A small bug was present in the algorithm of subroutines 
+      <a href="uf426.html">UF426</a>, <a href="uf427.html">UF427</a> and 
+      <a href="uf428.html">UF428</a> and was highlighted when
+      the global precision of the drift shell tracing has been
+      increased. Due to this bug, the error code
+      <a href="uf411.html#41110">-41110</a> was anomalously returned
+      by the subroutine <a href="ud310.html">UD310</a>. The error code
+      was consecutive to an error code return by the subroutine 
+      <a href="uf423.html">UF423</a> when it is called by the subroutine
+      <a href="uf426.html">UF426</a> with an abnormally small value of the argument
+      <code>scale</code>.
+</ul> <h2> <a name="solu"> Solution </a> </h2> <ul>
+      The algorithms of the three subroutines have been slighty modified.
+      To illustrate the effect of the correction,
+      the result obtained for the evaluation of the mirror-point
+      lowest altitude of different drift shells are compared in the table
+      below for the versions 1.11
+      and 1.12, respectively.
+      See <a href="fat06.html">FAQ T.06</a> for detailled description 
+      of these evaluations.
+<p>
+<center><table cellspacing=0 border=1>
+<tr><th><i>B</i></th><th><i>L</i></th><th>version 1.11</th><th>version 1.12</th></tr>
+<tr><td>0.400</td><td>4.60</td><td>113.3 </td><td>113.3 </td></tr>
+<tr><td>0.350</td><td>3.60</td><td><font size="-2" color=red>-41110</font> </td><td>171.0 </td></tr>
+<tr><td>0.275</td><td>2.10</td><td><font size="-2" color=red>-41110</font> </td><td>218.5 </td></tr>
+<tr><td>0.375</td><td>4.60</td><td>251.2 </td><td>251.2 </td></tr>
+<tr><td>0.350</td><td>4.10</td><td>311.8 </td><td>311.8 </td></tr>
+<tr><td>0.350</td><td>4.60</td><td>419.3 </td><td>419.3 </td></tr>
+<tr><td>0.225</td><td>1.60</td><td><font size="-2" color=red>-41110</font> </td><td>474.0 </td></tr>
+<tr><td>0.250</td><td>2.10</td><td>489.6 </td><td>489.6 </td></tr>
+<tr><td>0.350</td><td>5.10</td><td>504.9 </td><td>504.9 </td></tr>
+<tr><td>0.325</td><td>4.60</td><td>595.8 </td><td>595.8 </td></tr>
+<tr><td>0.225</td><td>2.10</td><td>764.7 </td><td>764.7 </td></tr>
+<tr><td>0.225</td><td>2.60</td><td><font size="-2" color=red>-41110</font> </td><td>1002.9 </td></tr>
+<tr><td>0.200</td><td>2.10</td><td>1099.7 </td><td>1099.7 </td></tr>
+<tr><td>0.225</td><td>3.10</td><td>1180.8 </td><td>1180.8 </td></tr>
+</table></center>
+<p>
+</ul> <h2> <a name="hist"> History </a> </h2> <ul>
+December 18, 1997 - Bug reported by M. Kruglanski<br>
+January 13, 1998 - Bug fixed
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

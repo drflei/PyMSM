@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: um520.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UM520
+   === --> 
+<!--meta name="keywords" content="printing,external magnetic field model,initialisation,Mead &amp; Fairfield,Tsyganenko,Olson &amp; Pfitzer,magnetic field vector"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UM520
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UM520 - select an external magnetic field model 
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      REAL*8        amjd, param(20)
+      INTEGER*4     kext, ifail, kunit
+      CHARACTER*32  lbext
+      
+      UM520 (kext, amjd, param, lbext, kunit, ifail)     
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> kext   </code> <dd>
+      Index of the external magnetic field model (0 to 6) [in]
+      <dt> <code> amjd   </code> <dd>
+      Modified Julian Day  [in]
+      <dt> <code> param    </code> <dd>
+      Set of parameters for the external magnetic field models [in]
+      <dt> <code> lbext  </code> <dd>
+      Label of the external magnetic field model [out]
+      <dt> <code> kunit  </code> <dd>
+      File unit for the summary table
+                   (see <a href="ut990.html#note">note</a> of subroutine UT990) [in]
+      <dt> <code> ifail  </code> <dd> 
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]       
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UM520 may be used to initialize the external magnetic
+      field description inside the common block <a href="uc140.html">UC140</a>.
+      The <code>kext</code> argument allows to choose between different models
+      as listed in the first table below.
+      <p>
+      The subroutine UM520 initializes the selected field model as well as
+      the position of the Sun and the GSM or SM coordinate transformation.
+      The position of the Sun and the transformation are deduced 
+      from the geomagnetic field model 
+      (selected by subroutine <a href="um510.html">UM510</a>) and
+      from the modified Julian Day specified by 
+      the argument <code>amjd</code>. 
+      <p>
+      The Mead &amp; Fairfield model (<code>kext</code> = 1)
+       and most of Tsyganenko models (<code>kext</code> = 2, 3 and 4)
+      depend on the planetary magnetic activity index K<sub>p</sub>. 
+      The dynamic Olson &amp; Pfitzer
+      model (<code>kext</code> = 6) depends on the
+      disturbance storm-time  index D<sub>st</sub>, the 
+      density of solar wind and the 
+      velocity of solar wind. The Tsyganenko 1996 model (<code>kext</code> = 7)
+      depends on the solar wind pressure and the components
+      <i>y</i> and <i>z</i> of the interplanetary magnetic field.
+      The Ostapenko &amp; Maltsev model (<code>kext</code> = 8) 
+      depends on the  planetary magnetic activity index K<sub>p</sub>,
+      the disturbance storm-time  index D<sub>st</sub>, the 
+      dynamic pressure of the solar wind and the <i>z</i> component
+      of the interplanetary magnetic field.
+      These different parameters are specified to the subroutine
+      UM520 by the way of the argument <code>param</code>.
+      The correspondance between the different parameters and the indices
+      of the argument <code>param</code> are given in the second table below.
+      The last column of the table is used to indicated correspondances
+      with old arguments of the subroutine (see history).
+      <p><center><table border=1 cellspacing=0 width="80%">
+       <tr><th><code>kext</code></th><th>External magnetic field model</th></tr>
+       <tr><td align=center>0</td><td align=center>None</td> </tr>
+       <tr><td align=center>1</td><td align=center>Mead &amp; Fairfield [1975]</td></tr>
+       <tr><td align=center>2</td><td align=center>Tsyganenko short [1987]</td></tr>
+       <tr><td align=center>3</td><td align=center>Tsyganenko long [1987]</td></tr>
+       <tr><td align=center>4</td><td align=center>Tsyganenko [1989c]</td></tr>
+       <tr><td align=center>5</td><td align=center>Olson &amp; Pfitzer quiet [1977]</td></tr>
+       <tr><td align=center>6</td><td align=center>Olson &amp; Pfitzer dynamic [1988]</td></tr>
+       <tr><td align=center>7</td><td align=center>Tsyganenko [1996]</td></tr>
+       <tr><td align=center>8</td><td align=center>Ostapenko &amp; Maltsev [1997]</td></tr>
+       <tr><td align=center>9</td><td align=center>Tsyganenko [2001] <font color=red>not documented yet</font></td></tr>
+       <tr><td align=center>10</td><td align=center>Tsyganenko [2004 ]<font color=red>not documented yet</font></td></tr>
+       <tr><td align=center>11</td><td align=center>Paraboloid model, Alexeev <font color=red>not documented yet</font></td></tr>
+      </table>
+      <b>Note:</b> Dr. Tsyganenko recommends not using the 
+                   obsolete 1987 versions.
+      </center>                                                
+      <p>
+      <center><table border=1 cellspacing=0 width="80%">
+      <tr><td><code>param</code></td><td>Description</td><td>Range</td>
+           <td>Default</td>
+           <td>Used by<br>(<code>kext</code>)</td><td>Old argument</td></tr>
+      <tr><td align=center>1</td><td>Planetary magnetic activity index 
+                  K<sub>p</sub> (see <a href="#note">Note</a>)</td>
+               <td align=center>0 to 9</td><td>0</td><td align=center>1, 2, 3, 4, 8</td>
+               <td><code>fkp</code></td></tr> 
+      <tr><td align=center>2</td><td>Disturbance storm-time  index 
+                  D<sub>st</sub> (nT)</td>
+               <td align=center>-600 to 50</td><td>-30</td><td align=center>6, 7, 8</td>
+               <td><code>dst</code></td></tr> 
+      <tr><td align=center>3</td><td>Solar wind pressure (nPa)</td>
+               <td align=center>0.5 to 10</td><td>3</td><td align=center>7, 8</td>
+               <td>-</td></tr> 
+      <tr><td align=center>4</td><td>Solar wind density (cm<sup>-3</sup>)</td>
+               <td align=center>1 to 100</td><td>25</td><td align=center>6</td>
+               <td><code>swd</code></td></tr> 
+      <tr><td align=center>5</td><td>Solar wind velocity (km/s)</td>
+               <td align=center>100 to 1200</td><td>300</td><td align=center>6</td>
+               <td><code>swv</code></td></tr> 
+      <tr><td align=center>6</td><td>Interplanetary magnetic field <i>X</i> 
+               component (nT)</td>
+               <td align=center>-50 to 50</td><td>6</td><td align=center>-</td>
+               <td>-</td></tr> 
+      <tr><td align=center>7</td><td>Interplanetary magnetic field <i>Y</i> 
+               component (nT)</td>
+               <td align=center>-50 to 50</td><td>0</td><td align=center>7</td>
+               <td>-</td></tr> 
+      <tr><td align=center>8</td><td>Interplanetary magnetic field <i>Z</i> 
+                component (nT)</td>
+               <td align=center>-50 to 50</td><td>0</td><td align=center>7, 8</td>
+                <td>-</td></tr> 
+      <tr><td align=center>9</td><td>Standoff distance to the subsolar point 
+                   (Re)</td>
+               <td align=center>4 to 14</td><td>10</td><td align=center>-</td>
+               <td>-</td></tr> 
+      <tr><td align=center>10</td><td>AL <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      <tr><td align=center>11</td><td>G1 <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      <tr><td align=center>12</td><td>G2 <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      <tr><td align=center>13</td><td>W1 <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      <tr><td align=center>14</td><td>W2 <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      <tr><td align=center>15</td><td>W3 <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      <tr><td align=center>16</td><td>W4 <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      <tr><td align=center>17</td><td>W5 <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      <tr><td align=center>18</td><td>W6 <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      <tr><td align=center>19</td><td>reserved <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      <tr><td align=center>20</td><td>reserved <font color=red>not documented yet</font></td>
+               <td align=center>-</td><td>-</td><td align=center>-</td><td>-</td></tr> 
+      </table></center>
+      <p> 
+      For each element of the argument <code>param</code>, when a value 
+      is set to -999, the corresponding default value is
+      used instead (without modifying the argument <code>param</code>).
+      The default value of the standoff distance is deduced from
+      the solar wind velocity and density when they are provided.
+      Anyway, a warning is written in the summary table when a parameter
+      is out of range.
+      <p>
+      As result,
+      the <code>lbext</code> argument contains a string with the label of the
+      selected external magnetic field model and a summary table is written
+      on the file specified by argument <code>kunit</code>.
+      The summary table includes the values of the parameters that will
+      be used by the external magnetic field model.
+      <p>
+      The subroutines <a href="um522.html">UM522</a>, 
+      <a href="um523.html">UM523</a> and <a href="um524.html">UM524</a>
+      can be used to modify the time and date of the external magnetic field
+      without modifying the model choice (<code>kext</code>) or
+      field parameters (K<sub>p</sub>, D<sub>st</sub>,...),
+      <strong>except</strong> for the Ostapenko &amp; Maltsev [1997]
+      model (<code>kext</code>=8) for which UM520 has to be called.
+      Note that the coefficients of 
+      <a href="structure.html#zemf"><code>mext.trans</code></a> (common
+      block <a href="uc140.html">UC140</a>) are expressed in the GSM 
+      coordinates with the Tsyganenko models (2, 3, 4 and 7)  while 
+      the SM coordinates are used with 
+      the other models (1, 5 and 6).  
+</ul> <h4><a name="note"> Note </a></h4> <ul>
+      The value of K<sub>p</sub> is also used by the 
+      subroutine <a href="um533.html">UM533</a> to determine the distance to the
+      magnetopause, even when the selected model is not function of
+      K<sub>p</sub>, e.g. Olson &amp; Pfitzer quiet.
+      The subroutine <a href="um533.html">UM533</a> is used to prevent the
+      library the tracing of magnetic field line outside the magnetosphere.
+      So, the subroutine is active only for large <i>L</i> values.
+      Note that it is possible to inhibit the action of this subroutine.
+</ul> <h4> References </h4> <ul>
+      <li> Olson, W.P., <i>A model of the distributed magnetospheric
+      currents</i>, JGR <b>79</b> (1974) 3731-3738
+      <li> Olson, W.P. and Pfitzer, K.A., <i>Magnetospheric magnetic field
+      modeling</i>, Annual Scientific Report, AFOSR Contract No.
+      F44620-75-C-0033 (1977)
+      <li>Ostapenko, A.A., and Maltsev, Y.P., <i>Relation of the
+          magnetic field in the magnetosphere to the geomagnetic and
+          solar wind activity</i>, JGR <b>102</b> (1997) 17467-17473
+      <li>Pfitzer, K.A., Olson, W.P. and Mogstad, T., <i>A time dependent
+      source driven magnetospheric magnetic field model</i>, EOS <b>69</b>
+      (1988) 426
+      <li>Tsyganenko, N.A., <i>Global quantitative models of the geomagnetic
+      field in the cislunar magnetosphere for different disturbance levels</i>,
+      Planet.Space Sci. <b>35</b> (1987) 1347-1358
+      <li>Tsyganenko, N.A., <i>A magnetospheric magnetic field model with a
+      wrapped tail current sheet</i>, Planet.Space.Sci. <b>37</b> (1989) 5-20
+      <li>Tsyganenko, N.A. and Stern, D.P., <i>Modeling the global 
+       magnetic field the large-scale Birkeland current systems</i>,
+       J.Geophys.Res. <b>101</b> (1996) 27187-27198
+</ul> <h4> History </h4> <ul>
+      In version 1.06 and earlier, the subroutine UM520 includes only
+      7 models (<code>kext</code> = 0 to 6).  The addition of other
+      models has caused a modification of the synopsis of the subroutine
+      UM520.  The previous synopsis of the subroutine was:
+</ul><pre>
+      UM520 (kext, amjd, dst, fkp, swd, swv, lbext, kunit, ifail)     
+</pre><ul>
+      where the arguments <code>dst</code>,  <code>fkp</code>,
+      <code>swd</code> and <code>swv</code> correspond to the 
+      disturbance storm-time index D<sub>st</sub>, the
+      planetary magnetic activity index K<sub>p</sub>, the 
+      density of solar wind and the 
+      velocity of solar wind, respectively. In the new version, these
+      parameters are passed through the argument <code>param</code>.
+      The Tsyganenko [1996] model has been implemented in the 
+      version 1.07 of the library.  The Ostapenko &amp; Maltsev [1997] model 
+      has 
+      been implemented in the version 1.12.
+<p>
+      In versions 1.07 to 1.12, the documentation did not include
+      D<sub>st</sub> as parameter of the Tsyganenko [1996] model and
+      the subroutine UM520 did not print the value of D<sub>st</sub>
+      when this model was selected. Note that, nevertheless, the value
+      of D<sub>st</sub> was used during computations of the Tsyganenko 
+      [1996] model.
+<p>
+      In versions 1.07 to 1.13, the value of K<sub>p</sub> was not
+      correctly passed to the subroutine <a href="um533.html">UM533</a>.
+      The distance to the magnetopause was always evaluated with
+       K<sub>p</sub>  set to zero. 
+<p>
+      In versions 2.00 and 2.01, due to an oversight, the model
+      parameters were forced to the default values instead of the values
+      passed in the argument <code>param</code>. This erroneous behaviour
+      affects user applications using external magnetic field
+      models: Mead & Fairfield [1975],
+             Tsyganenko short [1987],
+             Tsyganenko long [1987],
+             Tsyganenko [1989a],
+             Olson & Pfitzer dynamic [1988],
+             Tsyganenko [1996] and
+             Ostapenko & Maltsev [1997].
+     It does not affect applications that do not use an external 
+     field model (<code>kext</code>=0) or that use the Olson & Pfitzer 
+     quiet [1977] model (<code>kext</code>=5).
+<p>
+     In version 2.02, the Tsyganenko [1989a] model (<code>kext</code>=4)
+     has been replaced by the Tsyganenko [1989c] model.
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="52001.htm">-52001</a>,
+      invalid model number <br> 
+      <a name="52002">-52002</a>, error on output device <br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc140.html">UC140</a>, magnetic field description <br>
+      <a href="uc160.html">UC160</a>, general constants<br>
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      None
+</ul> <h4> Calls </h4> <ul>
+      <a href="um521.html">UM521</a>, 
+       ground disturbances from K<sub>p</sub> <br>
+      <a href="um522.html">UM522</a>, 
+       position of the Sun <br>    
+      <a href="um523.html">UM523</a>, 
+       GEO to GSM transformation <br>  
+      <a href="um524.html">UM524</a>, 
+       GEO to SM transformation <br>
+      <a href="ext530.html">EXT530</a>, set of external magnetic models:  
+      <ul> SET_A</UL>     
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="um510.html">UM510</a>, select a geomagnetic field model<br>
+      <a href="um530.html">UM530</a>, evaluate the magnetic field vector<br>
+      <a href="ext530.html">EXT530</a>, set of external magnetic models<br>
+      <a href="http://www.oulu.fi/~spaceweb/textbook/indices.html" target="x">magnetic activity indices at SpaceWeb</a>   
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      9-Jan-98 (v1.10 & v1.11), Anomalous return with error code -52002 when
+      <code>kunit</code> and <code>kext</code> are greater than 0
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      <a href="try01.html">#1</a>, evaluation of the magnetic field vector<br>
+      <a href="try02.html">#2</a>, evaluation of the (<i>B</i>, <i>L</i>) 
+                                  coordinates<br>   
+      <a href="try03.html">#3</a>, evaluation of the third invariant<br>
+      <a href="try04.html">#4</a>, search the point with the lowest altitude 
+                                  on a magnetic drift shell<br>
+      <a href="try05.html">#5</a>, namelist to initialize UNILIB<br>
+      <a href="try07.html">#7</a>, iso-contour of the shell parameter<br>
+      <a href="faq06.html">G.06</a> How to start using the UNILIB library ? <br>
+      <a href="fat03.html">T.03</a> How to customize the magnetic field
+                                   model used by the library ? <br>
+      <a href="fat04.html">T.04</a> Why are Roederer's <i>L</i><sup>*</sup>
+                                   and McIlwain's <i>L</i> parameters
+                                   different ? <br>
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

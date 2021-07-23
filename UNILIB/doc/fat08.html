@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: fat08.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ T.08
+   === --> 
+<!--meta name="Keywords" content="Interactive Data Language"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1><h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="question"> Question </a> </h2> <ul> 
+      T.08 - How to link the library in IDL/PV-WAVE ?
+</ul> <h2> <a name="answer"> Answer </a> </h2> <ul>
+      In IDL/PV-WAVE, the <code>CALL_EXTERNAL</code> function 
+      provides an easy-to-use
+      access to UNILIB routines by the way of a sharable image or object.
+      Unfortunately, this functionality is not supported
+      for every platform, and, may operate differently
+      between different operating systems and between IDL and PV-WAVE.
+      This FAQ provides the way to build and use such shareable image
+      or object for some platforms.
+</ul> <h4>OpenVMS</h4><ul>
+      The UNILIB distribution includes already a shareable image
+      (<code>unilib.exe</code>) that can be linked with IDL under 
+      OpenVMS AXP plateform (but not with PV-WAVE since the floating 
+      memory format used is different). From the object libraries of 
+      the UNILIB distribution, it is also possible to build a shareable 
+      image for:
+      <ul><li> IDL or PV-WAVE on VAX station, using the VAX version of
+               <code>unilib.olb</code> (D_float);
+          <li> PV-WAVE on AXP station, using the AXP version of
+               <code>unilib.olb</code> (G_float).
+      </ul>
+      Please note that the shareable image <code>unilib.exe</code>
+      of version 2.03 and earlier uses the D_float floating 
+      memory format which is supported by IDL versions earlier
+      than version 5.2. Since version 5.2, IDL uses the IEEE floating 
+      memory format.  
+<p>
+      For additional information, please check FAQ <a href="fat05.html">T.05</a>.
+</ul> <h4>UNIX</h4><ul>
+      On UNIX, only routines that adhere to the C (<i>argc</i>, <i>argv</i>)
+      calling convention can be called from IDL. Since version 2.03 of
+      the UNILIB library, the routine <a href="uxidl.html">UXIDL</a>
+      provides an interface between the main routines of the UNILIB
+      library and IDL.  The UNILIB distribution includes a shareable
+      object for SunOS, DEC/OSF and HP-UX. In case of problems, the
+      steps to rebuild the shareable object are listed below.
+      The shareable object can be tested from IDL with the
+      the following instructions:<pre>
+ ifail = 0L
+ status = CALL_EXTERNAL( 'unilib.s<font color=green>o</font>', 'uxidl_', '<a
+href="ut990.html">UT990</a>', 6L, 1L, ifail )</pre>
+      Under HP-UX the string <code>unilib.s<font color=red>l</font></code> has to be used instead of
+      <code>unilib.s<font color=green>o</font></code>.
+<p>
+      For additional information, please check routine 
+      <a href="uxidl.html">UXIDL</a>.                         
+</ul> <h4>SunOS</h4><ul>
+      The steps to build a shareable object are:
+      </ul><ol><li>Download the SunOS version of the UNILIB static
+       library (<code>libunilib.a</code>).
+          <li>Extract the object <code>uxidl.o</code> included in the archive 
+              with the command<pre>
+ ar -x libunilib.a uxidl.o</pre>
+          <li>Link the UNILIB library into a shareable object with
+              the command<pre>
+ f77 -o unilib.so uxidl.o -L. -lunilib -Qoption ld -G</pre>
+</ol><h4>HP-UX</h4><ul>
+      The steps to build a shareable object are:
+      </ul><ol><li>Download the HP-UX version of the UNILIB static
+       library (<code>libunilib.a</code>).
+          <li>Extract all the objects included in the archive 
+              with the command<pre>
+ ar -x libunilib.a</pre>
+          <li>Link the UNILIB library into a shareable object with
+              the command<pre>
+ ld -b -o unilib.sl *.o</pre>
+</ol><h4>DEC OSF/1</h4><ul>
+      The steps to build a shareable object are:
+      </ul><ol><li>Download the DEC-OSF version of the UNILIB static
+       library (<code>libunilib.a</code>).
+          <li>Extract the object <code>uxidl.o</code>all included in the archive 
+              with the command<pre>
+ ar -x libunilib.a uxidl.o</pre>
+          <li>Link the UNILIB library into a shareable object with
+              the command<pre>
+ ld -S -shared -o unilib.so uxidl.o -L. -lunilib -lUfor -lfor -lFutil -lm -lots -lc </pre>
+</ol><h4>PC/Windows</h4><ul>
+      The UNILIB distribution includes a DLL file (<code>unilib.dll</code>).
+      The dynamic linked library can be tested from IDL with the
+      the following instructions:<pre>
+ ifail = 0L
+ status = CALL_EXTERNAL( 'unilib.dll', 'uxidl_', '<a
+href="ut990.html">UT990</a>', 6L, 1L, ifail )</pre> 
+      Note that <code>unilib.dll</code> makes use of two Digital
+      Fortran libraries, <code>dformd.dll</code> and <code>dforrt.dll</code>.
+      Copies of these DLL are included in the distribution.
+<p>
+      For additional information, please check routine 
+      <a href="uxidl.html">UXIDL</a>.                         
+</ul> <h2> <a name="illustration"> Illustration </a> </h2> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="fat05.html">T.05</a> How to pass correctly the subroutine 
+                                   arguments in IDL ? <br>
+      <a href="uxidl.html">UXIDL</a> Interface to IDL (UNIX)<br>
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

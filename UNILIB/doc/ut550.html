@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ut550.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UT550
+   === --> 
+<!--meta name="keywords" content="coordinate transformation,gsm coordinates,sm coordinates,geo coordinates,vector and coordinate conversion"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UT550
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UT550 - select a coordinate transformation
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre> 
+      INTEGER*4 kfrom, kto, ifail
+      REAL*8    trans(3,3)
+
+      CALL UT550 (kfrom,kto,trans,ifail)
+
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> kfrom      </code> <dd>
+      input coordinate system   [in]
+      <dt> <code> kto      </code> <dd>
+      output coordinate system  [in]
+      <dt> <code> trans      </code> <dd>
+      transformation matrix     [out]
+      <dt> <code> ifail </code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>)  [out]
+
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UT550 initializes the coordinate transformation.
+      The computed transformation can be applied then with the
+      help of subroutine <a href="ut555.html">UT555</a> or 
+      <a href="ut556.html">UT556</a>.  
+      The arguments <code>kfrom</code> and <code>kto</code> are
+      used to specify the input and output coordinate systems,
+      respectively.  
+      The resulting matrix <code>trans</code> allows to transform cartesian
+      coordinate of type <code>kfrom</code> to type <code>kto</code>.
+      <p>    
+      The correspondance between indices and
+      coordinate systems is shown in the table below
+               
+<center><br><table border=1 cellspacing=0 width="80%">       
+      <tr><td align=center><code>kfrom</code>, <code>kto</code></td><td align=center>coordinate system</td></tr>
+      <tr><td align=center><code>1</code></td><td>Geographic coordinate (GEO)</td></tr>
+      <tr><td align=center><code>2</code></td><td> Geocentric equatorial inertial coordinate (GEI)</td></tr>
+      <tr><td align=center><code>3</code></td><td>Geomagnetic coordinate (MAG)</td></tr>
+      <tr><td align=center><code>4</code></td><td>Solar magnetic coordinate (SM)</td></tr>
+      <tr><td align=center><code>5</code></td><td>Geocentric solar magnetospheric coordinate (GSM)</td></tr>
+      <tr><td align=center><code>6</code></td><td>Geocentric solar ecliptic
+                                                   coordinate (GSE)</td></tr>
+</table></center>
+<p>
+      The characteristics of the five coordinate systems are
+      summarized in the next table.  The origin of all these coordinate 
+      systems are located at the centre of the Earth.  
+   
+<center><br><table border=1 cellspacing=0 >
+      <tr><td></td>
+          <td align=center>X axis</td> 
+          <td align=center>Y axis</td>
+          <td align=center>Z axis</td></tr> 
+
+      <tr><td align=center>GEO</td>
+          <td valign=top>included in the Earth's equatorial plane and passing through the Greenwich meridian</td>
+          <td align=center>Z <code>x</code> X</td>
+          <td valign=top>parallel to the Earth's rotation axis and pointing to the North</td></tr>
+
+      <tr><td align=center>GEI</td>
+          <td valign=top>pointing to the first point of Aries, i.e. at the intersection between the Earth's equatorial plane and the ecliptic plane</td>
+          <td align=center>Z <code>x</code> X</td>
+          <td valign=top>parallel to the Earth's rotation axis and pointing to the North</td></tr>
+
+      <tr><td align=center>MAG</td>
+          <td align=center>Y <code>x</code> Z</td>
+          <td valign=top>perpendicular to both the geomagnetic dipole axis and the Earth's rotation axis in the East direction</td>
+          <td valign=top>parallel to the geomagnetic dipole axis and pointing to the North</td></tr>
+
+      <tr><td align=center>SM</td>
+          <td align=center>Y <code>x</code> Z</td>
+          <td valign=top>perpendicular to the Earth-Sun line towards dusk</td>
+          <td valign=top>parallel to the geomagnetic dipole axis and pointing to the North</td></tr>
+
+      <tr><td align=center>GSM</td>
+          <td valign=top>pointing towards the Sun</td>
+          <td>perpendicular to the geomagnetic dipole axis such that the Z axis is pointing to the North</td>
+          <td align=center>X <code>x</code> Y</td></tr>
+      <tr><td align=center>GSE</td>
+          <td valign=top>pointing towards the Sun</td>
+          <td align=center>Z <code>x</code> X</td>
+          <td>perpendicular to the ecliptic plane and pointing to the North</td></tr>
+</table></center>
+      <p>
+      Note that the coordinate transformation generally depends
+      on the Sun position and/or the geomagnetic dipole field.
+      For this information, the subroutine UT550 makes use of the
+      data stored in the argument <code>mint</code> and <code>msun</code>
+      of the common block <a href="uc140.html">UC140</a>. 
+      The common block  <a href="uc140.html">UC140</a> can be initialized by the
+      subroutines <a href="um510.html">UM510</a> and 
+      <a href="um520.html">UM520</a>. 
+      The Sun position can be modified
+      without affecting the external magnetic field model by a call
+      to subroutine  <a href="um522.html">UM522</a>. 
+
+</ul> <h4>References</h4><ul>
+      <li>Olson, W.P., <i>Coordinate Transformations Used in Magnetospheric Physics</i>,
+      McDonnell-Douglas Astronautics Company Paper WD1145 (1970).
+      <li>Russell, C.T.,<i>Geophysical Coordinate Transformations</i>, 
+      Cosmic Electrodynamics <b>2</b> (1971) 184-196. 
+</ul> <h4>History</h4><ul>
+      The subroutine UT550 does not exist in version 1.05 and earlier.
+      The transformation from/to the GSE coordinate system is
+      not included in version 2.00 and earlier.<br>
+      The subroutine UT550 includes an error in versions 2.01
+      to 2.03 that affects transformation from/to the GSE 
+      coordinate system.  Due to this error the GSE coordinate
+      axes are reverted in some conditions. The error is corrected
+      in version 2.05.  Additional sporadic errors have been
+      fixed in version 2.09.
+      
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="55001">-55001</a>, invalid coordinate system <br>
+      <a name="55002">-55002</a>, <a name="55003">-55003</a>, <a name="55004">-55004</a>, 
+      problem with the Sun direction<br>
+
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc140.html">UC140</a>,
+      magnetic field description<br> 
+      <a href="uc160.html">UC160</a>,
+      general constants<br>
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul> 
+      None                                           
+
+</ul> <h4> Calls </h4> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="um510.html">UM510</a>, select a geomagnetic field model<br>
+      <a href="um522.html">UM522</a>, position of the Sun  <br>
+      <a href="ut551.html">UT551</a>, initialize an Euler rotation matrix<br>   
+      <a href="ut552.html">UT552</a>, initialize a quaternion rotation matrix<br>     
+      <a href="ut555.html">UT555</a>, coordinate conversion <br>
+      <a href="ut556.html">UT556</a>, vector conversion <br>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      v1.07, Erroneous behaviour of the coordinate transformations
+      relative to GSM and MAG coordinate systems, fixed in next versions
+      (this erroneous behaviour does not affect the subroutine <a
+      href="um523.html">UM523</a>).
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

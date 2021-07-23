@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: um530.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UM530
+   === --> 
+<!--meta name="keywords" content="geomagnetic field model,external magnetic field model,magnetic field vector"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UM530
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UM530 - evaluate the magnetic field vector 
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      TYPE(<a href="structure.html#zgeo">zgeo</a>) mpos
+      TYPE(<a href="structure.html#zvec">zvec</a>) mb
+      INTEGER*4     ifail
+        
+      CALL UM530 (mpos, mb, ifail) 
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> mpos      </code> <dd>
+      Geographic position in geocentric coordinates (GEO)  [in]
+      <dt> <code> mb      </code> <dd>
+      Magnetic field vector  [out]
+      <dt> <code> ifail      </code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>)  [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UM530 evaluates the magnetic field vector at a geographic 
+      location.  Before the first call to subroutine UM530, the magnetic field
+      parameters have to be initialized.  These parameters are stored in the 
+      common block <a href='uc140.html'>UC140</a> but they can be modified with
+      the help of the subroutines <a href='um510.html'>UM510</a> and 
+      <a href='um520.html'>UM520</a>.  
+      The subroutines  <a href='um510.html'>UM510</a> and 
+      <a href='um520.html'>UM520</a> allow to select an internal geomagnetic
+      field model (e.g. IGRF) and an external magnetic field (e.g. Tsyganenko),
+      respectively.
+      <p>      
+      The geographic location <code>mpos</code> has to be provided in
+      geocentric spherical coordinates.  The subroutine UM530 returns the
+      spherical component and the intensity of the magnetic field vector.
+      Note that the magnetic field vector is evaluated by the subroutine
+      even when the error flag <code>ifail</code> is returned with the 
+      negative values -53002, -53003 and -53004.  The diagnostics provided
+      by the subroutine UM530 are controlled by the
+      parameters <code>xrmin</code>, <code>xbmin</code>, <code>xtmin</code>
+      and <code>xbmax</code> stored in the common block 
+      <a href='uc192.html'>UC192</a>.        
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="53001">-53001</a>, position too deep inside the Earth  <br>
+      <a name="53002">-53002</a>, too small value of the magnetic field intensity  <br>
+      <a name="53003">-53003</a>, too large value of the geomagnetic latitude  <br>
+      <a name="53004">-53004</a>, too large value of the magnetic field intensity  <br>
+      <a name="53005">-53005</a>, incorrect value of the co-latitude  <br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc140.html">UC140</a>, magnetic field description <br>
+      <a href="uc160.html">UC160</a>, general constants<br>
+      <a href="uc192.html">UC192</a>, control parameters, set 2<br>
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="ul220.html">UL220</a>, 
+      get information on a magnetic field line segment <br>
+      <a href="ud328.html">UD328</a>, 
+      evaluate the second derivative of <i>B</i> <br>
+      <a href="ud329.html">UD329</a>, 
+      interpolate between two or three points <br>
+      <a href="ud332.html">UD332</a>, 
+      evaluate the magnetic flux through a spherical pie<br>
+      <a href="uf411.html">UF411</a>, 
+      search a local magnetic equator  <br>
+      <a href="uf421.html">UF421</a>, 
+      initialize and close a field line segment <br>
+      <a href="uf423.html">UF423</a>, 
+      Runge Kutta step  <br>
+      <a href="uf425.html">UF425</a>, 
+      evaluate the curvature of the field lines <br>
+      <a href="um539.html">UM539</a>, evaluate the magnetic field <br>
+      <a href="ut998.html">UT998</a>, 
+      evaluate the magnetic field vector and the normal to the field line <br>
+</ul> <h4> Calls </h4> <ul>
+      <a href="um531.html">UM531</a>, 
+           geomagnetic field  <br>
+      <a href="um532.html">UM532</a>, 
+           external magnetic field <br>    
+      <a href="um533.html">UM533</a>, 
+           distance to the magnetopause  <br>
+      <a href="um535.html">UM535</a>, 
+           geocentric to geodetic transformation <br>  
+      <a href="um537.html">UM537</a>, 
+           Kluge evaluation of the geomagnetic field  <br>                  
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="um510.html">UM510</a>, select a geomagnetic field model <br>
+      <a href="um520.html">UM520</a>, select an external magnetic field model<br>
+      <a href="faq05.html">FAQ G.05</a> Which are the coordinates and units used ? <br>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None 
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      <a href="try01.html">#1</a>, evaluation of the magnetic field vector
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

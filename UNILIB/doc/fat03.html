@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: fat03.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ T.03
+   === --> 
+<!--meta name="keywords" content="geomagnetic field model,spherical harmonic expansion"-->
+ <!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1> <h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6>  <h2> <a name="question"> Question </a> </h2> <ul> 
+      T.03 - How to customize the magnetic field model used by the library ? 
+</ul> <h2> <a name="answer"> Answer </a> </h2> <ul>
+      In the UNILIB library, the magnetic field model is defined
+      by the selection of a geomagnetic field model (e.g. IGRF)
+      and an external field model (e.g. Tsyganenko).  These selections
+      are made by a call to the subroutines <a href=um510.html>UM510</a>
+      and <a href=um520.html>UM520</a> respectively. Both subroutines
+      modify the contents of the common block <a href=uc140.html>UC140</a>
+      which is used by the subroutine <a href=um530.html>UM530</a>
+      to evaluate the magnetic field vector at any geographic location.
+      The subroutine <a href=um530.html>UM530</a> and subordinate
+      subroutines use:<ul>           
+      <li><code><a href=uc140.html#msun>msun.utdeg</a></code> and 
+          <code><a href=uc140.html#mext>mext.vkp</a></code> to evaluate
+          the distance to the magnetopause;
+      <li><code><a href=uc140.html#mint>mint.kinner</a></code>,
+          <code><a href=uc140.html#mint>mint.norder</a></code>,
+          <code><a href=uc140.html#mint>mint.coef</a></code>  and
+          <code><a href=uc140.html#mint>mint.saarot</a></code> to evaluate
+          the geomagnetic field;
+      <li><code><a href=uc140.html#mext>mext.trans</a></code>, 
+          <code><a href=uc140.html#mext>mext.tilt</a></code>, 
+          <code><a href=uc140.html#mext>mext.kouter</a></code>, 
+          <code><a href=uc140.html#mext>mext.ikp</a></code>, 
+          <code><a href=uc140.html#mext>mext.wdens</a></code>, 
+          <code><a href=uc140.html#mext>mext.wvel</a></code> and 
+          <code><a href=uc140.html#mext>mext.vdst</a></code>
+          to evaluate the external magnetic field model.
+      </ul>
+      The magnetic field model can be customize by the user when
+      the customisation includes only change of parameter
+      values. 
+      <p>
+      For the internal part of the magnetic field model, the arguments
+      <code><a href=uc140.html#mint>mint.norder</a></code> and
+      <code><a href=uc140.html#mint>mint.coef</a></code> of
+      the common block <a href=uc140.html>UC140</a> can be easily modified
+      by the users. The element 
+      <code>mint.coef(</code><i>i</i><code>,</code><i>j</i><code>)</code>
+      corresponds to <ul>
+      <li> <i>h</i><sub><i>j</i>-1</sub><sup><i>i</i></sup> 
+           when <i>i</i>&lt;<i>j</i>;
+      <li> <i>g</i><sub><i>i</i>-1</sub><sup><i>j</i>-1</sup>
+           otherwise.</ul>
+      The coefficients have to satisfy the
+      Schmidt normalisation (except when 
+      <code><a href=uc140.html#mint>mint.kinner</a></code> is set to 4). 
+      Note that 
+      <code><a href=uc140.html#mint>mint.colat</a></code>,
+      <code><a href=uc140.html#mint>mint.elong</a></code> and
+      <code><a href=uc140.html#mint>mint.gmmo</a></code>
+      are evaluated in subroutine <a href=um510.html>UM510</a>
+      from the elements <code>(1,2)</code>, <code>(2,1)</code> and 
+      <code>(2,2)</code> of <code>mint.coef</code>.
+      <p>
+      For the external part of the magnetic field model, the arguments
+      used by the subroutine <a href=um530.html>UM530</a> are function
+      of the model selected (<a href=uc140.html#mext>mext.kouter</a></code>).
+      The Tsyganenko models are expressed in the GSM coordinates while 
+      the other models use the SM coordinates.  The transformation array 
+      from GEO coordinates to GSM or SM coordinates is stored in
+      <code><a href=uc140.html#mext>mext.trans</a></code>.  The transformation
+      array can be directly evaluated by a call to the subroutines
+      <a href=um522.html>UM522</a> and <a href=um523.html>UM523</a> or
+      to the subroutines <a href=um522.html>UM522</a> and 
+      <a href=um523.html>UM524</a>. 
+</ul> <h2> <a name="illustration"> Illustration </a> </h2> <ul>
+      In this illustration, the common block <a href="uc140.html">UC140</a> is 
+      modified such that the magnetic field model corresponds
+      to a centered magnetic field aligned with the Earth's axis.
+      The common block is initialized firstly to an IGRF magnetic field 
+      model. The spherical harmonic coefficients of the
+      IGRF field are used to compute the element
+      <i>g</i><sub>1</sub><sup>0</sup>. 
+      Note that the magnetic field dipole produced by the 
+      subroutine <a href=um510.html>UM510</a> when <code>kint</code>
+      is set to 3 is different.  The magnetic dipole of subroutine
+      <a href=um510.html>UM510</a> is not aligned with the Earth's axis;
+      it includes the elements <i>g</i><sub>1</sub><sup>0</sup>,
+      <i>g</i><sub>1</sub><sup>1</sup> and
+      <i>h</i><sub>1</sub><sup>1</sup>.  <pre>
+      PROGRAM faqt03
+C
+      INCLUDE '<a href="structure.html">structure.h</a>'
+C
+      COMMON /<a href="uc140.html">UC140</a>/  mint, mext, msun
+C      
+        TYPE(<a href="structure.html#zimf">zimf</a>) mint
+        TYPE(<a href="structure.html#zimf">zsun</a>) msun
+        TYPE(<a href="structure.html#zimf">zemf</a>) mext          
+C
+      INTEGER*4    kunit, kinit, ifail, kint, kext
+      CHARACTER*32 lbint, lbext
+      REAL*8       year, param, amjd
+C
+C     <b>initialize variables</b>
+C
+      DATA kunit, kinit/ 6, 1/
+      DATA kint, kext/ 0, 0/
+      DATA year, amjd, param/ 1995.0d0, 0.0d0, 10*0.0d0/
+C
+C     <b>initialize the library</b>
+C
+      CALL <a href="ut990.html">UT990</a> (kunit, kinit, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>set the geomagnetic field model</b>
+C     <b>(kint=0, DGRF/IGRF)</b>
+C
+C
+      CALL <a href="um510.html">UM510</a> (kint, year, lbint, kunit, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>set the external magnetic field model</b>
+C     <b>(kext=0, none)</b>
+C
+      CALL <a href="um520.html">UM520</a> (kext, amjd, param, lbext, kunit, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>restrict the geomagnetic field to its dipolar component</b>
+C     <b>and align the magnetic dipole with the Earth's axis</b>
+C
+      mint.norder    = 2         
+      mint.label     = 'Dipolar magnetic field          '
+      mint.coef(2,1) = <a href=uc140.html#mint>mint.gmmo</a> * 1.0d+05
+      mint.coef(1,2) = 0.0d+00
+      mint.coef(2,2) = 0.0d+00
+      mint.elong     = 0.0d+00
+      mint.colat     = 0.0d+00
+C
+C     <b>To be followed by the user application</b>
+C
+      end
+</pre></ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="uc140.html">UC140</a>, magnetic field description<br> 
+      <a href="um510.html">UM510</a>, select a geomagnetic field model <br>
+      <a href="um520.html">UM520</a>, select an external magnetic field model <br>
+      <a href="um515.html">UM515</a>,  perform a Schmidt normalisation<br>
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

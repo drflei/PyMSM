@@ -1,0 +1,337 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: toc.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      Table of contents
+   === --> 
+<!--meta name="keywords" content="getting started"-->
+<meta name="description" 
+      content="The UNILIB Fortran library implements a series of tools 
+               for coordinate transformations, magnetic field computation,
+               magnetic coordinate evaluation, magnetic field line and 
+               drift shell tracing, ...">
+<!-- End of Head, Begin of Body -->
+ 
+<h1>
+      Table of contents
+</h1>
+<h6>
+ [ <a href="#other">General Information</a>
+ | <a href="#examples">Examples</a>
+ | <a href="#structures">Structures</a>
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#subroutines">Subroutines</a>   
+] </h6>
+<h2> <a name="other">General Information</a> </h2> <ul>
+      <a href="home.html" rev=toc>HOME</a>, library overview<br>
+      <a href="faq.html" rev=toc>FAQ</a>, frequently asked questions
+      <ul><a href="faq01.html" rev=toc>G.01</a>, <a href="faq02.html" rev=toc>G.02</a>, 
+          <a href="faq03.html" rev=toc>G.03</a>, <a href="faq04.html" rev=toc>G.04</a>, 
+          <a href="faq05.html" rev=toc>G.05</a>, <a href="faq06.html" rev=toc>G.06</a>,
+          <a href="faq07.html" rev=toc>G.07</a>, 
+          <a href="faq08.html" rev=toc>G.08</a>, <a href="faq09.html" rev=toc>G.09</a>,
+          <a href="fat01.html" rev=toc>T.01</a>, <a href="fat02.html" rev=toc>T.02</a>, 
+          <a href="fat03.html" rev=toc>T.03</a>, <a href="fat04.html" rev=toc>T.04</a>, 
+          <a href="fat05.html" rev=toc>T.05</a>, <a href="fat06.html" rev=toc>T.06</a>,
+          <a href="fat07.html" rev=toc>T.07</a>, <a href="fat08.html" rev=toc>T.08</a>,
+          <a href="fat09.html" rev=toc>T.09</a>, <a href="fat10.html" rev=toc>T.10</a>
+      <br>
+      
+      Bug reports:
+      <a href="bug01.html" rev=toc>R.01</a>, <a href="bug02.html" rev=toc>R.02</a>,
+      <a href="bug03.html" rev=toc>R.03</a>
+      </ul> 
+      <a href="hist.html" rev=toc>HIST</a>, project history<br>
+      <a href="href.html" rev=toc>HREF</a>, list of references <br>
+      <a href="index.html" rev=toc>INDEX</a>, keywords index<br> 
+</ul> 
+
+<h2> <a name="examples"> Examples </a> </h2> <ul>
+      <a href="try01.html" rev=toc>Ex. #1</a>, evaluation of the magnetic field vector<br>
+      <a href="try02.html" rev=toc>Ex. #2</a>, evaluation of the (<i>B</i>, <i>L</i>) 
+                                  coordinates<br>   
+      <a href="try03.html" rev=toc>Ex. #3</a>, evaluation of the third invariant<br>
+      <a href="try04.html" rev=toc>Ex. #4</a>, search the point with the lowest altitude 
+                                  on a magnetic drift shell<br>
+      <a href="try05.html" rev=toc>Ex. #5</a>, namelist to initialize UNILIB<br>
+      <a href="try06.html" rev=toc>Ex. #6</a>, visualisation of a drift shell<br>
+      <a href="try07.html" rev=toc>Ex. #7</a>, iso-contour of the shell parameter<br>
+      <a href="try08.html" rev=toc>Ex. #8</a>, effect of the magnetic field model
+                                              parameters on the (<i>B</i>, <i>L</i>) coordinates<br>
+</ul>  
+<h2> <a name="structures" href="structure.html" rev=toc>Structures</a> </h2> <ul>
+      <a href="structure.html#zatm">zatm</a>,
+      <a href="structure.html#zdat">zdat</a>,
+      <a href="structure.html#zemf">zemf</a>,
+      <a href="structure.html#zfln">zfln</a>,
+      <a href="structure.html#zgeo">zgeo</a>,
+      <a href="structure.html#zimf">zimf</a>,
+      <a href="structure.html#zind">zind</a>,
+      <a href="structure.html#zlbl">zlbl</a>,
+      <a href="structure.html#zpnt">zpnt</a>,
+      <a href="structure.html#zseg">zseg</a>,
+      <a href="structure.html#zsun">zsun</a>,
+      <a href="structure.html#zvec">zvec</a>,
+      <a href="structure.html#zxyz">zxyz</a>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc110.html" rev=toc>UC110</a>,
+      magnetic drift shell description<br> 
+      <a href="uc120.html" rev=toc>UC120</a>,
+      magnetic field line description<br> 
+      <a href="uc130.html" rev=toc>UC130</a>,
+      set of magnetic field line segments<br> 
+      <a href="uc140.html" rev=toc>UC140</a>,
+      magnetic field description<br> 
+      <a href="uc150.html" rev=toc>UC150</a>,
+      atmospheric model description<br> 
+      <a href="uc160.html" rev=toc>UC160</a>, 
+      general constants<br>        
+      <a href="uc170.html" rev=toc>UC170</a>, 
+      temporary magnetic field line<br>        
+      <a href="uc190.html" rev=toc>UC190</a>, 
+      control parameters, set 1<br>        
+      <a href="uc192.html" rev=toc>UC192</a>, 
+      control parameters, set 2<br>        
+</ul> <h2> <a name="subroutines"> Subroutines </a> </h2> <ul>
+      <a href="ul220.html" rev=toc>UL220</a>,
+           get information on a magnetic field line segment <br>
+      <a href="ul225.html" rev=toc>UL225</a>,
+           evaluate invariant radius and latitude <br>
+      <a href="ul230.html" rev=toc>UL230</a>,
+           evaluate the integral invariant coordinate <i>I</i> <br>
+      <a href="ul240.html" rev=toc>UL240</a>,
+           evaluate the Hilton's function<br>
+      <a href="ul242.html" rev=toc>UL242</a>,     
+           inverse the Hilton function  <br>
+      <a href="ul245.html" rev=toc>UL245</a>, 
+           equatorial pitch angle      <br>
+      <a href="ud310.html" rev=toc>UD310</a>,
+           trace a magnetic drift shell <br>
+      <a href="ud315.html" rev=toc>UD315</a>,   
+           search the mirror point with the lowest altitude    <br>
+      <a href="ud316.html" rev=toc>UD316</a>,   
+           search the equatorial point with the lowest magnetic field intensity <br>
+      <a href="ud317.html" rev=toc>UD317</a>,
+           trace a magnetic drift shell (new) <br>
+      <a href="ud319.html" rev=toc>UD319</a>,    
+           transfer a field line segment from common block
+           <a href="uc170.html" rev=toc>UC170</a> to <a href="uc130.html" rev=toc>UC130</a><br>
+      <a href="ud320.html" rev=toc>UD320</a>,
+           evaluate a double time integral over a drift shell <br>
+      <a href="ud321.html" rev=toc>UD321</a>,
+           evaluate a time integral over a magnetic field line <br>
+      <a href="ud322.html" rev=toc>UD322</a>,
+           special entry to subroutine UD320<br>
+      <a href="ud323.html" rev=toc>UD323</a>,
+           special entry to subroutine UD321<br>
+      <a href="ud327.html" rev=toc>UD327</a>,
+           search an extremum<br>
+      <a href="ud328.html" rev=toc>UD328</a>,
+           evaluate the second derivative of <i>B</i> <br>
+      <a href="ud329.html" rev=toc>UD329</a>,
+           interpolate between two or three points <br>
+      <a href="ud330.html" rev=toc>UD330</a>,
+           evaluate the third invariant <br>
+      <a href="ud331.html" rev=toc>UD331</a>,
+           evaluate the magnetic flux through a spherical cap       <br>
+      <a href="ud332.html" rev=toc>UD332</a>, 
+           evaluate the magnetic flux through a spherical pie      <br>
+      <a href="uf410.html" rev=toc>UF410</a>,
+           search the geographic position of a magnetic field line <br>
+      <a href="uf411.html" rev=toc>UF411</a>,      
+           search a local magnetic equator <br>
+      <a href="uf415.html" rev=toc>UF415</a>,     
+           rebuild the labels of the field line  <br>
+      <a href="uf417.html" rev=toc>UF417</a>,
+           search the geographic position of a magnetic field line (new)<br>
+      <a href="uf420.html" rev=toc>UF420</a>,
+           trace a magnetic field line segment passing 
+           through a given position<br>
+      <a href="uf421.html" rev=toc>UF421</a>,      
+           initialize and close a field line segment <br>
+      <a href="uf422.html" rev=toc>UF422</a>,      
+           follow a field line until a boundary condition is reached <br>
+      <a href="uf423.html" rev=toc>UF423</a>,      
+           Runge Kutta step <br>
+      <a href="uf424.html" rev=toc>UF424</a>,      
+           search the lowest B value <br>
+      <a href="uf425.html" rev=toc>UF425</a>,      
+           evaluate the curvature of the field lines <br>
+      <a href="uf426.html" rev=toc>UF426</a>,     
+           interpolating an extremum of B <br>
+      <a href="uf427.html" rev=toc>UF427</a>,       
+           interpolating a value of B <br>
+      <a href="uf428.html" rev=toc>UF428</a>, 
+           interpolating an altitude       <br>
+      <a href="uf429.html" rev=toc>UF429</a>, 
+           transpose a field line segment      <br>
+      <a href="um510.html" rev=toc>UM510</a>, 
+           select a geomagnetic field model <br>
+      <a href="um511.html" rev=toc>UM511</a>, 
+           set the Jensen & Cain model coefficients <br>
+      <a href="um512.html" rev=toc>UM512</a>, 
+           set the GSFC 12/66 model coefficients <br>
+      <a href="um513.html" rev=toc>UM513</a>, 
+           set the DGRF/IGRF model coefficients <br>
+      <a href="um515.html" rev=toc>UM515</a>, 
+           perform a Schmidt normalisation<br>
+      <a href="um517.html" rev=toc>UM517</a>, 
+           transform from Schmidt to Kluge normalisation<br>
+      <a href="um520.html" rev=toc>UM520</a>, 
+           select an external magnetic field model <br>
+      <a href="um521.html" rev=toc>UM521</a>,
+           ground disturbances from Kp <br>
+      <a href="um522.html" rev=toc>UM522</a>,
+           position of the Sun <br>
+      <a href="um523.html" rev=toc>UM523</a>,
+           GEO to GSM transformation <br>
+      <a href="um524.html" rev=toc>UM524</a>,
+           GEO to SM transformation <br>
+      <a href="um530.html" rev=toc>UM530</a>, 
+           evaluate the magnetic field vector <br>
+      <a href="um531.html" rev=toc>UM531</a>,      
+           geomagnetic field <br>
+      <a href="um532.html" rev=toc>UM532</a>,      
+           external magnetic field <br>
+      <a href="um533.html" rev=toc>UM533</a>,      
+           distance to the magnetopause <br>
+      <a href="um535.html" rev=toc>UM535</a>,      
+           geocentric to geodetic transformation <br>
+      <a href="um536.html" rev=toc>UM536</a>,      
+           geodetic to geocentric transformation <br>
+      <a href="um537.html" rev=toc>UM537</a>,      
+           Kluge evaluation of the geomagnetic field <br>
+      <a href="um538.html" rev=toc>UM538</a>,      
+           Evaluate the magnetic local time<br>
+      <a href="um539.html" rev=toc>UM539</a>,      
+           evaluate the magnetic field<br>               
+      <a href="ut540.html" rev=toc>UT540</a>,
+           compute modified Julian Day from date <br>
+      <a href="ut541.html" rev=toc>UT541</a>,
+           convert spherical coordinates to cartesian coordinates <br>
+      <a href="ut542.html" rev=toc>UT542</a>,
+           convert spherical vector components to cartesian components <br>
+      <a href="ut545.html" rev=toc>UT545</a>,      
+           compute date from modified Julian Day <br>
+      <a href="ut546.html" rev=toc>UT546</a>,
+           convert cartesian coordinates to spherical coordinates  <br>
+      <a href="ut547.html" rev=toc>UT547</a>,
+           convert cartesian vector components to spherical components <br>
+      <a href="ut550.html" rev=toc>UT550</a>,
+           select a coordinate transformation <br>
+      <a href="ut551.html" rev=toc>UT551</a>,
+           initialize an Euler rotation matrix <br>
+      <a href="ut552.html" rev=toc>UT552</a>,
+           initialize a quaternion rotation matrix <br>
+      <a href="ut555.html" rev=toc>UT555</a>,
+           coordinate conversion<br>
+      <a href="ut556.html" rev=toc>UT556</a>,
+           vector conversion <br>
+      <a href="ua610.html" rev=toc>UA610</a>, 
+           select an atmospheric, ionospheric
+              and/or plasmaspheric model <br> 
+      <a href="ua612.html" rev=toc>UA612</a>,
+           provide a list of atmospheric constituents <br>
+      <a href="ua630.html" rev=toc>UA630</a>,
+           evaluate the density numbers and mass densities <br>
+      <a href="ua631.html" rev=toc>UA631</a>, 
+           Anderson and Francis atmosphere <br>
+      <a href="ua632.html" rev=toc>UA632</a>, 
+           MSISE-90 atmosphere <br>
+      <a href="ua633.html" rev=toc>UA633</a>, 
+           IRI-90 ionosphere <br>
+      <a href="ua634.html" rev=toc>UA634</a>, 
+           compute mass density from number density <br>
+      <a href="ua635.html" rev=toc>UA635</a>,
+           evaluate the Debye length <br>
+      <a href="ua636.html" rev=toc>UA636</a>,
+           evaluate a weighted atmospheric mass <br>
+      <a href="ua637.html" rev=toc>UA637</a>,
+           proton cross sections <br>
+      <a href="ua638.html" rev=toc>UA638</a>,
+           Hassitt proton cross sections <br>
+      <a href="ua639.html" rev=toc>UA639</a>,
+           equatorial electron density <br>
+      <a href="ut980.html" rev=toc>UT980</a>,
+           print the error messages <br>
+      <a href="ut981.html" rev=toc>UT981</a>,      
+           (old) <br>
+      <a href="ut982.html" rev=toc>UT982</a>,      
+           (old) <br>
+      <a href="ut985.html" rev=toc>UT985</a>,  
+           transfer a field line of the drift shell to IDL<br>
+      <a href="ut986.html" rev=toc>UT986</a>,  
+           pass general variables to IDL<br> 
+      <a href="ut990.html" rev=toc>UT990</a>,
+           initialize the UNILIB libray <br>
+      <a href="ut991.html" rev=toc>UT991</a>,
+           print the magnetic field line <br>
+      <a href="ut992.html" rev=toc>UT992</a>,     
+           print the magnetic drift shell  <br>
+      <a href="ut993.html" rev=toc>UT993</a>,     
+           store a magnetic field drift shell<br>
+      <a href="ut998.html" rev=toc>UT998</a>, 
+           evaluate the magnetic field vector and 
+                    the normal to the field line <br>
+      <a href="ut999.html" rev=toc>UT999</a>,
+           radius of curvature in a dipolar magnetic field
+</ul> <h4> Not documented subroutines </h4> <ul>
+      <a href="ext530.html" rev=toc>EXT530</a>,
+           set of external magnetic models <br>
+      <a href="ext630.html" rev=toc>EXT630</a>,
+            Neutral Atmosphere Empirical Model MSISE-90 <br>
+      <a href="ext635.html" rev=toc>EXT635</a>,
+            International Reference Ionosphere IRI-90 <br>
+      <a href="uxidl.html" rev=toc>UXIDL</a>,
+            Interface to IDL (UNIX) <br>
+</ul>   
+<!-- +++ Navigation +++ -->
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

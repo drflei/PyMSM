@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uc190.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UC190
+   === --> 
+<!--meta name="keywords" content="control parameters,Runge-Kutta,magnetic moment"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UC190
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Common block UC190 - control parameters, set 1
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INCLUDE 'structure.h'
+      
+      COMMON /UC190/ prop, stepx, stpmin, umsq, upsq, uk2, uk3, 
+                     epskm, epsrel, stplst, xclat, kmflg, kum533       
+
+      REAL*8         prop, stepx, stpmin
+      REAL*8         umsq, upsq, uk2, uk3
+      REAL*8         epskm, epsrel, stplst, xclat
+      INTEGER*4      kmflg, kum533      
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> prop   </code> <dd>
+      Proportionality factor between the radius of curvature and the step size
+      <dt> <code> stepx  </code> <dd>
+      Maximum step size
+      <dt> <code> stpmin  </code> <dd>
+      Minimum step size
+      <dt> <code> umsq, upsq, uk2, uk3  </code> <dd>
+      Constants used in Runge-Kutta calculation
+      <dt> <code> epskm   </code> <dd>
+      Altitude precision
+      <dt> <code> epsrel  </code> <dd>
+      Relative magnetic field precision
+      <dt> <code> stplst </code> <dd>
+      Step size near a point of interest
+      <dt> <code> xclat   </code> <dd>
+      Not used
+      <dt> <code> kmflg  </code> <dd>
+      Flag for <a href="ul240.html">UL240</a>  (see table below)
+      <dt> <code> kum533 </code> <dd>      
+      Flag for <a href="um533.html">UM533</a>
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The common blocks UC190 and <a href="uc192.html">UC192</a> are used to
+      specify parameters which control the execution of the UNILIB libray.
+      The arguments of common block UC190 are more specific to the tracing
+      of magnetic field line segment by the Runge-Kutta algorithm.
+      The arguments of both common blocks are initialized by the
+      subroutine <a href="ut990.html">UT990</a>.
+      <p>
+      The table below describes the use of the <code>kmflg</code> argument.
+      <center><br><table border=1 cellspacing=0 width="80%">
+       <tr><th><code>kmflg</code> value</th><th></th></tr>
+       <tr><td> 0,10</td><td>The magnetic dipole moment defined by McIlwain is
+                             used, e.g. to compute Hilton's function.</td></tr>
+       <tr><td> 1,11</td><td>The magnetic dipole moment of the current magnetic
+                             field model is used, e.g. to compute Hilton's
+                             function. </td></tr>  
+       <tr><td> 0,1</td><td> To evaluate the equatorial pitch angle,
+                             the lowest magnetic field intensity on a field line
+                             segment is defined by <i>B</i><sub>0</sub>=
+                             <i>M</i>/<i>L</i><sup>3</sup> where <i>M</i>
+                             is the magnetic dipole moment.</td></tr> 
+       <tr><td>10,11</td><td>The equatorial pitch angle is evaluated with the
+                             help of the lowest magnetic field intensity
+                             encountered along the current field line segment.                                        
+      </table></center>
+</ul> <h4> History </h4> <ul>
+      In version 1.10 and earlier, the argument <code>nxstp</code> was defined
+      in the common block UC190 instead of the argument <code>kum533</code>.
+      The argument <code>nxstp</code> was used to control the maximum number 
+      of steps allowed during the tracing of a field line segment.  The value
+      of the maximum step number is now only fixed by the value of parameter 
+      <code><a href="structure.html#description">nx170</a></code>.
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Used by </h4> <ul> <dl>
+      <dt><a href="ul225.html">UL225</a>
+      (evaluate invariant radius and latitude): 
+      <dd> <code>kmflg</code> <br>
+      <dt><a href="ul220.html">UL220</a>
+      (get information on a magnetic field line segment): 
+      <dd> <code>epsrel </code> <br>
+      <dt><a href="ul230.html">UL230</a>
+      (evaluate the integral invariant coordinate <i>I</i> ): 
+      <dd> <code> umsq</code>, <code>upsq</code> and
+      <code>epsrel</code> <br>
+      <dt><a href="ul240.html">UL240</a>
+      (evaluate the Hilton's function): 
+      <dd> <code>kmflg</code> <br>
+      <dt><a href="ul242.html">UL242</a>
+      (inverse the Hilton function): 
+      <dd> <code>kmflg</code> <br>
+      <dt><a href="ul245.html">UL245</a>
+      (equatorial pitch angle): 
+      <dd> <code> kmflg</code> <br>
+      <dt><a href="ud319.html">UD319</a>
+      (transfer a field line segment from common block
+       <a href="uc170.html">UC170</a> to <a href="uc130.html">UC130</a>): 
+      <dd> <code>epsrel</code> <br>
+      <dt><a href="ud330.html">UD330</a>
+      (evaluate the third invariant): 
+      <dd> <code>kmflg</code> <br>
+      <dt><a href="ud332.html">UD332</a>
+      (evaluate the magnetic flux through a spherical pie): 
+      <dd> <code>epskm</code> <br>
+      <dt><a href="uf410.html">UF410</a>
+      (search the geographic position of a magnetic field line): 
+      <dd> <code>epskm</code> <br>
+      <dt><a href="uf411.html">UF411</a>
+      (search a local magnetic equator): 
+      <dd> <code>epskm</code> <br>
+      <dt><a href="uf415.html">UF415</a>
+      (rebuild the labels of the field line): 
+      <dd> <code>epsrel</code> <br>
+      <dt><a href="uf420.html">UF420</a>
+      (trace a magnetic field line segment passing through a given position): 
+      <dd> <code>epskm</code> and <code>epsrel</code>  <br>
+      <dt><a href="uf422.html">UF422</a>
+      (follow a field line until a boundary condition is reached): 
+      <dd> <code>prop</code>, <code>stepx</code>, <code>stpmin</code>,
+      <code>epskm</code>, <code>epsrel</code> and <code>stplst</code> <br>
+      <dt><a href="uf423.html">UF423</a>
+      (Runge Kutta step): 
+      <dd> <code>prop</code>, <code>stepx</code>, <code>stpmin</code>,
+      <code>umsq</code> and <code>upsq</code>  <br>
+      <dt><a href="uf426.html">UF426</a>
+      (interpolating an extremum of <i>B</i>): 
+      <dd> <code>prop</code>, <code>stepx</code>, <code>stpmin</code>,
+      <code>epskm</code> and <code>stplst</code> <br>
+      <dt><a href="uf427.html">UF427</a>
+      (interpolating a value of <i>B</i>): 
+      <dd> <code>prop</code>, <code>stepx</code>, <code>stpmin</code>,
+      <code>epsrel</code> and <code>stplst</code> <br>
+      <dt><a href="uf428.html">UF428</a>
+      (interpolating an altitude): 
+      <dd> <code>prop</code>, <code>stepx</code>, <code>stpmin</code>,
+      <code>epskm</code> and <code>stplst</code> <br>
+      <dt><a href="uf429.html">UF429</a>
+      (transpose a field line segment): 
+      <dd><code>uk2</code> and <code>uk3</code>  <br> 
+      <dt><a href="um533.html">UM533</a>
+      (distance to the magnetopause): 
+      <dd><code>kum533</code>  <br> 
+      <dt><a href="ut986.html">UT986</a>
+      (pass general variables to IDL): 
+      <dd><code>kmflg</code>
+</dl> </ul> <h4> Modified by </h4> <ul> <dl>
+      <dt><a href="ut990.html">UT990</a>
+      (initialize the UNILIB libray): 
+      <dd> <code>prop</code>, <code>stepx</code>, <code>stpmin</code>,
+      <code>umsq</code>, <code>upsq</code>, <code>uk2</code>, <code>uk3</code>,
+      <code>epskm</code>, <code>epsrel</code>, <code>stplst</code>,
+      <code>kmflg</code> and <code>kum533</code>   <br>
+</dl> </ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="uc192.html">UC192</a>, 
+      control parameters, set 2<br> 
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

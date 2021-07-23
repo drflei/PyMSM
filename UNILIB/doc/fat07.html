@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: fat07.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ T.07
+   === --> 
+<!--meta name="keywords" content="getting started"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1> <h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+]  </h6>  <h2> <a name="question"> Question </a> </h2> <ul> 
+      T.07 -  Which subroutines are mandatory?
+</ul> <h2> <a name="answer"> Answer </a> </h2> <ul>
+Since several common blocks are used in the UNILIB libray
+to pass data between subroutines, calls to
+initialisation subroutines have to be done before a call
+to a specific subroutine. The documentation of each subroutine
+includes a list of the common blocks accessed by the subroutine, and
+the documentation on the common blocks includes the list of
+the subroutines which modify or initialize the common blocks.
+So, an appropriate browsing of the documentation should determine
+which are the subroutines to be called mandatory before a specific
+subroutine.
+<p> 
+For the sake of clarity, the dependencies for the mostly used
+subroutines are given in the table below. The table indicates when
+the subroutines <a href="ut990.html">UT990</a>,
+<a href="um510.html">UM510</a>, <a href="um520.html">UM520</a>,
+<a href="ua610.html">UA610</a>, <a href="ud310.html">UD310</a> and
+<a href="ut550.html">UT550</a> have to be called, and in which order.
+     <center><br><table border=1 cellspacing=0 width="80%">
+        <tr><td></td><th>UT990</th><th>UM510</th><th>UM520</th><th>UA610</th>
+                      <th>UD310</th><th>UT550</th></tr>
+        <tr><td>Evaluation of the magnetic field vector with subroutines
+                <a href="um530.html">UM530</a>, <a href="um539.html">UM539</a>
+                or <a href="ut998.html">UT998</a></td>
+            <td>1</td><td>2</td><td>3</td><td>-</td><td>-</td><td>-</td></tr>
+        <tr><td>Tracing of a magnetic field line segment with subroutines
+                <a href="ul220.html">UL220</a>,  <a href="uf410.html">UF410</a>
+                or <a href="uf420.html">UF420</a></td>
+            <td>1</td><td>2</td><td>3</td><td>-</td><td>-</td><td>-</td></tr>
+        <tr><td>Evaluation of the third invariant with subroutine
+                <a href="ud330.html">UD330</a></td>
+            <td>1</td><td>2</td><td>3</td><td>-</td><td>4</td><td>-</td></tr>
+        <tr><td>Applying geocentric/geodetic or 
+              cartesian/spherical conversion with subroutines
+              <a href="um535.html">UM535</a>, <a href="um536.html">UM536</a>,
+              <a href="ut541.html">UT541</a>, <a href="ut542.html">UT542</a>,
+              <a href="ut546.html">UT546</a>, <a href="ut547.html">UT547</a></td>
+            <td>1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+        <tr><td>Transforming between coordinate systems with subroutines
+              <a href="ut555.html">UT555</a> or <a href="ut556.html">UT556</a></td>
+            <td>1</td><td>2(<a href="#note">*</a>)</td><td>3(<a href="#note">*</a>)</td><td>-</td><td>-</td><td>4</td></tr>
+        <tr><td>Converting between date and modified Julian day with subroutines
+              <a href="ut540.html">UT540</a> or <a href="ut545.html">UT545</a></td>
+            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+        <tr><td>Evaluating atmospheric densities with subroutines
+              <a href="ua630.html">UA630</a> or <a href="ua636.html">UA636</a></td>
+            <td>1</td><td>-</td><td>-</td><td>2</td><td>-</td><td>-</td></tr>
+        <tr><td>Evaluating a mean atmospheric density over a drift
+              shell with subroutine
+              <a href="ud320.html">UD320</a></td>
+            <td>1</td><td>2</td><td>3</td><td>4/5</td><td>5/4</td><td>-</td></tr>
+     </table><br></center>
+       It clearly appears from the table that, a good rule of conduct consists
+       in calling the subroutine <a href="ut990.html">UT990</a> at the beginning
+       of all application using the UNILIB library.
+</ul> <h4> <a name="note">Note</a> </h4> <ul>
+     To initialize the coordinate system transformation, the subroutine
+     <a href="ut550.html">UT550</a> needs as input the orientation of
+     the geomagnetic field dipole axis (MAG, SM, GSM) and the Sun direction
+     (GEI, SM, GSM). The geomagnetic field can be selected with
+     subroutine <a href="um510.html">UM510</a>. The Sun direction can be
+     set either by subroutine <a href="um520.html">UM520</a> or by
+     subroutine <a href="um522.html">UM522</a>.  
+</ul> <h2> <a name="illustration"> Illustration </a> </h2> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="ud310.html" rev=toc>UD310</a>,
+           trace a magnetic drift shell <br>
+      <a href="um510.html" rev=toc>UM510</a>, 
+           select a geomagnetic field model <br>
+      <a href="um520.html" rev=toc>UM520</a>, 
+           select an external magnetic field model <br>
+      <a href="ut550.html" rev=toc>UT550</a>,
+           select a coordinate transformation <br>
+      <a href="ua610.html" rev=toc>UA610</a>, 
+           select an atmospheric, ionospheric
+              and/or plasmaspheric model <br> 
+      <a href="ut990.html" rev=toc>UT990</a>,
+           initialize the UNILIB libray <br>
+      The dependencies of the common blocks defined in the
+      UNILIB library (<a href="uc110.html#dependencies">UC110</a>,
+      <a href="uc120.html#dependencies">UC120</a>,
+      <a href="uc130.html#dependencies">UC130</a>,
+      <a href="uc140.html#dependencies">UC140</a>,
+      <a href="uc150.html#dependencies">UC150</a>,
+      <a href="uc160.html#dependencies">UC160</a>,
+      <a href="uc170.html#dependencies">UC170</a>,
+      <a href="uc190.html#dependencies">UC190</a>,
+      <a href="uc192.html#dependencies">UC192</a>) <br>                  
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

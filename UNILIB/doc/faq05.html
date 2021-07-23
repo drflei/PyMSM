@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: faq05.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ G.05
+   === --> 
+<!--meta name="keywords" content="physical unit,geodetic coordinates"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1> <h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="question"> Question </a> </h2> <ul>
+      G.05 - Which are the coordinates and units used ?
+</ul> <h2> <a name="answer"> Answer </a> </h2> <ul>
+  In the library, the geographic positions are expressed, as far as 
+  possible, in the Geocentric Equatorial (GEO) coordinate system in 
+  the form of longitude, colatitude and radial distance from the 
+  centre of the Earth (see TYPE 
+  <a href="structure.html#zgeo">zgeo</a>).
+  A convertor between geocentric and geodetic coordinates is provided
+  in the library (subroutines <a href="um535.html">UM535</a> and 
+  <a href="um536.html">UM536</a>) as well as a convertor between
+  GEO, Geocentric Equatorial Inertial (GEI), Geomagnetic (MAG),
+  Solar Magnetic (SM) and Geocentric Solar Magnetospheric (GSM)
+  coordinate systems (subroutines <a href="ut550.html">UT550</a> and 
+  <a href="ut555.html">UT555</a>).
+<p>
+  When geodetic coordinates are used, geographic position are given relatively
+  to the Earth's geoid instead of a spherical approximation of the Earth's
+  surface. This coordinate system is generally associated to satellite
+  ephemeris but is not well suited for mathematical computation.
+  Different standard of World Geodetic System are currently in use.
+  In the UNILIB library, the geodetic coordinates refer to the description of
+  the Earth's geoid by an axially symmetrical ellipsoid (the parameters of
+  which are defined in common block <a href="uc160.html">UC160</a>).
+  The geodetic altitude is given by the distance from the ellipsoid surface,
+  and the geodetic latitude is given by the angle between the equatorial
+  plane and the line perpendicular to the ellipsoid surface which passes
+  through the position. Be aware that in the library the same structure is 
+  used to represent geocentric and geodetic coordinates (see  
+  <a href="structure.html#zgeo">zgeo</a>). Note also that the ellipsoid
+  defined in the library does not correspond with the WGS84 standard (used
+  by the Global Positioning System) nor
+  the International 1924 standard.
+<p>
+  The vector attached to a geographic position is stored with the help
+  of  spherical components
+  (e.g. <i>V</i><sub>rho</sub>, <i>V</i><sub>theta</sub>,
+  <i>V</i><sub>phi</sub> where the indices rho, theta and phi
+  indicate the radial distance, the colatitude and the longitude in GEO,
+  respectively).                              
+  The spherical components are related to the cartesian components
+  by the transformation
+<blockquote>
+  <i>V</i><sub>rho</sub>   =  <i>V</i><sub>x</sub> sin <i>theta</i> cos <i>phi</i> + <i>V</i><sub>y</sub> sin <i>theta</i> sin <i>phi</i> + <i>V</i><sub>z</sub> cos <i>theta</i> <br>
+  <i>V</i><sub>theta</sub> =  <i>V</i><sub>x</sub> cos <i>theta</i> cos <i>phi</i> + <i>V</i><sub>y</sub> cos <i>theta</i> sin <i>phi</i> - <i>V</i><sub>z</sub> sin <i>theta</i> <br>
+  <i>V</i><sub>phi</sub>   = -<i>V</i><sub>x</sub> sin <i>phi</i>                  + <i>V</i><sub>y</sub> cos <i>phi</i>                                                          
+</blockquote>
+  One should note that the GEO spherical components and the Geocentric
+  Inertial (GEI) spherical components of a vector are identical since both 
+  coordinate
+  systems only differ by a rotation arround the <i>Z</i> axis.
+<p>
+  The SI units are used to express the different
+  physical quantities except for the quantities listed in the table below.
+  Angles should be expressed in degrees.
+<p><center> <table border=1 cellspacing=0 width="80%">
+        <tr><th>Quantity</th> <th>Unit</th> <th>Relation to SI</th></tr>
+        <tr><td>energy</td> <td>MeV</td> <td>1.602177 10<sup>-13</sup> J</td></tr>
+        <tr><td>date</td> <td>day</td> <td>86400 s</td></tr>
+        <tr><td>dipole geomagnetic moment</td> <td>Gauss <i>R</i><sub>E</sub><sup>3</sup></td> <td>2.58621 10<sup>-16</sup> T m<sup>3</sup></td></tr>
+        <tr><td>distance</td> <td>km</td> <td>10<sup>+3</sup>m</td></tr>
+        <tr><td>Earth radius</td> <td><i>R</i><sub>E</sub></td> <td>6,371,200 m</td></tr>
+        <tr><td>mass</td> <td>amu</td> <td>1.66054 10<sup>-27</sup> kg</td></tr>
+        <tr><td>mass thickness</td> <td>g cm<sup>-2</sup></td> <td>10 kg m<sup>-2</sup></td></tr>
+        <tr><td>mass density</td> <td>g cm<sup>-3</sup></td> <td>1000 kg m<sup>-3</sup></td></tr>
+        <tr><td>number density</td> <td>cm<sup>-3</sup></td> <td>10<sup>+6</sup> m<sup>-3</sup></td></tr>
+        <tr><td>magnetic flux density</td> <td>Gauss</td> <td>10<sup>-4</sup> T </td></tr>
+        <tr><td>cross section</td> <td>mbarn</td> <td>10<sup>-31</sup> m<sup>2</sup></td></tr>
+</table></center>
+</ul> <h2> <a name="illustration"> Illustration </a> </h2> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+   <a href="uc160.html">UC160</a>,    general constants<br>
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

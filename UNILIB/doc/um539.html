@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: um539.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UM539
+   === --> 
+<!--meta name="keywords" content="geomagnetic field model,external magnetic field model,magnetic field vector,Sun position,coordinate transformation"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UM539
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UM539 - Evaluate the magnetic field  
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      TYPE(<a href="structure.html#zgeo">zgeo</a>) mpos
+      TYPE(<a href="structure.html#zvec">zvec</a>) mb
+      REAL*8        amjd
+      INTEGER*4     ifail
+
+      CALL UM539(mpos, amjd, mb, ifail)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> mpos      </code> <dd>
+      Geographic position in geocentric coordinates (GEO) [in]
+      <dt> <code> amjd      </code> <dd>
+      Modified Julian day  [in]
+      <dt> <code> mb      </code> <dd>
+      Magnetic field vector  [out]
+      <dt> <code> ifail      </code> <dd>
+      Error flag (passed by <a href="#dependencies">dependents</a>)  [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UM539 evaluates the magnetic field vector 
+      at a given time and geographic location. The subroutine
+      differs from subroutine <a href="um530.html">UM530</a> 
+      by its argument <code>amjd</code> from
+      which the time is specified. Note that the magnetic field
+      models have to be firstly initialized, e.g. by a call to
+      the subroutine  <a href="um510.html">UM510</a> and 
+      <a href="um520.html">UM520</a>.
+      <p>
+      The time (argument <code>amjd</code>) passed to the subroutine is used
+      to re-evaluate the position of the Sun and the GSM or SM
+      coordinate transformation. Note that only the external magnetic
+      field model is affected by the re-evaluation.
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      None  
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul> 
+      <a href="uc140.html">UC140</a>, magnetic field description <br>
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      None  
+</ul> <h4> Calls </h4> <ul>
+      <a href="um522.html">UM522</a>, position of the Sun  <br>
+      <a href="um523.html">UM523</a>, GEO to GSM transformation <br>
+      <a href="um524.html">UM524</a>, GEO to SM transformation <br>
+      <a href="um530.html">UM530</a>, evaluate the magnetic field vector <br>
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="um510.html">UM510</a>, select a geomagnetic field model <br>
+      <a href="um520.html">UM520</a>, select an external magnetic field model<br>
+      <a href="um530.html">UM530</a>, evaluate the magnetic field vector <br>
+      <a href="faq05.html">FAQ G.05</a> Which are the coordinates and units used ? <br>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

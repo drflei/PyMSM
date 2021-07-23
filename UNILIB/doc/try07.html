@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: try07.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      Example 7
+   === --> 
+<!--meta name="keywords" content="Mcilwain shell parameter,example,Interactive Data Language"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Example 7 - iso-contour of the shell parameter
+</h1> <h6>
+ [ <a href="#description">Description</a>
+ | <a href="#source">Source</a>
+ | <a href="#results">Results</a>
+ <!-- *** Navigation *** -->  
+] </h6>
+<h2> <a name="description"> Description </a> </h2> <ul>
+  Note that this exemple has been performed on a Alpha/VMS plateform
+  where the library can be directly linked to IDL 
+  (see FAQ <a href="faq06.html">G.06</a> and <a href="fat05.html">T.05</a>),
+  and that the IDL routine 
+  <a href="fat05.html#illustration">unilib_init</a> is used to
+  correctly initialized the library.
+  <p>
+  In this exemple, the subroutine <a href="ul220.html">UL220</a>
+  is called several time to evaluate the magnetic field intensity
+  <i>B</i><sub>m</sub> and the McIlwain shell parameter <i>L</i> 
+  at different geographic positions
+  in the plane including both the Earth rotation axis and the
+  geomagnetic dipole axis.  The IDL routine <code>CONTOUR</code>
+  is then used to display the results.  The geomagnetic field
+  model IGRF, epoch 1995, is used without external magnetic field
+  for this computation. It is selected by a call to the subroutines
+  <a href="um510.html">UM510</a> and <a href="um520.html">UM520</a>.
+  The longitude of the geomagnetic dipole axis is obtained
+  by a call to subroutine <a href="ut986.html">UT986</a>.
+  <p>
+  Be aware that the iso-contours of the shell parameter
+  do not necessarily correspond to magnetic field
+  lines.
+</ul> <h2> <a name="source"> Source </a> </h2> <pre>
+;
+;  <b>Initialisation of the library</b>
+;
+   <a href="fat05.html#illustration">unilib_init</a>
+;
+;  <b>Selection of the magnetic field model</b>
+;
+   ifail   =  0L
+   label   = '12345678901234567890123456789012'
+   status  = CALL_EXTERNAL( 'unilib', '<a href="um510.html">UM510</a>', 0L, 1995.0d0, label, 6L, ifail )
+   IF ifail LT 0 THEN STOP
+   status  = CALL_EXTERNAL( 'unilib', '<a href="um520.html">UM520</a>', 0L, 0.0d0, DBLARR(10), $
+                            label, 6L, ifail )
+   IF ifail LT 0 THEN STOP
+;
+;  <b>Get the geomagnetic dipole axis</b>
+;
+   msun    = {<a href="structure.html#zxyz">zxyz</a>}
+   gm      = 0.0d0
+   clatdip = 0.0d0
+   elngdip = 0.0d0
+   re      = 0.0d0
+   status  = CALL_EXTERNAL( 'unilib', '<a href="ut986.html">UT986</a>', gm, clatdip, elngdip, msun, re )
+;
+;  <b>Define a grid of points</b>
+;
+   colat   = [INDGEN(21)*150./20.+15.,165.-INDGEN(21)*150./20.,15.] # (FLTARR(21)+1)
+   elong   = [FLTARR(21,21),FLTARR(21,21)+180.,FLTARR(1,21)] + elngdip
+   radius  = (FLTARR(43)+1) # (INDGEN(21)/2.+1)
+   z       = radius * COS( colat*!dtor )
+   x       = radius * SIN( colat*!dtor ) * COS( (elong-elngdip)*!dtor )
+   vallm   = FLTARR (43,21)         
+   valbm   = FLTARR (43,21)         
+;
+;  <b>Intermediate variables</b>
+;
+   fbm     = 0.d0
+   flm     = 0.d0
+   fkm     = 0.d0
+   fsm     = 0.d0
+   fbeq    = 0.d0
+   fs      = 0.d0        
+   mpos    = {<a href="structure.html#zgeo">zgeo</a>}
+;
+;  <b>Loop on all the points</b>
+;
+   FOR i = 0, N_ELEMENTS( radius ) - 1 DO BEGIN
+     mpos.radius = radius(i)*re
+     mpos.colat  = colat(i)
+     mpos.elong  = elong(i)
+     ifail       = 0L
+     status      = CALL_EXTERNAL( 'unilib', '<a href="ul220.html">UL220</a>', mpos, 90.0d0, 1L, $
+                                  fbm, flm, fkm, fsm, fbeq, fs, ifail)
+       vallm(i)  = flm    
+       valbm(i)  = fbm    
+   ENDFOR
+;
+;  <b>Plot of the results</b>
+;
+   range   = 5 * [-1,1]
+   rapp    = 1.3
+   PLOT, [0], /nodata, xsty=3, ysty=3, xra=range*rapp, yra=range, chars=1.5
+;   
+   levlm   = [ 1.2, 1.5, 2., 3., 4., 6., 8. ]
+   levbm   = [ 0.002, 0.005, 0.01, 0.03, 0.1, 0.2, 0.4 ]
+;
+   i = WHERE( vallm LT 0 )
+   IF i(0) GE 0 THEN BEGIN
+     OPLOT, x(i), z(i), psym=3, color=!p.color*0.2+!p.background*0.8 
+     valbm(i) = -1
+   ENDIF       
+;
+   CONTOUR, vallm, x, z, min_val=0., /overplot, levels=levlm, $
+            c_labels=levlm*0, c_colors=!p.color*0.8+!p.background*0.2
+   CONTOUR, valbm, x, z, min_val=0., /overplot, levels=levbm, $
+            c_labels=levbm*0, c_colors=!p.color*0.5+!p.background*0.5
+;
+   END
+</pre> <h2> <a name="results"> Results </a> </h2> <ul>
+<center><img src="try07.gif"></center><p>
+The green and blue curves correspond to the <i>L</i> and <i>B</i><sub>m</sub>
+iso-contours, respectively.  The red dots indicate geographic location
+where the subroutine <a href="ul220.html">UL220</a> failed to compute
+the value of <i>L</i>. 
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

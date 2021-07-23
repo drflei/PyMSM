@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ud329.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UD329
+   === --> 
+<!--meta name="keywords" content="elementary segment,interpolation"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UD329
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UD329 - interpolate between two or three points 
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre> 
+      TYPE(<a href="structure.html#zseg">zseg</a>) mele(*)
+      INTEGER*4     ja, jb, jtmp, ifail, npt      
+      TYPE(<a href="structure.html#zpnt">zpnt</a>) mgeo(npt)
+
+      CALL UD329 (mele, ja, jb, jtmp, mgeo, npt,ifail)
+   
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code>mele  </code> <dd>
+      field line segment [in]
+      <dt> <code>ja </code> <dd>
+      index of the first point [in]
+      <dt> <code>jb</code> <dd>
+      index of the last point [in]
+      <dt> <code>jtmp</code> <dd>
+      index of another point [in]
+      <dt> <code>mgeo</code> <dd>
+      interpolated points (including the points indiced by <code>ja</code> and <code>jb</code>) [out]
+      <dt> <code>npt</code> <dd>
+      number of points [in]
+      <dt> <code>ifail</code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]
+
+</dl> </ul> <h2> <a name="description"> Description </a> </h2>
+      The subroutine UD329 interpolates <code>npt</code>-2 points along a magnetic field line segment.
+      The indices of the points are passed by the arguments
+      <code>ja</code>,  <code>jb</code>  and  <code>jtmp</code>. If the argument 
+      <code>jtmp</code> is set to a value less than zero, the subroutine makes a linear 
+      interpolation between the two points <code>mele(ja)</code> and
+      <code>mele(jb)</code>. Otherwise, a parabolic interpolation is
+      applied.  The magnetic field vector is evaluated
+      at the interpolated points. 
+
+</ul> <h4>History</h4><ul>
+      The subroutine UD329 does not exist in version 1.05 and earlier.
+      
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="32901">-32901</a>, wrong value of the argument <code>npt</code> <br>
+      <a name="32902">-32902</a>, <a name="32903">-32903</a>, not separated points
+
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      None
+
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="ud321.html">UD321</a>, 
+      evaluate a time integral over a magnetic field line <br> 
+</ul> <h4> Calls </h4> <ul>
+      <a href="um530.html">UM530</a>, 
+      evaluate the magnetic field vector  <br>
+      <a href="ut541.html">UT541</a>, 
+      convert spherical coordinates to cartesian coordinates <br>
+      <a href="ut546.html">UT546</a>, 
+      convert cartesian coordinates to spherical coordinates <br>
+      <a href="ut999.html">UT999</a>, 
+      radius of curvature in a dipolar magnetic field  <br>
+
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

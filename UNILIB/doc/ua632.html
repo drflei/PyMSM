@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ua632.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UA632
+   === --> 
+<!--meta name="keywords" content="atmospheric densities,MSIS,temperature"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UA632
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UA632 - MSISE-90 atmosphere 
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      TYPE(<a href="structure.html#zgeo">zgeo</a>) mgde
+      REAL*8        dens(30), tmpn
+      INTEGER*4     nsp, ksp(nsp), ifail
+      
+      CALL UA632 (mgde, nsp, ksp, dens, tmpn, ifail) 
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> mgde    </code> <dd>
+      Geographic location (geodetic coordinates) [in]
+      <dt> <code> nsp   </code> <dd>
+      Number of species [in]
+      <dt> <code> ksp    </code> <dd>
+      List of species code [in]
+      <dt> <code> dens     </code> <dd>
+      Number density (see <a href="ua630.html#note">note</a> of subroutine
+      UA630) [out]       
+      <dt> <code> tmpn     </code> <dd>
+      Temperature [out]
+      <dt> <code> ifail    </code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UA632 interfaces the UNILIB libray with the atmospheric
+      model MSISE-90.  The species included in the model are H, He, Ar, 
+      N<sub>2</sub>, O<sub>2</sub>, O<sup>.</sup> and N<sup>.</sup>
+      (code 1,2,4,8,9,16 and 17 respectively).  The subroutine makes use of the
+      arguments <code>matm.ut</code>, <code>matm.f107a</code>, 
+      <code>matm.f107</code>, <code>matm.apind()</code>, and <code>kflag()</code>
+      of common block <a href="uc150.html">UC150</a>.  The first 26 elements of 
+      argument <code>kflag</code> are used to control the MSISE-90 model.
+      Note that the different arguments of common block <a href="uc150.html">
+      UC150</a> can be initialized with the help of subroutine 
+      <a href="ua610.html">UA610</a>. 
+</ul> <h4> References </h4> <ul>
+      <li>Hedin, A.E., <i>Extension of the MSIS thermosphere model into the
+      middle and lower atmosphere</i>, JGR <b>96</b> (1991) 1159-1172
+</ul><h4>History</h4><ul>
+      In version 2.00 and earlier, the local time was improperly passed
+      to the MSIS model.
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="63201">-63201</a>, altitude below the Earth's surface<br>
+      <a name="63202">-63202</a>, invalid species code <br>
+      <a name="63203">-63203</a>, species not included in the model<br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc150.html">UC150</a>,
+      atmospheric model description<br> 
+      <a href="uc160.html">UC160</a>,
+      general constants<br> 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="ua630.html">UA630</a>, 
+      evaluate the atmospheric densities <br>
+</ul> <h4> Calls </h4> <ul>
+      <a href="ext630.html">EXT630</a>, set of atmospheric models, Neutral
+       Atmosphere Empirical Model MSISE-90 : 
+      <ul>NWGTD6</ul>
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="ua610.html">UA610</a>,
+      select an atmospheric, ionospheric and/or plasmaspheric model    
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

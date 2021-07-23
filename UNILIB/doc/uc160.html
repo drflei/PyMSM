@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uc160.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UC160
+   === --> 
+<!--meta name="keywords" content="control parameters,magnetic moment,atmospheric component mass"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UC160
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Common block UC160 - general constants
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INCLUDE 'structure.h'
+      
+      COMMON /UC160/ pi, deg, re, gmagmo, eclipt, geoid, uma
+
+      REAL*8         pi, deg, re
+      REAL*8         gmagmo
+      REAL*8         eclipt, geoid(3), uma(30)    
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> pi   </code> <dd>
+      3.141592...
+      <dt> <code> deg   </code> <dd>
+      Conversion factor from degrees to radians
+      <dt> <code> re   </code> <dd>
+      Earth's radius in km
+      <dt> <code> gmagmo   </code> <dd>
+      McIlwain's dipole moment in G<i>R</i><sub>E</sub><sup>3</sup>
+      <dt> <code> eclipt   </code> <dd>
+      Ecliptic inclination
+      <dt> <code> geoid  </code> <dd>
+      Geoid major axis in km and excentricities
+      <dt> <code> uma  </code> <dd>
+      Atomic mass of the atmospheric constituents
+      (see <a href="ua630.html#note">note</a> of subroutine UA630)     
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The common block UC160 is used to store physical constants.
+      The common block is initialized by the subroutine
+      <a href="ut990.html">UT990</a>.
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Used by </h4> <ul> <dl>
+      <dt><a href="ul225.html">UL225</a>
+      (evaluate invariant radius and latitude): 
+      <dd> <code> deg </code> <br>
+      <dt><a href="ul220.html">UL220</a>
+      (get information on a magnetic field line segment): 
+      <dd> <code> deg </code> <br>
+      <dt><a href="ul240.html">UL240</a>
+      (evaluate the Hilton's function): 
+      <dd> <code>re</code> and <code>gmagmo</code> <br>
+      <dt><a href="ul242.html">UL242</a>
+      (inverse the Hilton function): 
+      <dd> <code>re</code> and <code>gmagmo</code> <br>
+      <dt><a href="ul245.html">UL245</a>
+      (equatorial pitch angle): 
+      <dd> <code> deg</code> and <code>gmagmo</code> <br>
+      <dt><a href="ud317.html">UD317</a>
+      (trace a drift shell - new):
+      <dd> <code>re</code> <br>
+      <dt><a href="ud320.html">UD320</a>
+      (evaluate a double time integral over a drift shell):
+      <dd> <code>deg</code> <br>
+      <dt><a href="ud327.html">UD327</a>
+      (search an extremum):
+      <dd> <code> deg</code> <br>
+      <dt><a href="ud330.html">UD330</a>
+      (evaluate the third invariant): 
+      <dd> <code>pi</code>, <code>re</code> and <code>gmagmo</code> <br>
+      <dt><a href="ud332.html">UD332</a>
+      (evaluate the magnetic flux through a spherical pie): 
+      <dd> <code>deg</code> <br>
+      <dt><a href="uf410.html">UF410</a>
+      (search the geographic position of a magnetic field line): 
+      <dd> <code>re</code> <br>
+      <dt><a href="uf411.html">UF411</a>
+      (search a local magnetic equator): 
+      <dd> <code>deg</code> <br>
+      <dt><a href="uf417.html">UF417</a>
+      (search the geographic position of a magnetic field line - new): 
+      <dd> <code>re</code> <br>
+      <dt><a href="uf421.html">UF421</a>
+      (initialize and close a field line segment ): 
+      <dd> <code>re</code> <br>
+      <dt><a href="uf422.html">UF422</a>
+      (follow a field line until a boundary condition is reached): 
+      <dd> <code>re</code> <br>
+      <dt><a href="uf423.html">UF423</a>
+      (Runge Kutta step): 
+      <dd> <code>deg</code> and <code>re</code> <br>
+      <dt><a href="uf424.html">UF424</a>
+      (search the lowest <i>B</i> value): 
+      <dd> <code>deg</code> <br>
+      <dt><a href="uf425.html">UF425</a>
+      (evaluate the curvature of the field lines): 
+      <dd> <code>deg</code> <br>
+      <dt><a href="uf426.html">UF426</a>
+      (interpolating an extremum of <i>B</i>): 
+      <dd> <code>re</code> <br>
+      <dt><a href="uf427.html">UF427</a>
+      (interpolating a value of <i>B</i>): 
+      <dd> <code>re</code> <br>
+      <dt><a href="uf428.html">UF428</a>
+      (interpolating an altitude): 
+      <dd> <code>re</code> <br>
+      <dt><a href="um510.html">UM510</a>
+      (select a geomagnetic field model): 
+      <dd> <code>deg</code> <br>
+      <dt><a href="um522.html">UM522</a>
+      (position of the Sun): 
+      <dd> <code>pi</code>, <code>eclipt</code> and <code>deg</code> <br>
+      <dt><a href="um523.html">UM523</a>
+      (GEO to GSM transformation): 
+      <dd> <code>deg</code> <br>
+      <dt><a href="um524.html">UM524</a>
+      (GEO to SM transformation ): 
+      <dd> <code>deg</code> <br>
+      <dt><a href="um530.html">UM530</a>
+      (evaluate the magnetic field vector): 
+      <dd> <code>deg</code> and <code>re</code> <br>
+      <dt><a href="um532.html">UM532</a>
+      (external magnetic field): 
+      <dd> <code>deg</code> <br>
+      <dt><a href="um533.html">UM533</a>
+      (distance to the magnetopause): 
+      <dd> <code>deg</code> and <code>re</code> <br>
+      <dt><a href="um535.html">UM535</a>
+      (geocentric to geodetic transformation): 
+      <dd> <code>deg</code> and <code>re</code> <br>
+      <dt><a href="um536.html">UM536</a>
+      (geodetic to geocentric transformation): 
+      <dd> <code>deg</code> and <code>re</code> <br>
+      <dt><a href="um538.html">UM538</a> 
+      (evaluate the magnetic local time):
+      <dd><code>deg</code>
+      <dt><a href="ut541.html">UT541</a>
+      (convert spherical coordinates to cartesian coordinates):
+      <dd> <code>deg</code> <br>
+      <dt><a href="ut542.html">UT542</a>
+      (convert spherical vector components to cartesian components):
+      <dd> <code>deg</code> <br>
+      <dt><a href="ut546.html">UT546</a>
+      (convert cartesian coordinates to spherical coordinates):
+      <dd> <code>deg</code> <br>
+      <dt><a href="ut547.html">UT547</a>
+      (convert cartesian vector components to spherical components):
+      <dd> <code>deg</code> <br>
+      <dt><a href="ut550.html">UT550</a>
+      (select a coordinate transformation):
+      <dd> <code>deg</code> <br>
+      <dt><a href="ut551.html">UT551</a>
+      (initialize an Euler rotation matrix):
+      <dd> <code>deg</code> <br>
+      <dt><a href="ut555.html">UT555</a>
+      (coordinate conversion):
+      <dd> <code>deg</code> <br>
+      <dt><a href="ut556.html">UT556</a>
+      (vector conversion):
+      <dd> <code>deg</code> <br>
+      <dt><a href="ua630.html">UA630</a>
+      (evaluate the atmospheric densities):
+      <dd><code> re</code> <br> 
+      <dt><a href="ua631.html">UA631</a>
+      (Anderson and Francis atmosphere): 
+      <dd> <code> re</code> <br> 
+      <dt><a href="ua632.html">UA632</a>
+      (simple atmospheric density distribution): 
+      <dd> <code> re</code> <br>
+      <dt><a href="ua633.html">UA633</a>
+      (Pfitzer atmospheric model): 
+      <dd> <code>re</code>, <code>deg</code>, <code>pi</code>
+      and <code>uma</code> <br>
+      <dt><a href="ua634.html">UA634</a>
+      (compute mass density from number density): 
+      <dd> <code> uma </code> <br> 
+      <dt><a href="ua637.html">UA637</a>
+      (proton cross sections): 
+      <dd> <code> uma </code> <br> 
+      <dt><a href="ut986.html">UT986</a>
+      (pass general variables to IDL):
+      <dd><code>re</code> and <code>gmagmo</code>
+      <dt><a href="ut991.html">UT991</a>
+      (print the magnetic field line): 
+      <dd> <code>re</code> and <code>gmagmo</code> <br>
+      <dt><a href="ut992.html">UT992</a>
+      (print the magnetic drift shell): 
+      <dd> <code>re</code> and <code>gmagmo</code> <br>
+       <dt><a href="ut993.html">UT993</a>
+      (store a magnetic field drift shell): 
+      <dd> <code>re</code> and <code>deg</code> <br>
+      <dt><a href="ut999.html">UT999</a>
+      (radius of curvature in a dipolar magnetic field): 
+      <dd> <code>deg</code> <br> 
+</dl> </ul> <h4> Modified by </h4> <ul> <dl>
+      <dt><a href="ut990.html">UT990</a>
+      (initialize the UNILIB libray): 
+      <dd> <code>pi</code>, <code>deg</code>, <code>re</code>,
+      <code>gmagmo</code>, <code>eclipt</code>, <code>geoid</code>
+      and <code>uma</code><br>
+</dl> </ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

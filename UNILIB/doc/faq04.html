@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: faq04.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ G.04
+   === --> 
+<!--meta name="keywords" content="external subroutine,IRI,download"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1> <h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="question"> Question </a> </h2> <ul>
+      G.04 - How to install the IRI model ?
+</ul> <h2> <a name="answer"> Answer </a> </h2> <ul>
+     <b>The IRI model is included in the library since version 1.06.</b>
+     <p>
+     The International Reference Ionosphere (IRI) is the empirical reference 
+     model of ionospheric densities and temperatures (electrons and ions) 
+     recommended for international use by the Committee on Space Research 
+     (COSPAR) and the International Union of Radio Science (URSI). It was 
+     established in a world-wide collaboration starting in the late sixties. 
+     IRI is up-dated bi-yearly during special IRI workshops to 
+     incorporate newly available measurements. IRI is based on all the 
+     important ionospheric data sources including ground-based (ionosonde, 
+     absorption, incoherent scatter) and spacecraft (Alouette, ISIS, AE, 
+     AEROS, DE, rockets) measurements. IRI provides monthly mean values 
+     for magnetically quiet conditions at non-auroral latitudes in the 
+     altitude range 50km to 2000km. 
+     <p>
+      The IRI model was not distributed within the UNILIB package
+      <b>version 1.05 and earlier</b>.  
+      Nevertheless, the 1990 version of IRI  may 
+      be selected and used with the UNILIB libray. The IRI-90 Fortran
+      code is maintained by
+      <ul><address>
+      Dieter Bilitza 
+      (<a href="mailto:BILITZA@NSSDCA.GSFC.NASA.GOV">BILITZA@NSSDCA.GSFC.NASA.GOV</a>)<br>
+      NASA/GSFC, NSSDC code 633/HSTX, Greenbelt <br>
+       Maryland 20771 - USA <br>
+      </address></ul>
+      The IRI-90 package may be retrieved from CCMC, see
+      <a href="http://ccmc.gsfc.nasa.gov/models/modelinfo.php?model=IRI">
+      info on IRI</a>
+      It includes the Fortran subroutines, data files with the model
+      coefficients and documentation files. The UNILIB package make use
+      of the <code>IRIS12</code> subroutine which may be found in the
+      FTP directory 
+      <a href="ftp://hanna.ccmc.gsfc.nasa.gov/pub/modelweb/ionospheric/iri/iri90/fortran_code/">
+      ftp://hanna.ccmc.gsfc.nasa.gov/pub/modelweb/ionospheric/iri/iri90/fortran_code/</a>
+      where the data files are also archived.
+      <p>
+      When the IRI-90 model is not needed, a dummy subroutine
+      <code>IRIS12</code> may be written to avoid warnings during
+      the link phase.
+</ul> <h4> Synopsis </h4>  <pre>
+      LOGICAL*4      jf(12)
+      INTEGER*4      jmag, mmdd, dhour
+      REAL*4         alati, along, rz12, heibeg, heiend, heistp
+      REAL*4         outf(11,50), oarr(30)
+
+      CALL IRIS12 (jf, jmag, alati, along, rz12, mmdd, dhour,
+     :             heibeg, heiend, heistp, outf, oarr)
+</pre><ul> 
+      The UNILIB code calls the IRI-90 model with the declarations given
+      above. Unfortunately, the original subroutine <code>IRIS12</code>
+      does not include explicit declarations of the  arguments
+      and thus the size of these arguments depends on the 
+      platform and compiler used. Therefore, the definition of the
+      <code>IRIS12</code> arguments should be probably adapted. This 
+      modification
+      can be made by inserting, in each subroutine and function
+      of the files <code>iris12.for</code> and <code>irif12.for</code>,
+      the following lines: <pre>
+      IMPLICIT REAL*4    ( A-H,O-Z)
+      IMPLICIT INTEGER*4 (   I-N  )</pre>
+      and by changing the declaration of <code>jf</code> in the 
+      subroutine       <code>IRIS12</code>.
+</ul> <h4> Dependencies </a> </h4> <ul>
+      The different subroutines, functions and common blocks
+      used by the subroutine <code>IRIS12</code> are listed
+      in the table below
+      <center> <table border=1 cellspacing=0 width="80%">
+        <tr><th colspan=3>Common blocks</th></tr>
+        <tr><td>ARGEXP </td><td>BLO10 </td><td>BLOCK1 </td></tr>
+        <tr><td>BLOCK2 </td><td>BLOCK3 </td><td>BLOCK4 </td></tr>
+        <tr><td>BLOCK5 </td><td>BLOCK6 </td><td>BLOCK7 </td></tr>
+        <tr><td>BLOCK8 </td><td>BLOTE </td><td>BLOTN </td></tr>
+        <tr><td>CONST </td><td> </td><td> </td></tr>
+        <tr><th colspan=3>Subroutines</th></tr>
+        <tr><td>CIRA86 </td><td>F2OUT </td><td>FIELDG </td></tr>
+        <tr><td>GGM </td><td>INILAY </td><td>IONCOM </td></tr>
+        <tr><td>KOEFP1 </td><td>KOEFP2 </td><td>KOEFP3 </td></tr>
+        <tr><td>LNGLSN </td><td>LSKNM </td><td>MODA </td></tr>
+        <tr><td>RDHHE </td><td>REGFA1 </td><td>ROGUL </td></tr>
+        <tr><td>SOCO </td><td>SPHARM </td><td>SUFE </td></tr>
+        <tr><td>TAL </td><td>TEBA </td><td>VALGUL </td></tr>
+        <tr><th colspan=3>Functions</th></tr>
+        <tr><td>B0POL </td><td>D1LAY </td><td>D2LAY </td></tr>
+        <tr><td>DXE1N </td><td>EPLA </td><td>ELTE </td></tr>
+        <tr><td>EPST </td><td>EPSTEP </td><td>EPTR </td></tr>
+        <tr><td>FOEEDI </td><td>FOF1ED </td><td>GAMMA1 </td></tr>
+        <tr><td>HMF2ED </td><td>HPOL </td><td>RDNO </td></tr>
+        <tr><td>RLAY </td><td>RPID </td><td>TEDE </td></tr>
+        <tr><td>TEDER </td><td>TI </td><td>XE </td></tr>
+        <tr><td>XE1 </td><td>XE2 </td><td>XE2TO5 </td></tr>
+        <tr><td>XE3 </td><td>XE4 </td><td>XE5 </td></tr>
+        <tr><td>XE6 </td><td>XEN </td><td>XMDED </td></tr>
+      </table></center>
+</ul> <h2> <a name="illustration"> Illustration </a> </h2> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="uc150.html">UC150</a>, atmospheric model description <br>
+      <a href="ua610.html">UA610</a>, select an atmospheric, ionospheric
+                                 and/or plasmaspheric model <br> 
+      <a href="ext635.html">EXT635</a>, IRI-90 <br>
+      <a href="http://iri.gsfc.nasa.gov/" target="x">IRI Model</a>
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

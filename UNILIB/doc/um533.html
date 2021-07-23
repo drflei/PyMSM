@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: um533.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UM533
+   === --> 
+<!--meta name="keywords" content="magnetopause,Fairfield,Sun position"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UM533
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UM533 - distance to the magnetopause 
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      TYPE(<a href="structure.html#zgeo">zgeo</a>) mgeo
+      REAL*8        rmagp
+      INTEGER*4     ifail
+      
+      CALL UM533 (mgeo, rmagp, ifail )
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> mgeo      </code> <dd>
+      Geocentric location   [in]
+      <dt> <code>   rmagp      </code> <dd>
+      distance from the Earth center to the magnetopause in the same direction
+      as <code>mgeo</code> [out]
+      <dt> <code>   ifail    </code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>)  [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UM533 evaluates the location of the magnetopause in a 
+      given direction.  The algorithm is based on Fairfield (J.Geophys.
+      Res., 76-28, p.6700).
+      It depends on the arguments <code>msun.utdeg</code> and
+      <code>mext.vkp</code> of the common block <a href="uc140.html">UC140</a>.
+      The subroutine is mainly used to prevent the library to
+      trace magnetic field line outside the magnetosphere.
+      Note that the algorithm is independent of the selected magnetic field
+      model, and therefore, that the location of the magnetopause
+      does not coincide exactly with the one of the magnetic field model. 
+<p>
+      It is possible to inhibit the subroutine with the help of
+      the argument <code>kum533</code> of the common block
+      <a href="uc190.html">UC190</a>. When the argument <code>kum533</code> 
+      is less or equal to 0, the error diagnostic is disable.
+      Note that the argument is initialized to 1 by the subroutine
+      <a href="ut990.html">UT990</a>.
+</ul> <h4> History </h4> <ul>
+      In version 1.10 and earlier, the argument <code>kum533</code>
+      was not present. 
+      In versions 1.07 to 1.13, the value of K<sub>p</sub> was not
+      correctly passed by the subroutine <a href="um520.html">UM520</a>
+      and the value zero was used instead.    
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="53301">-53301</a>, position beyond the magnetopause<br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc140.html">UC140</a>, magnetic field description <br>
+      <a href="uc160.html">UC160</a>, general constants<br>
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="um530.html">UM530</a>, evaluate the magnetic field vector <br>
+</ul> <h4> Calls </h4> <ul>
+      None      
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

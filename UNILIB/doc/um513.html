@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: um513.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UM513
+   === --> 
+<!--meta name="keywords" content="spherical harmonic expansion,geomagnetic field model,IGRF"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UM513
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+]  </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UM513 - set the DGRF/IGRF model coefficients
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      REAL*8        tm
+      CHARACTER*32  lbl
+      
+      CALL UM513 (tm, lbl)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> tm      </code> <dd>
+      Epoch of the geomagnetic field calculation expressed in year [in]
+      <dt> <code> lbl      </code> <dd>
+      Label of the geomagnetic field model   [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UM513 initializes the expansion coefficients of
+      the geomagnetic field inside the common block <a href="uc140.html">UC140</a>
+      with the coefficients of the DGRF/IGRF model. 
+      The <code>tm</code> arguments specifies the epoch to which the model
+      has to be extrapolated. The base epochs of the model are the year
+      multiple of 5 between 1900 and 2015. The expansion coefficients are
+      extrapolated from the nearest base epoch that precedes the <code>tm</code>
+      time.
+      As result, the <code>lbl</code> argument contains a string with the 
+      name of the model. 
+</ul> <h4> History </h4> <ul>
+      In version 1.11 and earlier, the description of the IGRF/DGRF 45-95
+      geomagnetic field models were included in a specific block data
+      (<a href="dgrfbd.html">DGRFBD</a>).
+      Since some Fortran compilers (e.g. Microsoft PowerStation) are not
+      able to link correctly such block data, the DATA statements have been 
+      included in the subroutine UM533.
+      Note that the common block
+      <code>DGRF</code> is not more present in the UNILIB library.
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      None
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc140.html">UC140</a>,
+      magnetic field description<br> 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="um510.html">UM510</a>, 
+           select a geomagnetic field model <br>
+</ul> <h4> Calls </h4> <ul>
+      <a href="um515.html">UM515</a>, 
+           perform a Schmidt normalisation<br>
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="um511.html">UM511</a>, 
+           set the Jensen & Cain 1960 model coefficients <br>
+      <a href="um512.html">UM512</a>, 
+           set the GSFC 12/66 model coefficients <br>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

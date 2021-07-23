@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uf422.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UF422
+   === --> 
+<!--meta name="keywords" content="internal subroutine"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UF422
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UF422 -  follow a field line until a boundary condition is reached 
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      REAL*8        fbm, falt, scale
+      INTEGER*4     kdir, ifail, jind
+      TYPE(<a href="structure.html#zgeo">zgeo</a>) mpos
+      
+      CALL UF422 (kdir, fbm, falt, scale, mpos, jind, ifail)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> kdir      </code> <dd>
+      Direction indicator (-1, +1 or 0) [in]     
+      <dt> <code> fbm      </code> <dd>
+      Boundary condition on <i>B</i>  [in]
+      <dt> <code> falt      </code> <dd>
+      Boundary condition on the altitude  [in]
+      <dt> <code> scale      </code> <dd>
+      Scale factor (its sign giving the direction checked by <code>kdir</code>)  [in/out]
+      <dt> <code> mpos      </code> <dd>
+      Geographic location where a condition is reached [out]
+      <dt> <code> jind      </code> <dd>
+      Index in the common block <a href="uc170.html">UC170</a> [out]
+      <dt> <code> ifail      </code> <dd>
+      error flag and/or boundary condition indicator 
+      (see <a href="#diagnostics">diagnostics</a>)  [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UF422 builds a magnetic field line segment until one of 
+      the following boundary conditions is reached: 
+      <menu>
+      <li>the field line reached the altitude <code>falt</code>;
+      <li>the field line reached the magnetic field intensity <code>fbm</code>.
+      </menu>
+      The precision are set by the arguments <code>epskm</code> and
+      <code>epsrel</code> of the common block 
+      <a href="uc190.html">UC190</a>, respectively.
+      The condition on the altitude is not checked when the argument 
+      <code>falt</code> is lower than -500.
+      <p>
+      The direction, in which the magnetic field line is followed, is
+      controlled by the argument <code>kdir</code>.  When <code>kdir</code> 
+      is equal to 1, the magnetic field line is traced in the direction  of the
+      increasing magnetic field intensities.  At the opposite, when <code>kdir</code>
+      is equal to -1, the magnetic field line is traced in the direction of the
+      decreasing magnetic field intensities.  In both cases, the sign of the
+      scale factor <code>scale</code> is adapted by the subroutine. When 
+      <code>kdir</code> is equal to 0, the sign of the argument <code>scale</code> 
+      is not modified and the magnetic field line is traced in the same
+      direction as the direction of the previous call to the subroutine.
+      <p>
+      As result, the subroutine returns the geographic location
+      (<code>mpos</code>) and the corresponding index (<code>jind</code>)
+      in the common block <a href="uc170.html">UC170</a> where the first
+      boundary condition is reached.  When no error occurs during the whole
+      process, the kind of the boundary condition is returned by the argument
+      <code>ifail</code>.
+      Note that the subroutine UF422 does change the absolute value of the
+      argument <code>scale</code>.
+</ul> <h4> History </h4> <ul>
+      From version 1.13 to 2.00, the algorithm of the subroutine
+      has been improved for the case where the starting point
+      is close to the point along the field line with the minimum 
+      of magnetic field intensity.
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="42201">-42201</a>,
+      invalid value of the <code>scale</code> argument <br>
+      <a name="42202">-42202</a>, 
+      reach a minimum of <i>B</i> which is not compatible with the boundary
+      conditions <br>
+      <a name="42203">-42203</a>, <a name="42204">-42204</a>,
+      not used<br>
+      <a name="42205">-42205</a>, 
+      cannot follow the desired direction due to an extremum of <i>B</i> <br>
+      <p>
+      If the subroutine UF422 succeeds, the argument <code>ifail</code> is set to
+      <menu>
+      <li>100: the magnetic field intensity <code>fbm</code> has been reached;
+      <li>200: the altitude <code>falt</code> has been reached;
+      <li>300: both conditions.
+      </menu>
+      These values can be incremented by 
+      <menu>
+      <li>1: when the altitude of the starting point is <code>falt</code>;
+      <li>2: when the magnetic field intensity at the starting point is equal
+      to <code>fbm</code>;
+      <li>10: when an extremum of magnetic field intensity has been met along
+      the field line ;
+      <li>30: when the boundary condition corresponds to a maximum of the
+      magnetic intensity;
+      <li>50: when the boundary condition corresponds to a minimum of the
+      magnetic intensity.
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>     
+      <a href="uc160.html">UC160</a>,
+      general constants<br>
+      <a href="uc170.html">UC170</a>,
+      temporary magnetic field line<br> 
+      <a href="uc190.html">UC190</a>,
+      control parameters, set 1<br>
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="uf420.html">UF420</a>, 
+      trace a magnetic field line segment passing through a given position<br>
+</ul> <h4> Calls </h4> <ul>
+      <a href="uf423.html">UF423</a>, 
+      Runge Kutta step<br>
+      <a href="uf426.html">UF426</a>, 
+      interpolating an extremum of <i>B</i>  <br> 
+      <a href="uf427.html">UF427</a>, 
+      interpolating a value of <i>B</i>   <br> 
+      <a href="uf428.html">UF428</a>, 
+      interpolating an altitude  <br>     
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

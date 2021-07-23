@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ext530.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      EXT530
+   === --> 
+<!--meta name="keywords" content="Tsyganenko,Mead &amp; Fairfield,Olson &amp; Pfitzer,external subroutine,resources"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      EXT530 
+</h1> <h6>
+ [ <a href="#name">Name</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Package EXT530 - set of external magnetic models
+</ul>  <h2> <a name="description"> Description </a> </h2> <ul>
+      This package includes subroutines to evaluate the 
+      external magnetic field models:
+      <menu>
+      <li> Mead &amp; Fairfield [1975], subroutine <code>MEAD</code>;
+      <li> Tsyganenko short [1987], subroutine <code>TSY87S</code>;
+      <li> Tsyganenko long [1987], subroutine <code>TSY87L</code>;
+      <li> Tsyganenko [1989] (T89c), subroutine <code>T89C</code>;
+      <li> Olson &amp; Pfitzer quiet [1977], subroutine <code>BXYZMU</code>;
+      <li> Olson &amp; Pfitzer dynamic [1988], subroutine <code>BDYN</code>;
+      <li> Tsyganenko [1996], subroutine <code>T96_01</code>.
+      <li> Ostapenko &amp; Maltsev [1997], subroutine <code>BOM97</code>.
+      </menu>
+      <p>
+      The Mead &amp; Fairfield [1975] model was obtained by a least-square-fit 
+      to 12616 vector field measurements from 451 orbits of four IMP 
+      satellites between 1966 and 1972. The model depends on four levels of 
+      magnetic activity parameterized by K<sub>p</sub>. The model was
+      developed by
+      <ul><address>
+         D.H. Fairfield <BR>
+         NASA/GSFC, Code 695 Greenbelt <br>
+         Maryland 20771, USA
+      </address></ul>   
+      <p>
+      The Tsyganenko magnetic field models are based on a large number of 
+      satellite observations (IMP, HEOS) covering the period 1966 to 1980. 
+      The models are obtained from 36682 data points for
+      several levels of magnetic disturbance parameterized by K<sub>p</sub>.
+      The Tsyganenko [1987] model is provided as  a 'long' and a 'short' 
+      versions. The Tsyganenko [1989] model T89c is tilt dependent and was
+      primarily developed as a tail model. The Tsyganenko [1996] model
+      has an explicitly defined realistic magnetopause, large-scale 
+      Region 1 and 2 Birkeland
+      current systems, and the IMF penetration  across the boundary.
+      The models may be retrieved
+      from NSSDC's anonymous FTP site and were developed by
+      <ul><address>
+         N.A. Tsyganenko (<a href="mailto:ys2nt@lepvax.gsfc.nasa.gov">ys2nt@lepvax.gsfc.nasa.gov</a>)<BR>
+         NASA/GSFC, Code 695 Greenbelt <br>
+         Maryland 20771, USA
+      </address></ul>
+      <p>
+      The Olson &amp; Pfitzer [1977] is an average models fit to quiet conditions
+      using data from OGO 3, 5 and Explorer 33, 35. There are no parameters
+      for this model.
+      The dynamic model is a scalable model dependending upon the
+      activity level but without a tilt dependence. The scale factor are
+      determined by the activity index D<sub>st</sub> and the standoff 
+      distance of the magnetopause obtained by the solar wind
+      density and velocity.
+      These models were developed by
+      <ul><address>
+         K.A. Pfitzer and W.P. Olson <br>
+         McDonnell Douglas Company, Code A3-208, Mail Stop 13/3 <br>
+         5301 Bolsa Avenue, Huntington Beach <br>
+         California 92647, USA
+      </address></ul>
+      <p>
+      The Ostapenko &amp; Maltsev [1997] model was obtained by a 
+      least-square-fit of fourth-order polynomials 
+      to 14000 vector field measurements from the database of Fairfield
+      et al. [1994]. The model depends on the D<sub>st</sub>
+      and  K<sub>p</sub> indices, as well as on the solar wind dynamic 
+      pressure and the <i>z</i> component of the interplanetary magnetic field.
+      The model can be retrieved from
+      <ul><address>
+         Y.P. Maltsev (<a href="mailto:maltsev@pgi-ksc.murmansk.su">maltsev@pgi-ksc.murmansk.su</a>)<BR>
+         Polar Geophysical Institute <br>
+         Apatity, RUSSIA
+      </address></ul>   
+      <p>
+      In the UNILIB libray, the codes of the implemented models have been
+      modified in order to make them clearer and to correct small mistakes.
+      These modifications have been made by 
+      <ul><address>
+         D. Heynderickx (<a href="mailto:daniel.heynderickx@bira-iasb.oma.be">daniel.heynderickx@bira-iasb.oma.be</a>) <br>
+         BIRA, Ringlaan 3 <br>
+         B-1180 Brussel, Belgium 
+      </address></ul>
+</ul> <h4> References </h4> <ul>
+      <li>Mead, G.D., and Fairfield, D.H., <i>A quantitative magnetospheric 
+          model derived from spacecraft magnetometer data</i>, JGR <b>80</b> 
+          (1975) 523-534
+      <li> Olson, W.P., <i>A model of the distributed magnetospheric
+      currents</i>, JGR <b>79</b> (1974) 3731-3738
+      <li> Olson, W.P. and Pfitzer, K.A., <i>Magnetospheric magnetic field
+      modeling</i>, Annual Scientific Report, AFOSR Contract No.
+      F44620-75-C-0033 (1977)
+      <li>Ostapenko, A.A., and Maltsev, Y.P., <i>Relation of the
+          magnetic field in the magnetosphere to the geomagnetic and
+          solar wind activity</i>, JGR <b>102</b> (1997) 17467-17473
+      <li>Pfitzer, K.A., Olson, W.P., and Mogstad, T., <i>A time dependent
+          source driven magnetospheric magnetic field model</i>, EOS 
+          <b>69</b> (1988) 426 
+      <li>Tsyganenko, N.A., <i>Global quantitative models of the geomagnetic 
+          field in the cislunar magnetosphere for different
+          disturbance levels</i>, Planet. Space Sci. <b>35</b> (1987)
+          1347-1358 
+      <li>Tsyganenko, N.A., <i>A magnetospheric magnetic field model with a 
+          wrapped tail current sheet</i>, Planet. Space Sci. <b>37</b>
+          (1989) 5-20
+      <li>Tsyganenko, N.A. and Stern, D.P., <i>Modeling the global 
+       magnetic field the large-scale Birkeland current systems</i>,
+       J.Geophys.Res. <b>101</b> (1996) 27187-27198     
+ </ul> <h4> History </h4> <ul>
+       In version 1.06 and earlier of the library,
+       most of the external magnetic field models do not work properly 
+       under HPUX, SunOS and DEC/OSF (see <a href="bug02.html">R.02</a>).<br>
+       The model of Tsyganenko [1996] (subroutine <code>T96_01</code>)
+       is not included in version 1.06 and earlier of the library.
+       The model of Ostapenko &amp; Maltsev [1997] (subroutine 
+       <code>BOM97</code>) is not included in 
+       version 1.11 and earlier of the library.
+       (subroutine <code>BOM97</code>).
+       Since version 2.02, the Tsyganenko model T89c is implemented instead
+       of the version T89a.     
+ </ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre> 
+      REAL*8         xx, yy, zz, tilt, abx, aby, abz
+      INTEGER*4      kp
+
+      CALL MEAD (xx, yy, zz, tilt, kp, abx, aby, abz)
+
+
+      REAL*8         x, y, z, ps, bx, by, bz
+      INTEGER*4      iopt
+
+      CALL TSY87S (iopt, ps, x, y, z, bx, by, bz)
+
+
+      REAL*8         x, y, z, ps, bx, by, bz
+      INTEGER*4      iopt
+
+      CALL TSY87L (iopt, ps, x, y, z, bx, by, bz)
+
+
+      REAL*8         parmod(10), ps, x, y, z, bx, by, bz
+      INTEGER*4      iopt
+
+      CALL T89C (iopt, parmod, ps, x, y, z, bx, by, bz)
+
+
+      REAL*8         x, y, z, tilt, abx, aby, abz
+
+      CALL BXYZMU (x, y , z, tilt, abx, aby, abz)
+
+
+      REAL*8         x, y, z, tilt, abx, aby, abz
+      REAL*8         den, vel, dst
+
+      CALL BDYN (den, vel, dst, x, y, z, abx, aby, abz)
+
+
+      REAL*8         parmod(10), ps, x, y, z, bx, by, bz
+      INTEGER*4      iopt
+
+      CALL T96_01 (iopt, parmod, ps, x, y, z, bx, by, bz)
+
+
+      REAL*8         dst, pdyn, fkp, bimfz, r(3), b(3), sn
+
+      CALL SET_A (dst, pdyn, fkp, bimfz, sn)
+      CALL BOM97 (r, b)
+</pre> <h2> <a name="dependencies"> Dependencies </a> </h2> <ul>
+      The subroutine <code>BDYN</code> makes use of  the
+      subroutines and functions that are listed
+      in the table below
+      <center> <br> <table border=1 cellspacing=0 width="80%">
+        <tr><th colspan=3>Subroutines</th></tr>
+        <tr><td>BDYNAM </td><td>BFMAGP </td><td>BFRING </td></tr>
+        <tr><td>BFTAIL </td><td> </td><td> </td></tr>
+        <tr><th colspan=3>Functions</th></tr>
+        <tr><td>RINGST </td><td>STDOFF </td><td> </td></tr>
+      </table> </center> <P>
+      The subroutine <code>T89C</code> makes use of  the
+      subroutine that is listed
+      in the table below
+      <center> <br> <table border=1 cellspacing=0 width="80%">
+        <tr><th >Subroutine</th></tr>
+        <tr><td>T89 </td></tr>
+      </table> </center> <P>
+      The subroutine <code>T96_01</code> makes use of  the
+      subroutines, common blocks and functions that are listed
+      in the table below
+      <center> <br> <table border=1 cellspacing=0 width="80%">
+        <tr><th colspan=3>Subroutines</th></tr>
+        <tr><td>BCONIC</TD><TD>BIRK1SHLD</TD><TD>BIRK2SHL</TD></TR> 
+        <tr><td>BIRK1TOT_02</TD><TD>BIRK2TOT_02</TD><TD>CIRCLE</TD></TR> 
+        <tr><td>CONDIP1</TD><TD>CROSSLP</TD><TD>CYLHAR1</TD></TR> 
+        <tr><td>CYLHARM</TD><TD>DIPDISTR</TD><TD>DIPLOOP1</TD></TR> 
+        <tr><td>DIPOLE</TD><TD>DIPSHLD</TD><TD>DIPXYZ</TD></TR> 
+        <tr><td>INTERCON</TD><TD>LOOPS4</TD><TD>R2_BIRK</TD></TR> 
+        <tr><td>R2INNER</TD><TD>R2OUTER</TD><TD>R2SHEET</TD></TR> 
+        <tr><td>RINGCURR96</TD><TD>SHLCAR3X3</TD><TD>TAIL87</TD></TR> 
+        <tr><td>TAILDISK</TD><TD>TAILRC96</TD></TR> 
+        <tr><th colspan=3>Functions</th></tr>
+        <tr><td>BES</TD><TD>BES0</TD><TD>BES1</TD></TR>
+        <tr><td>FEXP</TD><TD>FEXP1</TD><TD>TKSI</TD></TR> 
+        <tr><td>XKSI</TD></TR> 
+        <tr><th colspan=3>Common Blocks</th></tr>
+        <tr><td>COORD11</TD><TD>COORD21</TD><TD>DX1</TD></TR> 
+        <tr><td>LOOPDIP1</TD><TD>RHDR</TD><TD>WARP</TD></TR> 
+      </table> </center> <p>
+      The subroutine <code>bom97</code> makes use of  the common block
+      and subroutines that are listed
+      in the table below
+      <center> <br> <table border=1 cellspacing=0 width="80%">
+        <tr><th colspan=3>common block</th></tr>
+        <tr><td>COEFOM97</td></tr>
+        <tr><th colspan=3>subroutines</th></tr>
+        <tr><td>BAZ_T</td><td>JETASY</td><td>JETSYM</td></tr>
+        <tr><td>LEGNDR</td><td>PTNCL</td><td>SET_A</td></tr>
+      </table></center>
+
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="um520.html">UM520</a>, 
+           select an external magnetic field model <br>
+      <a href="um530.html">UM530</a>, 
+           evaluate the magnetic field vector <br>
+      <a href="http://ccmc.gsfc.nasa.gov/modelweb/" target="x">Catalog of Space Physics Model</a>
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

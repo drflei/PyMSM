@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ud320.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UD320
+   === --> 
+<!--meta name="keywords" content="magnetic drift shell,shell average,weighted density,integration over drift shell and field line"-->
+<!-- End of Head, Begin of Body -->
+ <h1>                                                                             
+      UD320
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UD320 - evaluate a double time integral over a drift shell  
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre> 
+      REAL*8    rpar2, result, rnorm, rdrift
+      INTEGER*4 kpar1, ifail
+      EXTERNAL  zsub
+
+      CALL UD320 (kpar1, rpar2, zsub, result, rnorm, rdrift, ifail)     
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code>kpar1  </code> <dd>
+      control parameter passed to <code>zsub</code> [in]
+      <dt> <code>rpar2  </code> <dd>
+      control parameter passed to <code>zsub</code> [in]
+      <dt> <code>zsub </code> <dd>
+      external subroutine (see <a href="#note">note</a>) [in]
+      <dt> <code>result</code> <dd>
+      result of the integration  [out]
+      <dt> <code>rnorm</code> <dd>
+      time integral of the unity [out]
+      <dt> <code>rdrift</code> <dd>
+      single time integral of the unity [out]
+      <dt> <code>ifail</code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]
+
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UD320 is intended to average physical quantities over
+      a magnetic drift shell.  Before any call to this subroutine, a magnetic
+      drift shell has to be traced with the help of subroutine 
+      <a href="ud310.html">UD310</a>.  As input, the subroutine accepts
+      an external subroutine and two parameters to be passed to this 
+      subroutine.  The synopsis of the subroutine is given in the note
+      below and is similar to the synopsis of subroutine 
+      <a href="ua636.html">UD636</a>.  As result, the subroutine returns
+      the value of the double time integral
+      <center><img src="ud320a.gif" width=390 height=76 alt="[Eq]"></center>
+      evaluated over the magnetic drift shell for the function provided
+      by the subroutine <code>zsub</code> (argument <code>result</code>) and for the
+      unity (argument <code>rnorm</code>).
+      The average over the drift shell is given then by 
+      <code>result</code>/<code>rnorm</code>.  
+      In this equation, d<i>s</i> and d<i>l</i> are elements of length along
+      the field line and along the azimuthal drift direction, respectively.
+      The denominators of d<i>s</i> and d<i>l</i> are proportional to
+      the parallel velocity and the drift velocity, respectively. 
+      Since the drift time between two neighbouring field lines depends
+      weakly on the position on the field line, the last factor of
+      the integrant is evaluated only once for each field line
+      (at the local magnetic equator).   
+      <p>
+      The argument <code>rdrift</code>
+      returns the value of the single time integral 
+      <center><img src="ud320b.gif" width=207 height=78 alt="[Eq]"></center> 
+      which is proportional to the drift period.  
+
+</ul> <h4><a name="note">Note</a></h4><ul>
+      The synopsis of the external subroutine has to be the following:
+      <pre>
+      TYPE(<a href="structure.html#zgeo">zgeo</a>)mpos
+      TYPE(<a href="structure.html#zgeo">zvec</a>)mb
+      INTEGER*4 kpar1, ifail
+      REAL*8 rpar2, fct
+      
+      CALL ZSUB (kpar1, rpar2, mpos, mb, fct, ifail)</pre>        
+      where the arguments <code>kpar1</code> and <code>rpar2</code>
+      are control parameters, the arguments <code>mpos</code> and
+      <code>mb</code> are the 
+      geographic (geocentric) location and the magnetic field vector
+      where the function has to be
+      evaluated, respectively.
+      The subroutine ZSUB has to return the value of the evaluated function
+      in argument <code>fct</code>.
+      The argument <code>ifail</code>
+      can be used to flag errors in the subroutine <code>zsub</code>.
+      When the subroutine returns a negative value for the argument
+      <code>ifail</code>, the computation is aborted.
+      <p>
+      One should note that the synopsis has changed between version
+      2.00 and 2.01 (see history). Moreover, since version 2.01,
+      the entry <a href="ud322.html">UD322</a> allows an array for
+      argument <code>fct</code>.  
+</ul> <h4> References </h4> <ul>
+      <li> Hassitt, A., <i>Average effect of the atmosphere on
+          trapped protons</i>, JGR <b>70</b>
+           (1965) 5385-5394
+      <li>Heynderickx, D., Kruglanski, M., and Lemaire, J.F.,
+          <i>A new tool for calculating drift shell averaged atmospheric
+             density</i>, in "Radiation Belts: Models and Standards",
+             AGU Monograph <b>97</b> (1996) 173-178
+</ul> <h4>History</h4><ul>
+      The subroutine UD320 does not exist in version 1.05 and earlier.
+      The subroutine UD320 has been completely reviewed in version
+      2.01, as well as subroutine <a href="ud321.html">UD321</a>.
+      The major effects are the addition of a special entry
+      (<a href="ud322.html">UD322</a>) and a modification of the
+      synopsis of the <code>zsub</code> external subroutine.
+      In version 2.00 and earlier, the synopsis is
+      <pre>
+      CALL ZSUB (kpar1, rpar2, mpos, fct, ifail)</pre>        
+      (Before version 2.01, the argument <code>mb</code> was not included;
+      see <a href="#note">note</a> for details). Note that subroutine
+      UA636 has been also adapted.
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="32001">-32001</a>, invalid drift shell description <br>
+      <a name="32002">-32002</a>, invalid drift shell description <br>
+
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc110.html">UC110</a>, magnetic drift shell description <br>  
+      <a href="uc120.html">UC120</a>, magnetic field line description <br>
+      <a href="uc130.html">UC130</a>, set of magnetic field line segments <br>
+      <a href="uc160.html">UC160</a>, general constants
+
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      None
+</ul> <h4> Calls </h4> <ul>
+      <a href="ud321.html">UD321</a>, 
+      evaluate a time integral over a magnetic field line <br>
+      <code>zsub</code>, external subroutine (see <a href="#note">Note</a>) 
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="ud310.html">UD310</a>, trace a magnetic drift shell <br>
+      <a href="ua636.html">UA636</a>, evaluate a weighted atmospheric mass 
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

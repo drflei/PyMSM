@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: try03.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      Example 3
+   === --> 
+<!--meta name="keywords" content="third invariant,example"-->
+ <!-- End of Head, Begin of Body -->
+ <h1>
+      Example 3 - evaluation of the third invariant
+</h1> <h6>
+ [ <a href="#description">Description</a>
+ | <a href="#source">Source</a>
+ | <a href="#results">Results</a>
+ <!-- *** Navigation *** -->  
+] </h6>
+<h2> <a name="description"> Description </a> </h2> <ul>
+  Evaluation of the third invariant of a magnetic drift shell
+  labeled by a pair of (<i>B</i><sub>m</sub>, <i>L</i><sub>m</sub>) parameters.
+  The magnetic field is described with the help of
+  the DGRF/IGRF 1995 geomagnetic
+  model.
+  <p>
+  The program contains three parts: the initialisation of the library and
+  the magnetic model (<a href="ut990.html">UT990</a>, 
+  <a href="um510.html">UM510</a> and <a href="um520.html">UM520</a>), the
+  tracing of the magnetic drift shell (<a href="ud310.html">UD310</a>) and
+  the evaluation of the third invariant (<a href="ud310.html">UD330</a>).
+  Note that subroutine <a href="ud317.html">UD317</a> can be used instead of
+  subroutine <a href="ud310.html">UD310</a> 
+  (see <a href="ud310.html#note">note</a>).      
+  <p>
+  In this example the drift shell parameters are set to 
+  <i>B</i><sub>m</sub> = 0.19 Gauss and <i>L</i><sub>m</sub> = 2.
+  The foot points of the magnetic drift shell in the Northern hemisphere
+  are shown on the lefthand panel of the figure below. 
+  The crosses indicate the points used to
+  evaluate the magnetic flux. In this case, the third invariant is equal
+  to 3.8 10<sup>+7</sup> Gauss km<sup>2</sup> which corresponds to
+  <i>L</i><sup>*</sup> = 2.07.
+  The righthand panel of the figure shows the foot points in 
+  the Southern hemisphere.
+  <p>
+  Note that the foot points of the drift shell are stored in the common block
+  <a href="uc120.html">UC120</a> [arguments <code><a href="structure.html#zfln">
+  mfl().footpn</a></code> and <code><a href="structure.html#zfln">
+  mfl().footps</a> </code>].
+  <center><p><img src=try03.gif></center>
+</ul> <h2> <a name="source"> Source </a> </h2> <pre>
+      PROGRAM example3
+C
+      INCLUDE '<a href="structure.html">structure.h</a>'
+C
+      INTEGER*4    kunit, kinit, ifail, kint, kext
+      CHARACTER*32 lbint, lbext
+      REAL*8       year, param(10), amjd
+      INTEGER*4    knfl, ktyplus
+      REAL*8       fbm0, flm0, falt, phi, star
+C
+C     <b>initialize variables</b>
+C
+      DATA kunit, kinit/ 6, 1/
+      DATA kint, kext/ 0, 0/
+      DATA year, param, amjd/ 1995.d0, 10*0.0d0, 0.0d0/
+C
+C     <b>initialize the library</b>
+C
+      CALL <a href="ut990.html">UT990</a> (kunit, kinit, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>set the geomagnetic field model</b>
+C     <b>(kint=0, DGRF/IGRF)</b>
+C
+      CALL <a href="um510.html">UM510</a> (kint, year, lbint, kunit, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>set no external magnetic field model</b>
+C
+C
+      CALL <a href="um520.html">UM520</a> (kext, amjd, param,
+     :           lbext, kunit, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>trace the drift shell</b>
+C
+      fbm0          =    0.19d0
+      flm0          =    2.0d0
+      falt          =    0.0d0
+      knfl          =   60
+      ktyplus       =    3
+C
+      CALL <a href="ud310.html">UD310</a> (fbm0, flm0, falt, knfl, 
+     :           ktyplus, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>evaluate the third invariant</b>
+C
+      CALL <a href="ud330.html">UD330</a> (phi, star, ifail) 
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>write the result</b>
+C
+      WRITE(kunit,1000) phi,star
+C
+ 1000 FORMAT(
+     :  /25('-'),/'RESULT:',
+     :  /'Third invariant =', es24.14, ' ; Lstar =', es24.14,
+     :  /25('-') )
+C
+      END
+</pre> <h2> <a name="results"> Results </a> </h2> <pre>
+
+                                    SPENVIS
+                                 UNILIB Library
+                                 Version 2.22_YCH_initPrep
+                           Generated by SPENVIS team
+
+
+ --- Main control parameters ---
+
+      UC160 (general constants):
+                      Geoid major axis = 6378.16     km
+                      Geoid minor axis = 6356.77     km
+                Mean Earth radius (Re) = 6371.20     km
+                  Ecliptic inclination =   23.441512 deg
+                 McIlwain Earth dipole =    0.311653 G/Re^3
+
+      UC190 (field line tracing):
+                     Maximum step size =  477.8      km at one Re
+              Maximum "last" step size =   15.0      km
+                     Minimum step size =    2.0      km
+                    Altitude precision =  200.       m
+              Magnetic field precision =    0.0006   %
+
+      UC192 (magnetic field evaluation):
+             Max. geomagnetic latitude =   85.0      deg
+                        Minimum radius =    0.157    Re
+            (drift shell tracing):
+                        Precision on L =    0.10000  %
+            Precision on the longitude =    0.05     deg
+
+ --- Geomagnetic field model ---
+
+      Model ( 0): DGRF 1995                          Epoch 1995.
+                             Order + 1 =   11
+                     Calculation epoch = 1995.0      year
+         Colatitude of the dipole pole =   10.68     deg
+          Longitude of the dipole pole =  -71.42     deg
+                   Earth dipole moment =    0.302151 G/Re^3
+          Correction for the SAA drift =    0.00     deg
+
+ --- External magnetic field model ---
+
+      Model ( 0): None                            
+           Planetary activity index Kp =    0.0      (magnetopause check)
+
+                                  Date =  01-Jan-1950
+                        Universal Time =    0.00     hrs
+            Greenwich angle of equinox =  100.08     deg
+           GEO direction of the Sun, X =   -0.9200
+                                     Y =   -0.0131
+                                     Z =   -0.3918
+                     Dipole tilt angle =  -25.91     deg
+
+-------------------------
+<b>RESULT:
+Third invariant =   -3.83261517738775E+07 ; Lstar =    2.07395076314524E+00</b>
+-------------------------
+</pre> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

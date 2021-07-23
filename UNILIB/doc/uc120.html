@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uc120.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UC120
+   === --> 
+<!--meta name="keywords" content="magnetic drift shell,foot point,mirror point,local magnetic equator,drift velocity"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UC120
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+]  </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Common block UC120 - magnetic field line description
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INCLUDE 'structure.h'
+      
+      COMMON /UC120/ nbrfl, kurfl, mfl
+
+      INTEGER*4      nbrfl, kurfl
+      TYPE(<a href="structure.html#zfln">zfln</a>)  mfl(<a href="structure.html#description">nx120<a>) 
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> nbrfl     </code> <dd>
+      Number of field lines already computed 
+      <dt> <code> kurfl   </code> <dd>
+      Indice of the current field line
+      <dt> <code> mfl    </code> <dd>
+      Description of the field line segments.  Each indice corresponds to a
+      field line.
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The common block UC120 is part of a set of three common blocks:
+      <ul> <li><a href="uc110.html">UC110</a>, magnetic drift shell description; <br>
+           <li>UC120, magnetic field line description; <br>
+           <li><a href="uc130.html">UC130</a>, set of magnetic field line segments.<br>
+      </ul>
+      This set of common blocks is used to store a magnetic drift shell which is
+      defined by a set of magnetic field line segments.
+      <p>
+      The common block UC120 includes a global description of each field line segment
+      as well as indices which points into the common block <a href="uc130.html">UC130</a>.
+      <p>
+      The argument <code>nbrfl</code> indicates the number of magnetic field line 
+      segments included in the drift shell.  For each segment, the geographic positions
+      of the local magnetic equator (<code>mfl%equat</code>, and eventually of the 
+      foot points, <code>mfl%footpn</code>, <code>mfl%footps</code>), pointers to the
+      eastern next and western previous segments (<code>mfl%keast</code>, 
+      <code>mfl%kwest</code>) and pointers to argument <code>mseg</code> of the common
+      block <a href="uc130.html">UC130</a> (<code>mfl%ind</code>) are included in the
+      description of each field line segment.  The geographic position of the mirror
+      points can be retrieved with the help of the pointers  <code>mfl%ind%jmirpn</code>
+      and <code>mfl%ind%jmirps</code>.  
+       Note that the common block
+      <a href="uc170.html">UC170</a> has a similar structure (argument <code>mlin</code>).    
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Used by </h4> <ul> <dl>
+      <dt> <a href="ud315.html">UD315</a>
+      (search the mirror point with the lowest altitude): 
+      <dd> <code>nbrfl</code> and <code>mfl</code> <br>
+      <dt> <a href="ud316.html">UD316</a>
+      (search the equatorial point with the lowest magnetic field intensity):
+      <dd> <code>nbrfl</code>, <code>mfl()%equat</code>, <code>mfl()%keast</code>
+      <dt> <a href="ud317.html">UD317</a>
+      (trace a magnetic drift shell - new):
+      <dd> <code>mfl()%equat</code>, <code>mfl()%kwest</code>    
+      <dt><a href="ud319.html">UD319</a>
+      (transfer a field line segment from common block <a href="uc170.html">UC170</a>
+       to <a href="uc130.html">UC130</a>): 
+      <dd> <code> nbrfl</code> and <code>mfl </code> <br>
+      <dt><a href="ud320.html">UD320</a>
+      (evaluate a double time integral over a drift shell):
+      <dd> <code>kurfl</code>, <code>mfl()%kwest</code>, <code>mfl()%keast</code>, 
+      <code>mfl()%equat%coord</code>, <code>mfl()%equat%b%dnrm</code>, 
+      <code>mfl()%drift</code> and <code>mfl()%ind</code> 
+      <dt> <a href="ud331.html">UD331</a>
+      (evaluate the magnetic flux through a spherical cap): 
+      <dd> <code>  mfl </code> <br>
+      <dt><a href="ut985.html">UT985</a>
+      (transfer a field line of the drift shell to IDL): 
+      <dd> <code>nbrfl</code> and <code>mfl</code> <br>
+      <dt><a href="ut992.html">UT992</a>
+      (print the magnetic drift shell):
+      <dd> <code>nbrfl</code> and <code>mfl</code> <br> 
+      <dt><a href="ut993.html">UT993</a>
+      (store a magnetic field drift shell):
+      <dd> <code>nbrfl</code> and <code>mfl</code> <br> 
+</dl> </ul> <h4> Modified by </h4> <ul> <dl>
+      <dt><a href="ud319.html">UD319</a>
+      (transfer a field line segment from common block <a href="uc170.html">UC170</a>
+       to <a href="uc130.html">UC130</a>): 
+      <dd> <code>nbrfl</code>, <code>kurfl</code> and <code>mfl</code> <br>
+      <dt><a href="ud320.html">UD320</a>
+      (evaluate a double time integral over a drift shell):
+      <dd> <code>kurfl</code>
+      <dt><a href="ud331.html">UD331</a>
+      (evaluate the magnetic flux through a spherical cap): 
+      <dd> <code>  kurfl </code> <br>
+      <dt><a href="ut990.html">UT990</a>
+      (initialize the UNILIB libray): 
+      <dd> <code>nbrfl</code> and <code>kurfl</code> <br>
+</dl> </ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="uc110.html">UC110</a>, magnetic drift shell description<br>
+      <a href="uc130.html">UC130</a>, set of magnetic field line segments<br>
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uc192.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UC192
+   === --> 
+<!--meta name="keywords" content="control parameters,third invariant"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UC192
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Common block UC192 - control parameters, set 2
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INCLUDE 'structure.h'
+      
+      COMMON /UC192/ xrmin, xbmin, xtmin, xbmax, epslon, epsfl,
+                     fvet, pvet, epsomeg, dltlat
+
+      REAL*8         xrmin, xbmin, xtmin, xbmax, epslon, epsfl
+      REAL*8         fvet, pvet, epsomeg, dltlat            
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> xrmin   </code> <dd>
+      Minimum allowed for the radial distance 
+      <dt> <code> xbmin </code> <dd>
+      Minimum allowed for the magnetic field intensity
+      <dt> <code> xtmin  </code> <dd>
+      Minimum allowed for the sinus of the geomagnetic latitude
+      <dt> <code> xbmax </code> <dd>
+      Maximum allowed for the magnetic field intensity
+      <dt> <code> epslon   </code> <dd>
+      Precision of the longitude determination in degrees
+      <dt> <code> epsfl   </code> <dd>
+      Tolerance on the shell parameter
+      <dt> <code> fvet   </code> <dd>
+      Factor of the Vette function
+      <dt> <code> pvet   </code> <dd>
+      Exponent of the Vette function
+      <dt> <code> epsomeg  </code> <dd>
+      Maximum solid angle in degree
+      <dt> <code> dltlat </code> <dd>
+      Maximum step in latitude              
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The common blocks <a href="uc190.html">UC190</a> and UC192 are used to
+      specify parameters which control the execution of the UNILIB libray.
+      The constants of common block UC192 are related to the evaluation of the
+      magnetic field vector and to the tracing of magnetic drift shell. 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Used by </h4> <ul> <dl>
+      <dt><a href="ul245.html">UL245</a>
+      (equatorial pitch angle): 
+      <dd> <code>xbmin</code> <br>
+      <dt><a href="ud319.html">UD319</a>
+      (transfer a field line segment from common block
+       <a href="uc170.html">UC170</a> to <a href="uc130.html">UC130</a>): 
+      <dd> <code>epsfl</code> <br>
+      <dt><a href="ud332.html">UD332</a>
+      (evaluate the magnetic flux through a spherical pie): 
+      <dd> <code>epsomeg</code> and <code>dltlat</code><br>
+      <dt><a href="uf410.html">UF410</a>
+      (search the geographic position of a magnetic field line): 
+      <dd> <code>xrmin</code>, <code>xbmin</code>, <code>xbmax</code>
+      and <code>epsfl</code><br>
+      <dt><a href="uf411.html">UF411</a>
+      (search a local magnetic equator): 
+      <dd> <code>epslon</code> <br>
+      <dt><a href="um530.html">UM530</a>
+      (evaluate the magnetic field vector): 
+      <dd> <code>xrmin</code>, <code>xbmin</code>, <code>xbmax</code>
+      and <code>xtmin</code> <br>      
+</dl> </ul> <h4> Modified by </h4> <ul> <dl>
+      <dt><a href="ut990.html">UT990</a>
+      (initialize the UNILIB libray): 
+      <dd> <code>xrmin</code>, <code>xbmin</code>, <code>xtmin</code>,
+      <code>xbmax</code>, <code>epslon</code>, <code>epsfl</code>, <code>fvet</code>,
+      <code>pvet</code>, <code>epsomeg</code> and <code>dltlat</code><br> 
+</dl> </ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="uc190.html">UC190</a>, 
+      control parameters, set 1<br>
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uf411.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UF411
+   === --> 
+<!--meta name="keywords" content="internal subroutine"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UF411
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UF411 - search a local magnetic equator
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>            
+        TYPE(zpnt) mpeq
+        TYPE(zlbl) ml
+        REAL*8        fbm, glon, radius, rmin, rmax, gsclat   
+        INTEGER*4     ifail 
+
+        CALL UF411(glon, radius, rmin, rmax, gsclat, fbm, mpeq, ml, ifail)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> glon      </code> <dd>
+      Equatorial longitude [in]
+      <dt> <code> radius     </code> <dd>
+      Equatorial radius [in/out]
+      <dt> <code> rmin     </code> <dd>
+      Minimum radius [in/out]
+      <dt> <code> rmax      </code> <dd>
+      Maximum radius [in/out]
+      <dt> <code> gsclat      </code> <dd>
+      guessed equatorial co-latitude [in]
+      <dt> <code> fbm      </code> <dd>
+      magnetic field intensity at the mirror points [in]
+      <dt> <code>mpeq </code> <dd>
+      Equatorial location [out]
+      <dt> <code>ml       </code> <dd>
+      Magnetic field line segment descriptor [out]
+      <dt> <code> ifail      </code> <dd>      
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UF411 searches iteratively a local magnetic equator
+      for a given longitude and a fixed range of geocentric radius. The 
+      local magnetic equator is identified as a point where a magnetic field
+      line segment passing through the point has its minimum of the magnetic
+      field intensity at this point.  Note that this definition of a local  
+      magnetic equator depends on the value of the  magnetic field intensity 
+      <i>B</i><sub>m</sub> at the mirror points chosen to trace the magnetic
+      field line segment.
+      <p>
+      As input, the subroutine accepts the arguments <code>glon</code>,
+      <code>radius</code>, <code>rmin</code>, <code>rmax</code>, 
+      <code>gsclat</code> and <code>fbm</code>.  To find a local magnetic 
+      equator, the geocentric radius can be modified in the range 
+      [<code>rmin</code>, <code>rmax</code>] as well as that the equatorial
+      co-latitude can be changed.  Note that the solution is not unique.
+      As output, the subroutine returns the arguments <code>radius</code>,
+      <code>rmin</code>, <code>rmax</code>, <code>mpeq</code> and
+      <code>ml</code>.  The argument <code>rmin</code> (<code>rmax</code>)
+      can be only increased (decreased, resp.) by subroutine UF411.
+
+
+ 
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="41101">-41101</a>, <a name="41102">-41102</a>,
+      <a name="41103">-41103</a>, 
+      cannot find the minimum of <i>B</i> <br>
+      <a name="41104">-41104</a>,
+      problem to trace a field line, too many points <br>
+      <a name="41105">-41105</a>,
+      problem to evaluate the integral invariant<br>
+      <a name="41106">-41106</a>,
+      problem to trace a field line <br>
+      <a name="41107">-41107</a>,
+      too many iterations<br>
+      <a name="41108">-41108</a>,
+      problem to trace a field line, RK integration<br>
+      <a name="41110">-41110</a>,
+      problem to find the local magnetic equator <br>
+      <a name="41111">-41111</a>, <a name="41112">-41112</a>,
+      <a name="41113">-41113</a>, <a name="41114">-41114</a>,
+      computation aborted after 10 iterations <br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc140.html">UC140</a>,
+      magnetic field description<br> 
+      <a href="uc160.html">UC160</a>,
+      general constants<br>
+      <a href="uc170.html">UC170</a>,
+      temporary magnetic field line<br>
+      <a href="uc190.html">UC190</a>,
+      control parameters, set 1<br> 
+      <a href="uc192.html">UC192</a>,
+      control parameters, set 2<br> 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="uf410.html">UF410</a>,
+      search the geographic position of a magnetic field line <br> 
+      <a href="uf417.html">UF417</a>,
+      search the geographic position of a magnetic field line (new) <br>      
+</ul> <h4> Calls </h4> <ul>
+      <a href="uf420.html">UF420</a>, 
+      trace a magnetic field line segment passing through a given
+      position <br>
+      <a href="um530.html">UM530</a>, 
+      evaluate the magnetic field vector<br> 
+      <a href="ul230.html">UL230</a>, 
+      evaluate the integral invariant coordinate <i>I</i><br>
+      <a href="ul240.html">UL240</a>, 
+      evaluate the Hilton's function<br>    
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      <a href="bug01.html">26-Aug-97 (v1.05)</a>, Anomalously return of subroutine UD310 with error code -41108<br>
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

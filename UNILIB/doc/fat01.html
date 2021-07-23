@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: fat01.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ T.01
+   === --> 
+<!--meta name="keywords" content="getting started"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1> <h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+]  </h6>  <h2> <a name="question"> Question </a> </h2> <ul> 
+      T.01 - How to build the UNILIB library ?
+</ul> <h2> <a name="answer"> Answer </a> </h2> <ul>
+      The UNILIB library is available in the form of
+      Fortran sources which fully conform to FORTRAN 77 fixed-format
+      standard, <b>except</b> for the use of FORTRAN 90 derived types.
+<p>
+      It is expected to compile using most FORTRAN compilers.
+<p>
+      For reference, <b>older versions of the library have been successfully
+      compiled and linked using the following setups</b>.
+</ul> <h4> MS-DOS / MS-Windows  </h4> <ul>
+      The object library (v2.01) has been built with the DIGITAL Visual Fortran 
+      Compiler version 5.0C on a PC/Pentium running Microsoft Windows
+      NT 4.00.      
+      Since the format of the LIB files does not seem to be a standard
+      under the MS-DOS/MS-Windows operating system, we recommand to
+      use the same compiler.
+      Assuming that the files <code>unilib.lib</code> and
+      <code>structure.h</code> are in the current
+      directory, the user executable code can be produced by the
+      command:<pre>
+> DF MYPROG.F UNILIB.LIB </pre> 
+</ul> <h4> OpenVMS (FORTRAN) </h4> <ul>
+      The object libraries for VAX and AXP platforms
+          are different. The  object libraries have been
+      built with the Digital Fortran 77 compiler: the VAX library (v2.01)
+      on a VAX Station 4000 running VAX/VMS V6.1, and the AXP library (v2.01)
+      on a Alpha Station 600 running OpenVMS v7.1.      
+      Assuming that the files <code>unilib.olb</code> and
+      <code>structure.h</code> are in the current
+      directory, the user executable code can be produced by the
+      command:<pre>
+$ FOR MYPROG.FOR
+$ LINK MYPROG.OBJ, UNILIB.OLB/LIB /EXE=MYPROG.EXE
+</pre></ul> <h4> OpenVMS (IDL) </h4> <ul>
+      Before starting IDL, the user has to define a logical which
+      includes the path to the shareable image. For further information
+      see <i>VMS-Specific Abilities / Calling a VAX FORTRAN Subroutine</i>
+      in Chapter 18 of the IDL user's guide.<pre>
+$ DEFINE unilib MY_DISK:[MY_DIRECTORY]UNILIB.EXE
+$ IDL
+</pre>
+      See also the FAQ <a href="fat05.html">T.05</a>.     
+</ul><h4> HP-UX  </h4> <ul>
+      The object library (v2.01) has been built with the HP-UX FORTRAN 77 
+      compiler on a HP 9000/879 running HP-UX release 10.20.
+      Assuming that the files <code>libunilib.a</code> and
+      <code>structure.h</code> are in the current
+      directory, the user executable code can be produced by the
+      command:<pre>
+> f77 +ppu myprog.f -Wl,-L. -lunilib -o myprog.out
+</pre> </ul> <h4> OSF  </h4> <ul>
+      The object library (v2.01) has been built with the Digital FORTRAN 77 
+      compiler on a  Alpha Workstation 3000 running Digital UNIX V3.2C.
+      Assuming that the files <code>libunilib.a</code> and
+      <code>structure.h</code> are in the current
+      directory, the user executable code can be produced by the
+      command:<pre>
+> f77 myprog.f -L. -lunilib -o myprog.out
+</pre></ul> <h4> SunOS  </h4> <ul>
+      The object library (v2.01) has been built with the Sun FORTRAN 77 
+      compiler version 4.0 on a  SPARC Station running SunOS 5.4.
+      Assuming that the files <code>libunilib.a</code> and
+      <code>structure.h</code> are in the current
+      directory, the user executable code can be produced by the
+      command:<pre>
+> f77 myprog.f -L. -lunilib -o myprog.out
+</pre></ul> <h4> Linux (PC)  </h4> <ul>
+      The object library (v2.01) has been built with the PGI Fortran 
+      compiler on a  PC/Pentium running Linux 2.2.0.
+      Assuming that the files <code>libunilib.a</code> and
+      <code>structure.h</code> are in the current
+      directory, the user executable code can be produced by the
+      command:<pre>
+> pgf77 myprog.f -L. -lunilib -o myprog.out
+</pre></ul> <h2> <a name="illustration"> Illustration </a> </h2> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="faq02.html">G.02</a> Where to find the UNILIB library and
+                                  documentation ? <br>
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

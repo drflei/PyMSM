@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uc140.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UC140
+   === --> 
+<!--meta name="keywords" content="geomagnetic field model,external magnetic field model,Sun position,magnetic moment"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UC140
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Common block UC140 - magnetic field description
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INCLUDE 'structure.h'
+
+      COMMON /UC140/ mint, mext, msun
+
+      TYPE(<a href="structure.html#zimf">zimf</a>) <a name="mint">mint</a>
+      TYPE(<a href="structure.html#zsun">zsun</a>) <a name="msun">msun</a>
+      TYPE(<a href="structure.html#zemf">zemf</a>) <a name="mext">mext</a>        
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> mint     </code> <dd>
+      Description of the geomagnetic field model
+      <dt> <code> mext     </code> <dd>
+      Description of the external magnetic field model
+      <dt> <code> msun     </code> <dd>
+      Sun position
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The common block UC140 contains the description of magnetic
+      field model used by the subroutine <a href="um530.html">UM530</a>.
+      The common may be initialized with the two subroutines
+      <a href="um510.html">UM510</a> and <a href="um520.html">UM520</a>.
+      The subroutine <a href="um510.html">UM510</a> allows to select
+      a geomagnetic field model and initializes the <code>mint</code>
+      argument. The subroutine <a href="um520.html">UM520</a> is used
+      to select an external magnetic field model and initializes
+      the arguments <code>mext</code> and <code>msun</code>. 
+      Since the subroutine <a href="um520.html">UM520</a> uses the values
+      of the two arguments <code>mint%colat</code> and
+      <code>mint%elong</code>, the subroutine 
+      <a href="um510.html">UM510</a> has to be previously called.
+      <p>
+      The subroutine <a href="um522.html">UM522</a> and the
+      subroutine <a href="um523.html">UM523</a> or 
+      <a href="um524.html">UM524</a> may be used to modify the arguments
+      <code>msun</code> and <code>mext%trans</code> for a new
+      date and time. The subroutine <a href="um523.html">UM523</a> has
+      to be used with the different Tsyganenko models, and the
+      subroutine <a href="um524.html">UM524</a> otherwise.
+      <p>
+      Except for the subroutines which computes the magnetic field 
+      vector, the common block UC140 generally is used to obtain 
+      the geographic colatitude and east longitude of boreal
+      earth dipole pole (<code>mint%colat</code> and 
+      <code>mint%elong</code>, respectively) or its magnetic moment 
+      (<code>mint%gmmo</code>). 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Used by </h4> <ul> <dl>
+      <dt><a href="ul225.html">UL225</a> 
+           (evaluate invariant radius and latitude): 
+           <dd><code>mint%gmmo</code>
+      <dt><a href="ul240.html">UL240</a> 
+           (evaluate the Hilton's function): 
+           <dd><code>mint%gmmo</code>
+      <dt><a href="ul242.html">UL242</a> 
+           (inverse the Hilton's function): 
+           <dd><code>mint%gmmo</code>
+      <dt><a href="ul245.html">UL245</a> 
+           (evaluate the equatorial pitch angle): 
+           <dd><code>mint%gmmo</code> 
+      <dt><a href="ud330.html">UD330</a> 
+           (evaluate the third invariant): 
+           <dd><code>mint%gmmo</code> 
+      <dt><a href="uf411.html">UF411</a> 
+           (search a field line for fixed longitude of its local equator):
+           <dd><code>mint%colat</code> and <code>mint%elong</code> 
+      <dt><a href="um523.html">UM523</a> 
+           (transformation array from GEO to GSM):
+           <dd><code>mint%colat</code>, <code>mint%elong</code>, 
+           <code>msun%dir</code> 
+      <dt><a href="um524.html">UM524</a> 
+           (transformation array from GEO to SM):
+           <dd><code>mint%colat</code>, <code>mint%elong</code>,
+           and <code>msun%dir</code>
+      <dt><a href="um530.html">UM530</a> 
+           (evaluate the magnetic field):
+           <dd><code>mint%colat</code>, <code>mint%elong</code>, 
+           <code>mint%kinner</code>, <code>mint%saarot</code>
+           and <code>mext%kouter</code>      
+      <dt><a href="um531.html">UM531</a> 
+           (geomagnetic field evaluation):
+           <dd><code>mint%norder</code> and <code>mint%coef</code>
+      <dt><a href="um532.html">UM532</a> 
+           (external magnetic field evaluation):
+           <dd><code>mext%trans</code>, <code>mext%tilt</code>,
+           <code>mext%kouter</code>, <code>mext%ikp</code>,
+           <code>mext%wdens</code>, <code>mext%wvel</code> and
+           <code>mext%vdst</code>
+      <dt><a href="um533.html">UM533</a> 
+           (distance to the magnetopause):
+           <dd><code>msun%utdeg</code> and <code>mext%vkp</code>
+      <dt><a href="um538.html">UM538</a> 
+           (evaluate the magnetic local time):
+           <dd><code>mext%trans</code>
+      <dt><a href="um539.html">UM539</a> 
+           (evaluate the magnetic field):
+           <dd><code>mext%kouter</code>
+      <dt><a href="ut550.html">UT550</a>
+           (select a coordinate transformation):
+      <dd><code>msun%dir</code>, <code>msun%gha</code>,  
+           <code>mint%colat</code> and <code>mint%elong</code>
+      <dt><a href="ut986.html">UT986</a> 
+           (pass general variables to IDL):
+      <dd> <code>mint%colat</code>, <code>mint%elong</code>, 
+           <code>mint%gmmo</code> and <code>msun%dir</code>            
+      <dt><a href="ut999.html">UT999</a> 
+           (radius of curvature in a dipolar magnetic field):
+           <dd><code>mint%colat</code> and <code>mint%elong</code> 
+</dl> </ul> <h4> Modified by </h4> <ul> <dl>
+    <dt>  <a href="um510.html">UM510</a> 
+           (select a geomagnetic field model): 
+    <dd>  <code>mint%norder</code>,
+           <code>mint%label</code>, <code>mint%kinner</code>, 
+           <code>mint%elong</code>, <code>mint%colat</code>, 
+           <code>mint%saarot</code>, 
+           <code>mint%gmmo</code> and <code>mint%epoch</code> 
+    <dt>  <a href="um511.html">UM511</a> 
+           (set the Jensen & Cain model coefficients):
+    <dd>       <code>mint%tzero</code>,
+           <code>mint%norder</code> and <code>mint%coef</code>) 
+    <dt>  <a href="um512.html">UM512</a> 
+           (set the GSFC 12/66 model coefficients):
+    <dd>       <code>mint%tzero</code>,
+           <code>mint%norder</code> and <code>mint%coef</code>)  
+    <dt>  <a href="um513.html">UM513</a> 
+           (set the DGRF/IGRF model coefficients):
+    <dd>       <code>mint%tzero</code>,
+           <code>mint%norder</code> and <code>mint%coef</code>)  
+    <dt>  <a href="um520.html">UM520</a> 
+           (select an external magnetic field model): 
+    <dd>       <code>mext%kouter</code>, <code>mext%vdst</code>,
+           <code>mext%wdens</code>, <code>mext%wvel</code>  
+    <dt>  <a href="um521.html">UM521</a> 
+           (ground disturbances level based on Kp): 
+    <dd>       <code>mext%ikp</code>  
+    <dt>  <a href="um522.html">UM522</a> 
+           (compute the position of the Sun): 
+    <dd>       <code>msun%utdeg</code>,  <code>msun%utgha</code>
+           and <code>msun%dir</code> 
+    <dt>  <a href="um523.html">UM523</a> 
+           (transformation array from GEO to GSM):
+    <dd>       <code>msun%dir%x</code>,  <code>msun%dir%y</code>, 
+             <code>msun%dir%z</code>, <code>msun%gha</code>
+    <dt>  <a href="um524.html">UM524</a> 
+           (transformation array from GEO to SM):
+    <dd>       <code>mext%tilt</code> and <code>mext%trans</code>
+</dl> </ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

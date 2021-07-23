@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ua630.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UA630
+   === --> 
+<!--meta name="keywords" content="atmospheric densities,atmospheric model,ionospheric model"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UA630
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UA630 - evaluate the atmospheric densities
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      TYPE(<a href="structure.html#zgeo">zgeo</a>) mpos
+      REAL*8        tmass, dens(30), temp(3)
+      INTEGER*4     ifail
+      
+      CALL UA630 (mpos, tmass, dens, temp, ifail) 
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> mpos     </code> <dd>
+      Geographic location (GEO)  [in]
+      <dt> <code> tmass     </code> <dd>
+      Total mass density         [out]
+      <dt> <code> dens     </code> <dd>
+      Number density of the different species (see <a href="#note">note</a>) [out]
+      <dt> <code> temp      </code> <dd>
+      Temperature of the neutral elements, electrons and ionized elements [out]
+      <dt> <code> ifail     </code> <dd>
+      Error flag (passed by <a href="#dependencies">dependents</a>) [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UA630 interfaces the atmospheric, ionospheric and
+      plasmaspheric model with the UNILIB libray.  The subroutine includes
+      also two simple atmospheric models of the total mass density.
+      The different models are selected by arguments <code>matm.katm</code>
+      and <code>matm.kion</code> of the common block
+      <a href="uc150.html">UC150</a>.  The possible 
+      selections are listed in the table below.
+      <center><br><table border=1 cellspacing=0 width="80%">
+       <tr><td> <code>matm.katm</code>=1 </td><td>MSISE-90 atmospheric
+       model</td></tr>
+       <tr><td> <code>matm.katm</code>=2 </td><td>Neutral part of the Anderson
+       & Francis model</td></tr>
+       <tr><td> <code>matm.katm</code>=3 </td><td>Simple total mass density model
+       "Astrophysical Quantities" (Allen, 1985)</td></tr>
+       <tr><td> <code>matm.katm</code>=4 </td><td>Simple Pfitzer total mass density
+       model</td></tr>
+       <tr><td> <code>matm.kion</code>=1 </td><td>IRI-90 ionospheric model</td></tr>
+       <tr><td> <code>matm.kion</code>=2 </td><td>Ionospheric part of the Anderson &
+       Francis model</td></tr>
+       <tr><td> <code>matm.kion</code>=3 </td><td>Simple Pfitzer model of the
+       ionosphere</td></tr>
+      </table></center> 
+      <p> 
+      The temperatures (argument <code>temp</code>) are provided only by the 
+      MSISE-90 and IRI-90 models.
+      <p> 
+      One should note that the total mass density and the number densities are 
+      only determined for the species listed in argument <code>kspec</code> of
+      common block <a href="uc150.html">UC150</a>.
+        
+      </ul><h4><a name=note>Note</a></h4><ul>
+      The argument <code>dens</code> of subroutines 
+      <a href="ua630.html">UA630</a>, <a href="ua631.html">UA631</a>, 
+      <a href="ua632.html">UA632</a>, <a href="ua633.html">UA633</a>,
+      <a href="ua634.html">UA634</a> and <a href="ua635.html">UA635</a>,
+      the argument <code>cs</code> of subroutines <a href="ua634.html">UA634</a>,
+      <a href="ua637.html">UA637</a> and <a href="ua638.html">UA638</a>,
+      and the argument <code>uma</code> of common block <a
+      href="uc160.html">UC160</a> have the same synopsis:
+      </ul><pre><code>
+            REAL*8  dens(30), cs(30), uma(30)
+      </code></pre><ul> 
+      Each indice of both arrays corresponds to a fixed atmospheric
+      constituent.
+      The table below provides the correspondance between indices and 
+      constituents. 
+      <center><br><table border=1 cellspacing=0 width="80%">
+       <tr><td align=center>1 = H</td>            <td align=center>11 = CO<sub>2</sub></td>       <td align=center>21 = He<sup>+</sup></td></tr>
+       <tr><td align=center>2 = He</td>           <td align=center>12 = NH<sub>3</sub></td>       <td align=center>22 = C<sup>+</sup></td></tr>
+       <tr><td align=center>3 = Ne</td>           <td align=center>13 = CH<sub>4</sub></td>       <td align=center>23 = N<sup>+</sup></td></tr>
+       <tr><td align=center>4 = Ar</td>           <td align=center>14 not used</td>               <td align=center>24 = O<sup>+</sup></td></tr>
+       <tr><td align=center>5 = Kr</td>           <td align=center>15 not used</td>               <td align=center>25 = Ne<sup>+</sup></td></tr>
+       <tr><td align=center>6 = Xe</td>           <td align=center>16 = O<sup><b>.</b></sup></td> <td align=center>26 = N<sub>2</sub><sup>+</sup></td></tr>
+       <tr><td align=center>7 = H<sub>2</sub></td><td align=center>17 = N<sup><b>.</b></sup></td> <td align=center>27 = NO<sup>+</sup></td></tr>
+       <tr><td align=center>8 = N<sub>2</sub></td><td align=center>18 not used</td>               <td align=center>28 = O<sub>2</sub><sup>+</sup></td></tr>
+       <tr><td align=center>9 = O<sub>2</sub></td><td align=center>19 = e<sup>-</sup></td>        <td align=center>29 not used</td></tr>
+       <tr><td align=center>10 = CO</td>          <td align=center>20 = p<sup>+</sup></td>        <td align=center>30 not used</td></tr>
+     </table></center>
+     <p>
+     Note that the subroutines, which return the arguments <code>dens</code> or
+     <code>cs</code>, assign the value 0 to array elements which correspond
+     to atmospheric components not treated by the subroutine.       
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      -63001, geographic position below the Earth's surface
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc150.html">UC150</a>,
+      atmospheric model description<br> 
+      <a href="uc160.html">UC160</a>,
+      general constants<br> 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+     <a href="ua636.html">UA636</a>, 
+     evaluate a weighted atmospheric mass<br>  
+</ul> <h4> Calls </h4> <ul>
+      <a href="um535.html">UM535</a>, 
+      geocentric to geodetic transformation<br>
+      <a href="ua631.html">UA631</a>, 
+      Anderson and Francis atmosphere <br> 
+      <a href="ua632.html">UA632</a>, 
+      simple atmospheric density distribution <br> 
+      <a href="ua633.html">UA633</a>, 
+      IRI-90 ionospheric model<br> 
+      <a href="ua634.html">UA634</a>, 
+      compute mass density from number density<br> 
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="ua610.html">UA610</a>,
+      select an atmospheric, ionospheric
+      and/or plasmaspheric model<br> 
+      <a href="faq05.html">FAQ G.05</a> Which are the coordinates and units used ? <br>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      <li> In version 2.00 and earlier, the local time was improperly
+      passed to both MSISE and IRI-90 models by the subroutines
+      <a href="ua632.html">UA632</a> and <a href="ua633.html">UA633</a>,
+      respectively. The bug is fixed since version 2.01.
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

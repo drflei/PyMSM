@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ud321.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UD321
+   === --> 
+<!--meta name="keywords" content="magnetic field line segment,weighted density,integration over drift shell and  field line"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UD321
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UD321 - evaluate a time integral over a magnetic field line  
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>    
+      REAL*8    rpar2, result, rnorm
+      INTEGER*4 kpar1, ifail
+      EXTERNAL  zsub
+      TYPE(<a href="structure.html#zseg">zseg</a>) mele(*)
+      TYPE(<a href="structure.html#zind">zind</a>) mind
+
+      CALL UD321 (mind, mele, kpar1, rpar2, zsub, result, rnorm, ifail)   
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code>mind  </code> <dd>
+      pointers into <code>mele</code> [in]
+      <dt> <code>mele</code> <dd>
+      Set of the elementary field line segments [in]
+      <dt> <code>kpar1  </code> <dd>
+      control parameter passed to <code>zsub</code>  [in]
+      <dt> <code>rpar2  </code> <dd>
+      control parameter passed to <code>zsub</code> [in]
+      <dt> <code>zsub </code> <dd>
+      external subroutine (see <a href="ud320.html#note">note </a> of subroutine UD320) [in]
+      <dt> <code>result</code> <dd>
+      result of the integration [out]
+      <dt> <code>rnorm</code> <dd>
+      time integral of the unity  [out]
+      <dt> <code>ifail</code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>) [out]
+
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UD321 averages physical quantities over a magnetic
+      field line segment in the same way as subroutine 
+      <a href="ud320.html">UD320</a>.  As input, the subroutine accepts
+      an external subroutine and two parameters to be passed to this
+      subroutine (see <a href="ud320.html#note">note</a> of subroutine
+      UD320 for synopsis and description).  As result, the subroutine
+      returns the value of the time integral 
+      <center><img src="ud321.gif" width=194 height=66 alt="[Eq]"></center>
+      evaluated over the magnetic field line segment for the function provided
+      by the subroutine <code>zsub</code> and for the unity (arguments
+      <code>result</code> and <code>rnorm</code>, respectively).
+      In this equation, d<i>s</i> is a element of length along
+      the field line and the denominators is proportional to
+      the parallel velocity. 
+
+</ul> <h4>History</h4><ul>
+      The subroutine UD321 does not exist in version 1.05 and earlier.
+      The subroutine UD321 has been completely reviewed in version
+      2.01, as well as subroutine <a href="ud320.html">UD320</a>.
+      The major effects are the addition of a special entry
+      (<a href="ud323.html">UD323</a>) and a modification of the
+      synopsis of the <code>zsub</code> external subroutine
+      (see <a href="ud320.html">UD320</a> for more details).
+      
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="32101">-32101</a>, invalid field line description <br>
+      <a name="32102">-32102</a>, wrong elementary segment  <br>
+      <a name="32103">-32103</a>, problem with an equatorial single point <br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      None
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="ud320.html">UD320</a>, 
+      evaluate a double time integral over a drift shell<br>
+</ul> <h4> Calls </h4> <ul>
+      <a href="ud328.html">UD328</a>, 
+      evaluate the second derivative of <i>B</i><br> 
+      <a href="ud329.html">UD329</a>, 
+      interpolate between two or three points<br> 
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ud330.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UD330
+   === --> 
+<!--meta name="keywords" content="magnetic drift shell,Roederer shell parameter,third invariant"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UD330
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UD330 - evaluate the third invariant 
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      REAL*8        phi,star
+      INTEGER*4     ifail
+      
+      CALL UD330 (phi, star, ifail)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> phi     </code> <dd>
+      Third invariant [out]
+      <dt> <code> star     </code> <dd>
+       Roederer's shell parameter <i>L</i><sup>*</sup>  [out]
+      <dt> <code> ifail     </code> <dd>
+       Error flag (passed by <a href="#dependencies">dependents</a>)  [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UD330 computes the third invariant of the magnetic drift shell stored
+      in the common block <a href="uc110.html">UC110</a>, <a href="uc120.html">UC120</a> and
+      <a href="uc130.html">UC130</a>.  The third invariant is evaluated by the integration
+      of the magnetic flux over a spherical polar cap.  Note that the subroutine needs the
+      foot prints of the magnetic field lines contained in the drift shell.  To this effect,
+      the argument <code>falt</code> has to be set to a positive value when the subroutine
+      <a href="ud310.html">UD310</a> is called to build the drift shell.  The integration 
+      steps are controlled by the arguments <code>epsomeg</code> and <code>dltlat</code>
+      of the common block <a href="uc192.html">UC192</a>. 
+      <p>
+      Roederer's shell parameter <i>L</i><sup>*</sup> is deduced directly from the value
+      of the third invariant and of the moment <i>M</i> of the magnetic dipole.  The value
+      of <i>M</i> depends on the argument <code>kmflg</code> of the common block 
+      <a href="uc190.html">UC190</a>.
+</ul> <h4> References </h4> <ul> 
+      <li>Roederer, J.G., <i>Dynamics of geomagnetically trapped radiation</i>,
+      Springer-Verlag (1970)
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      None
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+       <a href="uc110.html">UC110</a>,
+      magnetic drift shell description <br> 
+      <a href="uc140.html">UC140</a>,
+      magnetic field description<br> 
+      <a href="uc160.html">UC160</a>,
+      general constants<br>
+      <a href="uc190.html">UC190</a>,
+      control parameters, set 1<br> 
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      None
+</ul> <h4> Calls </h4> <ul>
+      <a href="ud331.html">UD331</a>, 
+      evaluate the magnetic flux through a spherical cap <br>
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="ul240.html">UL240</a>,
+      evaluate the Hilton's function<br>
+      <a href="ud310.html">UD310</a>,
+      trace a magnetic drift shell <br>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      <a href="try03.html">#3</a>, evaluation of the third invariant<br>
+      <a href="fat04.html">T.04</a> Why are Roederer's <i>L</i><sup>*</sup>
+                                   and McIlwain's <i>L</i> parameters
+                                   different ? <br>  
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

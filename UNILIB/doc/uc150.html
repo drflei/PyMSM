@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: uc150.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UC150
+   === --> 
+<!--meta name="keywords" content="atmospheric model,ionospheric model"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UC150
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Common block UC150 - atmospheric model description
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INCLUDE 'structure.h'
+
+      COMMON /UC150/ matm, ntspec, nnspec, kspec, kflag
+
+      TYPE(<a href="structure.html#zatm">zatm</a>) matm
+      INTEGER*4     ntspec, nnspec, kspec(30)
+      INTEGER*4     kflag(50)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> matm     </code> <dd>
+      Description of the atmospheric, ionospheric and/or plasmaspheric models
+      <dt> <code> ntspec, nnspec     </code> <dd>
+      Total number of species and number of neutral species
+      <dt> <code> kspec     </code> <dd>
+      Indices of the different species
+      <dt> <code> kflag     </code> <dd>
+      Internal switches
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The common block UC140 contains the description of 
+      atmospheric, ionospheric and/or plasmaspheric models
+      used by the subroutine <a href="ua630.html">UA630</a>.
+      The common may be initialized with the subroutine
+      <a href="ua610.html">UA610</a>.
+      <p>
+      The argument <code>kspec</code> provides a list of indices
+      which corresponds to the list of the atmospheric
+      and/or ionospheric constituents included in the selected
+      model. The indices <code>kspec(1:nnspec)</code> are related
+      to the neutral elements while the indices 
+      <code>kspec(nnspec+1:ntspec)</code> are related to the
+      ionized elements. The table below shows the correspondance
+      between the index values and the chemical elements.
+     <center><br><table border=1 cellspacing=0 width="80%">
+       <tr><td align=center>1 = H</td>            <td align=center>11 = CO<sub>2</sub></td>       <td align=center>21 = He<sup>+</sup></td></tr>
+       <tr><td align=center>2 = He</td>           <td align=center>12 = NH<sub>3</sub></td>       <td align=center>22 = C<sup>+</sup></td></tr>
+       <tr><td align=center>3 = Ne</td>           <td align=center>13 = CH<sub>4</sub></td>       <td align=center>23 = N<sup>+</sup></td></tr>
+       <tr><td align=center>4 = Ar</td>           <td align=center>14 not used</td>               <td align=center>24 = O<sup>+</sup></td></tr>
+       <tr><td align=center>5 = Kr</td>           <td align=center>15 not used</td>               <td align=center>25 = Ne<sup>+</sup></td></tr>
+       <tr><td align=center>6 = Xe</td>           <td align=center>16 = O<sup><b>.</b></sup></td> <td align=center>26 = N<sub>2</sub><sup>+</sup></td></tr>
+       <tr><td align=center>7 = H<sub>2</sub></td><td align=center>17 = N<sup><b>.</b></sup></td> <td align=center>27 = NO<sup>+</sup></td></tr>
+       <tr><td align=center>8 = N<sub>2</sub></td><td align=center>18 not used</td>               <td align=center>28 = O<sub>2</sub><sup>+</sup></td></tr>
+       <tr><td align=center>9 = O<sub>2</sub></td><td align=center>19 = e<sup>-</sup></td>        <td align=center>29 not used</td></tr>
+       <tr><td align=center>10 = CO</td>          <td align=center>20 = p<sup>+</sup></td>        <td align=center>30 not used</td></tr>
+     </table></center>
+     <p>
+     The array <code>kflag</code> contains switches to drive the differents
+     atmospheric or ionospheric models. The indices from 1 to 26 are specific
+     to the MSIS model and the indices from 27 to 39 are specific to
+     the IRI model. The function of the different switches are summarized
+     in the table below.  The whole set of switches is initialized
+     by the subroutine <a href="ut990.html">UT990</a>.
+     <center><br><table border=1 cellspacing=0 width="80%">
+      <tr><th>Switch</th><th>Possible values</th><th>Description</th></tr>
+      <tr><td colspan=3 align=center><b><font color=green>MSIS</font></b></td></tr>
+      <tr><td> 1</td><td>0, 1, 2, 3</td><td>F<sub>10.7</sub> effect on mean. 
+                       When set to 0, it has the same       
+                       effect than setting <code>matm%f107a</code> and
+                       <code>matm%f107</code> to 150</td></tr>
+      <tr><td> 2</td><td>0, 1, 2, 3</td><td>time independent term 
+                       of the expansion function    
+                       <i>G(L)</i></td></tr>
+      <tr><td> 3</td><td>0, 1, 2, 3</td><td>symmetrical annual variation</td></tr>
+      <tr><td> 4</td><td>0, 1, 2, 3</td><td>symmetrical semiannual variation</td></tr>
+      <tr><td> 5</td><td>0, 1, 2, 3</td><td>asymmetrical annual variation</td></tr>
+      <tr><td> 6</td><td>0, 1, 2, 3</td><td>asymmetrical semiannual variation</td></tr>
+      <tr><td> 7</td><td>0, 1</td><td>diurnal variation</td></tr>
+      <tr><td> 8</td><td>0, 1</td><td>semidiurnal variation</td></tr>
+      <tr><td> 9</td><td>-1, 0, 1</td><td>3-hour  A<sub>p</sub> effect, 
+                                          no A<sub>p</sub> effect, daily A<sub>p</sub> effect</td></tr>
+      <tr><td>10</td><td>0, 1</td><td>all  Universal Time and longitude variations</td></tr>
+      <tr><td>11</td><td>0, 1, 2, 3</td><td>longitudinal variations</td></tr>
+      <tr><td>12</td><td>0, 1, 2, 3</td><td>Universal Time and mixed Universal Time/longitude  
+                       variations</td></tr>
+      <tr><td>13</td><td>0, 1</td><td>mixed A<sub>p</sub>/Universal Time/longitude variations</td></tr>
+      <tr><td>14</td><td>0, 1</td><td>terdiurnal variation</td></tr>
+      <tr><td>15</td><td>-1, 0, 1</td><td>mixed, diffusive or net densities</td></tr>
+      <tr><td>16</td><td>0, 1</td><td>all variations of the exospheric 
+                       temperature. When set to 0, the exospheric 
+                       temperature is forced to 1037.18 K</td></tr>
+      <tr><td>17</td><td>0, 1</td><td>all variations of the temperature at 120 km</td></tr>
+      <tr><td>18</td><td>0, 1</td><td>all variations of temperatures at nodes of region  
+                       1</td></tr>
+      <tr><td>19</td><td>0, 1</td><td>all variations of the shape parameter <i>S</i> used in    
+                       the Bates profile</td></tr>
+      <tr><td>20</td><td>0, 1, 2, 3</td><td>all variations of temperatures at nodes of region  
+                       2</td></tr>
+      <tr><td>21</td><td>0, 1</td><td>all variations of the
+                       diffusive density at 120 km</td></tr>
+      <tr><td>22</td><td>0, 1, 2, 3</td><td>all variations of temperatures at nodes of region 3</td></tr>
+      <tr><td>23</td><td>0, 1</td><td>N<sub>2</sub>  turbopause height variation</td></tr>
+      <tr><td>24</td><td>0, 1</td><td>Earth radius and gravity varying with latitude</td></tr>
+      <tr><td>25</td><td>0, 1</td><td>security switch. When set to 0,
+                       fix all preceding switches to 1 anyway. When set to 1,
+                       transmit the values of the preceding switches.</td></tr>
+      <tr><td>26</td><td>0, 1</td><td>spare computing time. When set to 0,
+                       jump calculations already done, for which     
+                       results do not change.</td></tr>
+      <tr><td colspan=3 align=center><b><font color=green>IRI</font></b></td></tr>
+      <tr><td>27</td><td>-1, 0</td><td>electron density is calculated or not</td></tr>
+      <tr><td>28</td><td>-1, 0</td><td>temperatures are calculated or not</td></tr>
+      <tr><td>29</td><td>-1, 0</td><td>ion composition is calculated or not</td></tr>
+      <tr><td>30</td><td>-1, 0</td><td>B0 from table or from Gulyeava [1987]</td></tr>
+      <tr><td>31</td><td>-1, 0</td><td>F2 peak from CCIR or from URSI</td></tr>
+      <tr><td>32</td><td>-1, 0</td><td>ion composition standard or from
+                                          Danilov-Yaichnikov [1985]</td></tr>
+      <tr><td>33</td><td>-1, 0</td><td>standard IRI topside or IRI-79</td></tr>
+      <tr><td>34</td><td>-1, 0</td><td>NMF2 peak model or input values</td></tr>
+      <tr><td>35</td><td>-1, 0</td><td>HMF2 peak model or input values</td></tr>
+      <tr><td>36</td><td>-1, 0</td><td>electron temperature (TE) model or
+ electron temperature-density (TE-NE) model with the electron density as input</td></tr>
+      <tr><td>37</td><td>-1, 0</td><td>standard electron density or
+                                      Lay-functions version</td></tr>
+      <tr><td>38</td><td>-1, 0</td><td>message are written to unit 6 or 12</td></tr>
+      <tr><td>39</td><td>-1, 1</td><td>model depents on Sun spot numbers (1) or
+on F<sub>10.7</sub> radio flux (-1)</td></tr>
+      <tr><td>40-50</td><td colspan=2 align=center>not used</td></tr>
+     </table></center>
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Used by </h4> <ul> <dl>
+      <dt><a href="ua630.html">UA630</a>
+      (evaluate the atmospheric densities): 
+      <dd> <code>matm%katm</code>, <code>matm%f107</code>, <code>matm%f107a</code>,
+      <code>matm%kion</code>, <code>nnspec</code>, <code>ntspec</code>
+      and <code>kspec(1)</code> <br>
+      <dt><a href="ua632.html">UA632</a>
+      (simple atmospheric density distribution): 
+      <dd> <code>matm%ut</code>, <code>matm%f107</code>, <code>matm%f107a</code>,
+      <code>matm%ap</code>, <code>matm%kday</code> and <code>kflag(1)</code> <br>
+      <dt><a href="ua633.html">UA633</a>
+      (Pfitzer atmospheric model): 
+      <dd> <code>matm%ut</code>, <code>matm%rzss</code>, <code>matm%kday</code>,
+      <code>matm%fkpx</code> and <code>kflag(27)</code> <br>
+      <dt><a href="ua636.html">UA636</a>
+      (evaluate a weighted atmospheric mass):
+      <dd> <code>ntspec</code>, <code>nnspec</code>, <code>kspec(1)</code> <br> 
+</dl> </ul> <h4> Modified by </h4> <ul> <dl>
+      <dt><a href="ut990.html">UT990</a>
+      (initialize the UNILIB libray): 
+      <dd> <code>kflag</code><br> 
+</dl> </ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

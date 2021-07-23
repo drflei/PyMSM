@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: faq06.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - 
+      FAQ G.06
+   === --> 
+<!--meta name="keywords" content="Getting started,Interactive Data Language"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Frequently Asked Questions
+</h1> <h6>
+ [ <a href="#question">Question</a> 
+ | <a href="#answer">Answer</a> 
+ | <a href="#illustration">Illustration</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="question"> Question </a> </h2> <ul>
+      G.06 - How to start using the UNILIB library ?
+</ul> <h2> <a name="answer"> Answer </a> </h2> <ul>
+  The functionality of the library has to be accessed with the help
+  of a FORTRAN programme or a IDL routine. Note that except under the 
+  operating systems VAX/VMS and OpenVMS/AXP, additional C codes have to be
+  produced to interface the library with the IDL software.
+  A sample of FORTRAN programme is given in the 
+  <a href="#illustration">illustration</a>, as well as the
+  corresponding IDL programme.
+  Note that the HTML documentation (see <a href="toc.html">TOC</a>) contains help 
+  for each subroutine, including synopsis, description, dependencies 
+  and list of reported bugs.  
+</ul><h4>Initialization</h4><ul>
+  Before most of the library subroutines can be used, the different 
+  common blocks of the library have to be initialized. The following
+  initalisation subroutines are provided inside the library:
+  <ul>
+    <li><a href="ut990.html">UT990</a>, to initialize the different common blocks 
+                                       of the library;
+    <li><a href="um510.html">UM510</a>, to select a geomagnetic field model;
+    <li><a href="um520.html">UM520</a>, to select an external magnetic field model;
+    <li><a href="ua610.html">UA610</a>, to select an atmospheric, ionospheric and/or plasmaspheric
+                                       model.
+  </ul>
+</ul><h4>Main subroutines</h4><ul>
+  The subroutines of the library can be divided into three sets:
+  (1) the main subroutines, (2) the internal subroutines and 
+  (3) the miscellaneous subroutines.
+  The internal subroutines are subroutines called by other subroutines
+  of the library and that common users do not have to worry about.
+  The main subroutines are top-level subroutines, they include:
+<ul>
+    <li><a href="um530.html">UM530</a> or <a href="um539.html">UM539</a>, to 
+                                     evaluate the magnetic field vector;
+    <li><a href="ua630.html">UA630</a>, to 
+                                evaluate the atmospheric number and 
+                                       mass densities;
+    <li><a href="ua636.html">UA636</a>, to evaluate the atmospheric number or 
+                              mass densities weighted by cross sections;
+    <li><a href="ul220.html">UL220</a>, to evaluate <i>B</i><sub>m</sub>, 
+      <i>L</i>, <i>K</i> for a set of field line segments passing through a 
+      given position;
+    <li><a href="ud310.html">UD310</a>, to trace a magnetic drift shell;
+    <li><a href="ud330.html">UD330</a>, to evaluate the third invariant;
+    <li><a href="uf420.html">UF420</a>, to trace a magnetic field line segment 
+      passing through a given position;
+    <li><a href="ut980.html">UT980</a>, to print the library error messages. 
+</ul>
+  The miscellaneous subroutines are subroutines called by other subroutines
+  of the library but that users can also use directly (e.g.
+  <a href="um523.html">UM523</a>, <a href="um524.html">UM524</a> or
+  <a href="ut540.html">UT540</a>).
+
+  The HTML pages relative to the main subroutines are a good starting point
+  to learn about the library. Another starting point in the
+  understanding of the library are the 
+  <a href="structure.html#examples">examples</a> 
+  provided in the HTML
+  documentation.
+</ul><h4>Component identifiers</h4><ul>
+  In the library, each component has a unique identifier. 
+
+  The FORTRAN common block components of the library are identified by the two
+  characters <code>UC</code> followed by three digits. The FORTRAN subroutine 
+  components of the library are identified by two characters, related to the 
+  functionality of the component, followed by three digits. The characters 
+  <code>UL</code>, <code>UF</code>, <code>UD</code>, <code>UM</code>, 
+  <code>UA</code>, and <code>UT</code> correspond to geomagnetic labels,
+  field line tracing, drift shell tracing, magnetic models, atmospheric models,
+  and general tools, respectively.  Each component of the 
+  library is uniquely defined by its 3-digit code.
+
+  For the variables used in the library, the first character of the identifier
+  indicates the type of the variable. The correspondences between the first
+  character of the identifier and the FORTRAN type of the field are:
+<ul>
+  <li><code>A-H, P-Y</code> for <code>REAL*8</code>;
+  <li><code>I, J, K, N</code> for <code>INTEGER*4</code>;
+  <li><code>L</code> for <code>CHARACTER*(*)</code>;
+  <li><code>M</code> for <a href="structure.html#definitions">(FORTRAN 90) derived types</a>; 
+  <li><code>Z</code> for <code>EXTERNAL</code>.
+</ul>
+</ul><h4>Error diagnostics</h4><ul>
+  When an error occurs in a subroutine of the library, the error diagnostic
+  is returned by the way of a negative integer value of the form
+  <code>-dddii</code>.  The three first digits (<code>ddd</code>) are set 
+  to the 3-digit of the subroutine where the error occurs. The two last
+  digits (<code>ii</code>) are used to differentiated errors inside a same
+  subroutine. The errors are documented in the <b>Diagnostics</b>
+  section of each subroutine.
+  <p>
+  Note that some subroutines get an error flag as argument only to
+  pass the error flag of their dependents.
+</ul> <h2> <a name="illustration"> Illustration </a> </h2> <ul>
+  In the FORTRAN programme below, a magnetic field line
+  segment is computed and printed. The field line segment is 
+  passing through the GEO location [2,000 km, 40 deg N, 30 deg E] and 
+  limited by a magnetic field
+  intensity of 0.4 Gauss.  The library is 
+  initialized with the IGRF-95 geomagnetic field model.
+</ul><pre> 
+      PROGRAM  sample
+C
+      INCLUDE  'structure.h'
+      INTEGER*4     kunit, kinit, ifail, kint, kext, nfbm
+      CHARACTER*32  lbint, lbext
+      REAL*8        year, param(10), amjd, fbm(10), falt
+      TYPE(<a href="structure.html#zgeo">zgeo</a>) mpos
+C
+      DATA  kunit, kinit, kint, year/ 6, 1, 0, 1995.0d0/
+      DATA  kext, amjd, param/ 0, 0.d0, 10*0.0d0/
+      DATA  nfbm, falt, fbm/ 1, -999., 0.4, 9*0./
+C
+C     <b>Initialization</b>
+C
+      CALL <a href="ut990.html">UT990</a> (kunit, kinit, ifail)
+      IF( ifail .LT. 0 )STOP
+      CALL <a href="um510.html">UM510</a> (kint, year, lbint, kunit, ifail)
+      IF( ifail .LT. 0 )STOP
+      CALL <a href="um520.html">UM520</a> (kext, amjd, param, lbext, kunit, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>Body part</b>
+C
+      mpos.radius = 8371.2
+      mpos.colat  =   50.
+      mpos.elong  =   30.
+      CALL <a href="uf420.html">UF420</a> (mpos, fbm, nfbm, falt, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+C     <b>Result Printing</b>
+C
+      CALL <a href="ut991.html">UT991</a> (kunit, ifail)
+      IF( ifail .LT. 0 )STOP
+C
+      END
+</pre><ul>
+   The same programme but written with the IDL command language 
+   is presented below.  One should note that the
+   implementation is specific to the OpenVMS operating system.
+</ul><pre>
+;  <b>sample.pro</b>
+
+   testdef = TRNLOG( 'unilib', content) mod 2  
+   IF NOT testdef THEN MESSAGE, 'The logical UNILIB has to be '+       $
+                                'defined before running idl'
+   MESSAGE,  'File '+ strtrim( content, 2)+ ' linked', /informational
+;
+;  <b>Data</b>
+;
+   kunit= 6L  & kinit=    1L    & kint=  0L     & year= 1995.0D0
+   kext=  0L  & amjd=    0.0d0  & param= DBLARR(10)
+   nfbm=  1L  & falt= -999.0d0  
+   fbm= DBLARR(nfbm)            & fbm(*)= [ 0.4d0 ]
+;
+;  <b>Initialization</b>
+;
+   version = 0L
+   status  = CALL_EXTERNAL( 'unilib', '<a href="ut990.html">UT990</a>', -6L, 1L, version)
+   IF version LT 0 THEN MESSAGE, 'Unable to initialize'+               $
+                                 ' the Unirad Library'
+   MESSAGE,  'Unirad Library v'+ STRCOMPRESS( STRING(                  $
+                       version*0.01, format= '(f10.2)'), /remove_all), $
+              /informational
+   lbint   = '12345678901234567890123456789012'
+   ifail   = 0L
+   status  = CALL_EXTERNAL( 'unilib', '<a href="um510.html">UM510</a>', kint, year,             $
+                            lbint, kunit, ifail)
+   IF ifail LT 0 THEN MESSAGE, 'Error'+ STRING(ifail)+' in UM510'
+   lbext   = '12345678901234567890123456789012'
+   ifail   = 0L
+   status  = CALL_EXTERNAL( 'unilib', '<a href="um520.html">UM520</a>', kext,    amjd  ,        $
+                            param, lbext, kunit, ifail)
+   IF ifail LT 0 THEN MESSAGE, 'Error'+ STRING(ifail)+' in UM520'
+;
+;  <b>Body part</b>
+;
+   mpos    = {<a href="structure.html#zgeo">zgeo</a>, radius: 8371.2d0,                                  $
+                    colat:    50.0d0,                                  $
+                    elong:    30.0d0}
+   ifail   = 0L
+   status  = CALL_EXTERNAL( 'unilib', '<a href="uf420.html">UF420</a>', mpos, fbm, nfbm,        $
+                            falt, ifail)
+   IF ifail LT 0 THEN MESSAGE, 'Error'+ STRING(ifail)+' in UF420'
+;
+;  <b>Result Printing</b>
+;
+   ifail   = 0L
+   status  = CALL_EXTERNAL( 'unilib', '<a href="ut991.html">UT991</a>', kunit, ifail)
+   IF ifail LT 0 THEN MESSAGE, 'Error'+ STRING(ifail)+' in UT991'
+;
+ END
+</pre> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="faq01.html">G.01</a> What is the purpose of the library ? <br>
+      <a href="faq02.html">G.02</a> Where to find the UNILIB library and
+                                  documentation ? <br>     
+      <a href="fat01.html">T.01</a> How to build the UNILIB library ? <br>
+      <a href="try01.html">Ex.#1</a>, evaluation of the magnetic field vector<br>
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

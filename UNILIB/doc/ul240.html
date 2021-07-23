@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ul240.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UL240
+   === --> 
+<!--meta name="keywords" content="Hilton,integral invariant,McIlwain shell parameter"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UL240
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UL240 - evaluate the Hilton's function
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      TYPE(<a href="structure.html#zlbl">zlbl</a>) mlab
+      INTEGER*4     ifail
+      
+      CALL UL240 (mlab, ifail)
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> mlab      </code> <dd>
+      magnetic parameter of a field line segment [in/out]
+      <dt> <code> ifail     </code> <dd>
+      Error flag (see <a href="#diagnostics">diagnostics</a>)  [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UL240 computes McIlwain's shell parameter <i>L</i>
+      from the integral invariant <i>I</i> and the magnetic field intensity
+      <i>B</i><sub>m</sub> at the mirror points.  The parameter <i>L</i>
+      is evaluated with the help of the Hilton's function.  The inputs and
+      result of the subroutine are passed through the argument
+      <code>mlab</code>: <code>mlab.finv</code> and <code>mlab.fbmp</code>
+      have to contain the values of <i>I</i> and <i>B</i><sub>m</sub>,
+      respectively, and the value of <i>L</i> is stored in 
+      <code>mlab.flmi</code>.  Note that both elements <code>mlab.linv</code>
+      and <code>mlab.lbmp</code> have to be set to the value <code>true</code>.
+      <p>       
+      One should note that the behaviour of subroutine UL240 depends on the
+      argument <code>kmflg</code> of the common block
+      <a href="uc190.html">UC190</a>.  When <code>kmflg</code> is equal to 0
+      or 10, the magnetic dipole moment stored in the common block 
+      <a href="uc160.html">UC160</a> (argument <code>gmagmo</code>) is used to
+      perform the evaluation of Hilton's function.  When <code>kmflg</code> is
+      equal to 1 or 11, the magnetic dipole moment of the current geomagnetic
+      field model is used instead.  The value of this last magnetic dipole
+      moment is stored in argument <code>mint.gmmo</code> of the common block
+      <a href="uc140.html">UC140</a>.
+</ul><h4> References </h4> <ul>
+      <li>Hilton, H.H., <i>L parameter, a new approximation</i>,
+      JGR <b>76</b> (1971) 6952-6954
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="24001">-24001</a>,
+       value of the integral invariant <i>I</i> is negative <br>
+      <a name="24002">-24002</a>,
+       value of the integral invariant <i>I</i> not specified <br>
+      <a name="24003">-24003</a>,
+       value of <i>B</i> at the mirror point not specified <br>
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc140.html">UC140</a>,
+       magnetic field description<br>
+      <a href="uc160.html">UC160</a>,
+      general constants<br>
+      <a href="uc190.html">UC190</a>,
+      control parameters, set 1<br>
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      <a href="ul220.html">UL220</a>,
+      get information on a magnetic field line segment  <br>
+      <a href="ud317.html">UD317</a>,
+      trace a magnetic drift shell (new)<br>         
+      <a href="uf411.html">UF411</a>,
+      search a local magnetic equator <br>
+      <a href="uf415.html">UF415</a>,
+      rebuild the labels of the field line <br>     
+</ul> <h4> Calls </h4> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+       <a href="uc170.html">UC170</a>, 
+      temporary magnetic field line<br>
+      <a href="ul230.html">UL230</a>,
+           evaluate the integral invariant coordinate <i>I</i><br>
+      <a href="ul242.html">UL242</a>,     
+           inverse the Hilton function  <br>
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

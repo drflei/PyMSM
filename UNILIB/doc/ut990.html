@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ut990.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      UT990
+   === --> 
+<!--meta name="keywords" content="initialisation,printing,magnetic moment"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      UT990
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#arguments">Arguments</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#diagnostics">Diagnostics</a> 
+ | <a href="#commonbloks">Common Blocks</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#reportedbugs">Reported Bugs</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Subroutine UT990 - initialize the UNILIB libray
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INTEGER*4 kunit, kinit, iver
+      
+      CALL UT990 ( kunit, kinit, iver )
+</pre> <h2> <a name="arguments"> Arguments </a> </h2> <ul> <dl>
+      <dt> <code> kunit      </code> <dd>
+      File unit for output (see <a href="#note">note</a>)  [in]
+      <dt> <code> kinit      </code> <dd>
+      Control parameter (default: 1)  [in]
+      <dt> <code> iver       </code> <dd>
+      Current version   [out]
+</dl> </ul> <h2> <a name="description"> Description </a> </h2> <ul>
+      The subroutine UT990 initializes the different common blocks of the
+      UNILIB libray and displays the value of different constants.  
+      To generate a complete initialisation, the  argument 
+      <code>kinit</code> has to be set to a positive value, e.g. 1.
+      A single common block can be initialized by using a negative value 
+      for the argument <code>kinit</code>. To only initialize (or reset)
+      the common block <code>UCddd</code>, the  argument 
+      <code>kinit</code> has to be set to the value <code>-ddd</code>,
+      i.e. -110, -120, -130, -140, -150, -160, -170, -190 or -192.
+      When the argument is set to an other negative value, none
+      of the common block is initialized.
+<p>
+      The values assigned to the 
+      arguments of the different common blocks are displayed in the table
+      below (the floating values are only given with 6 significant digits).
+      <p><center><table cellspacing=0 border=1>
+      <tr><td colspan=4 align=center><b>Common block <a href="uc110.html">UC110</a></b></td></tr>
+      <tr><td valign=top><code>mlbl</code></td><td>not init.</td>
+          <td valign=top><code>k1st</code></td><td>-1</td>
+      <tr><td valign=top><code>klmp</code></td><td>-1</td></tr>
+      <tr><td colspan=4 align=center><b>Common block <a href="uc120.html">UC120</a></b></td></tr>
+      <tr><td valign=top><code>nbrfl</code></td><td>0</td>
+          <td valign=top><code>kurfl</code></td><td>-1</td></tr>
+      <tr><td valign=top><code>mfl(*)</code></td><td>not init.</td></tr>
+      <tr><td colspan=4 align=center><b>Common block <a href="uc130.html">UC130</a></b></td></tr>
+      <tr><td valign=top><code>nbrsg</code></td><td>0</td>
+          <td valign=top><code>kursg</code></td><td>-1</td></tr>
+      <tr><td valign=top><code>mseg(*)</code></td><td>not init.</td></tr>
+      <!--NewPage-->
+      <tr><td colspan=4 align=center><b>Common block <a href="uc140.html">UC140</a></b></td></tr>
+      <tr><td valign=top><code>mint</code></td><td>init. by <a href="um510.html">UM510</a></td>
+          <td valign=top><code>mext</code></td><td>init. by <a href="um520.html">UM520</a></td></tr>
+      <tr><td valign=top><code>msun</code></td><td>init. by <a href="um520.html">UM520</a></td></tr>
+      <tr><td colspan=4 align=center><b>Common block <a href="uc150.html">UC150</a></b></td></tr>
+      <tr><td valign=top><code>matm</code></td><td>init. by <a href="ua610.html">UA610</a></td>
+          <td valign=top><code>ntspec</code></td><td>-1</td></tr>
+      <tr><td valign=top><code>nnspec</code></td><td>-1</td>
+          <td valign=top><code>kspec(*)</code></td><td>init. by <a href="ua610.html">UA610</a></td></tr>
+      <tr><td valign=top><code>kflag(1...50)</code></td><td colspan=3>
+           1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
+           1,  1,  1,  1,  0,  0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  1,  0,
+           0,  0,  0,  0,  0,  0,  0,  0,  0,  0  </td></tr>
+      <tr><td colspan=4 align=center><b>Common block <a href="uc160.html">UC160</a></b></td></tr>
+      <tr><td valign=top><code>pi</code></td> <td>3.14159</td>
+          <td valign=top><code>deg</code></td><td>0.0174533</td></tr>
+      <tr><td valign=top><code>re</code></td><td>6371.2</td>
+          <td valign=top><code>gmagmo</code></td><td>0.311653</td></tr>
+      <tr><td valign=top><code>eclipt</code></td><td>23.4415</td>
+          <td valign=top><code>geoid(1...3)</code></td><td>6378.16, 1.00674, 0.00673970</td></tr>
+      <tr><td valign=top><code>uma(1...30)</code></td><td colspan=3>
+       1.6604 10<sup>-24</sup>,  6.6416 10<sup>-24</sup>, 33.208 10<sup>-24</sup>,
+      66.416 10<sup>-24</sup>, 139.47410<sup>-24</sup>,  217.512 10<sup>-24</sup>,
+       3.3208 10<sup>-24</sup>, 46.4912 10<sup>-24</sup>, 53.1328 10<sup>-24</sup>,
+      46.4912 10<sup>-24</sup>, 73.0576 10<sup>-24</sup>, 28.2268 10<sup>-24</sup>,
+      26.5664 10<sup>-24</sup>,                        0,                      0,
+      28.2268 10<sup>-24</sup>, 23.2456 10<sup>-24</sup>,                      0,
+       9.1091 10<sup>-28</sup>,  1.6604 10<sup>-24</sup>,  6.6416 10<sup>-24</sup>,
+      19.9248 10<sup>-24</sup>, 23.2456 10<sup>-24</sup>, 26.5664 10<sup>-24</sup>,
+      32.208 10<sup>-24</sup>, 46.4912 10<sup>-24</sup>,  49.812 10<sup>-24</sup>,
+      53.1328 10<sup>-24</sup>,                        0,                      0</td></tr>
+      <tr><td colspan=4 align=center><b>Common block <a href="uc170.html">UC170</a></b></td></tr>
+      <tr><td valign=top><code>nsg</code></td><td>0</td>
+          <td valign=top><code>kgp</code></td><td>-1</td></tr>
+      <tr><td valign=top><code>mlab</code></td><td>not init.</td>
+          <td valign=top><code>mlin</code></td><td>not init.</td></tr>
+      <tr><td valign=top><code>mele(*)</code></td><td>not init.</td></tr>
+      <tr><td colspan=4 align=center><b>Common block <a href="uc190.html">UC190</a></b></td></tr>
+      <tr><td valign=top><code>prop</code></td><td>0.2</td>
+          <td valign=top><code>stepx</code></td><td>0.075</td></tr>
+      <tr><td valign=top><code>stpmin</code></td><td>2.0</td>
+          <td valign=top><code>umsq</code></td><td>0.292893</td></tr>
+      <tr><td valign=top><code>upsq</code></td><td>1.70711</td>
+          <td valign=top><code>uk2</code></td><td>-1.0</td></tr>
+      <tr><td valign=top><code>uk3</code></td><td>0.757359</td>
+          <td valign=top><code>epskm</code></td><td>0.2</td></tr>
+      <tr><td valign=top><code>epsrel</code></td><td>6.0 10<sup>-6</sup></td>
+          <td valign=top><code>stplst</code></td><td>15.0</td></tr>
+      <tr><td valign=top><code>xclat</code></td><td>not init.</td>
+          <td valign=top><code>kmflg</code></td><td>0</td></tr>
+      <tr><td valign=top><code>kum533</code></td><td>1</td></tr>
+      <!--NewPage-->
+      <tr><td colspan=4 align=center><b>Common block <a href="uc192.html">UC192</a></b></td></tr>
+      <tr><td valign=top><code>xrmin</code></td><td>1000.0</td>
+          <td valign=top><code>xbmin</code></td><td>0.00004</td></tr>
+      <tr><td valign=top><code>xtmin</code></td><td>0.984808</td>
+          <td valign=top><code>xbmax</code></td><td>1000000.0</td></tr>
+      <tr><td valign=top><code>epslon</code></td><td>0.05</td>
+          <td valign=top><code>epsfl</code></td><td>0.001</td></tr>
+      <tr><td valign=top><code>fvet</code></td><td>0.65</td>
+          <td valign=top><code>pvet</code></td><td>3.452</td></tr>
+      <tr><td valign=top><code>epsomeg</code></td><td>0.008</td>
+          <td valign=top><code>dltlat</code></td><td>1.0</td></tr>
+      </table></center><p>
+      As output, the subroutine returns the current library version
+      in the argument <code>ifail</code>.
+</ul> <h4> <a name="note"> Note </a> </h4> <ul>
+      The argument <code>kunit</code> is used to specify a FORTRAN
+      file unit for the output displayed by the subroutine. When
+      the argument is set to a value less or equal to zero, 
+      the printings inside the subroutine are not executed.
+      Commonly when the file unit is set to 6, the output are
+      displayed on the screen (i.e. on the standard output).
+      The FORTRAN statement <code>OPEN</code> has to be used
+      to specify a file name as illustrated below:
+</ul> <pre>
+      OPEN( unit=3, file='result.txt', status='new' )
+      CALL <a href="ut990.html">UT990</a>( 3, 1, IVER )
+      CLOSE( 3 )
+</pre> <h4>  History </h4> <ul>
+      In version 1.10 and earlier, some arguments of common blocks
+      <a href="uc190.html">UC190</a> and <a href="uc192.html">UC192</a>
+      received other values at the initialisation. In common block
+      <a href="uc190.html">UC190</a>, the argument <code>nxstp</code>
+      was defined instead of argument <code>kum533</code>.
+      The old values are listed in the table below.
+      <p><center><table cellspacing=0 border=1>
+      <tr><td colspan=4 align=center><b>Old values</b> (version 1.10 and earlier)</td></tr>
+      <tr><td valign=top><code>stepx</code></td><td>0.4</td>
+          <td valign=top><code>stpmin</code></td><td>5.0</td></tr>
+      <tr><td valign=top><code>epskm</code></td><td>0.25</td>
+          <td valign=top><code>stplst</code></td><td>25.0</td></tr>
+      <tr><td valign=top><code>nxstp</code></td><td>400</td>
+          <td valign=top><code>dltlat</code></td><td>2.0</td></tr>
+      </table></center><p>
+      From version 2.01, the argument <code>kflag(39)</code> of common
+      block <a href="uc150.html">UC150</a> is active
+      and initialized to 1.
+      <p>The initialisation of a single common block (<code>kinit<code> =
+       -110, -120, -130, -140, -150, -160, -170, -190 or -192) is only
+       implemented since version 2.03
+</ul> <h2> <a name="diagnostics"> Diagnostics </a> </h2> <ul>
+      <a name="-99001">-99001</a>, error on output device
+</ul> <h2> <a name="commonbloks"> Common Blocks </a> </h2> <ul>
+      <a href="uc110.html">UC110</a>,
+      magnetic drift shell description<br>
+      <a href="uc120.html">UC120</a>,
+       magnetic field line description<br>
+      <a href="uc130.html">UC130</a>,
+      set of magnetic field line segments<br>
+      <a href="uc160.html">UC160</a>,
+      general constants<br> 
+      <a href="uc170.html">UC170</a>,
+      temporary magnetic field line<br> 
+       <a href="uc190.html">UC190</a>,
+      control parameters, set 1<br> 
+      <a href="uc192.html">UC192</a>,
+      control parameters, set 2<br>     
+</ul> <h2> <a name="dependencies"> Dependencies </a> </h2> 
+<h4> Called by </h4> <ul>
+      None
+</ul> <h4> Calls </h4> <ul>
+      None
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      None
+</ul> <h2> <a name="reportedbugs"> Reported Bugs </a> </h2> <ul>
+      None
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      <a href="try01.html">#1</a>, evaluation of the magnetic field vector<br>
+      <a href="try02.html">#2</a>, evaluation of the (<i>B</i>, <i>L</i>) 
+                                  coordinates<br>   
+      <a href="try03.html">#3</a>, evaluation of the third invariant<br>
+      <a href="try04.html">#4</a>, search the point with the lowest altitude 
+                                  on a magnetic drift shell<br>
+      <a href="try05.html">#5</a>, namelist to initialize UNILIB<br>
+      <a href="faq06.html">G.06</a> How to start using the UNILIB library ? <br>
+      <a href="fat03.html">T.03</a> How to customize the magnetic field
+                                   model used by the library ? <br>
+      <a href="fat04.html">T.04</a> Why are Roederer's <i>L</i><sup>*</sup>
+                                   and McIlwain's <i>L</i> parameters
+                                   different ? <br>
+      <a href="fat05.html">T.05</a> How to pass correctly the subroutine 
+                                   arguments in IDL ?
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

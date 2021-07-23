@@ -1,0 +1,359 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: structure.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library -
+      structure.h
+   === --> 
+<!--meta name="keywords" content="getting started"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      structure.h
+</h1> <h6>
+ [ <a href="#name">Name</a>
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#definitions">Definitions</a> 
+ | <a href="#seealso">See Also</a> 
+ | <a href="#examples">Examples</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Include file <code>structure.h</code> - structure definition
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>
+      INCLUDE 'structure.h'
+</pre> <h2> <a name="description"> Description </a> </h2> <ul>
+      Normally, the file <code>structure.h</code></a> 
+      should be included
+      in each FORTRAN program or subroutine that uses the UNILIB libray.
+      The file contains a <code>IMPLICIT NONE</code> statement, a list of
+      structure definitions (as fortran90 derived types) and the definitions 
+      of some global parameters. The global parameters are listed in the table
+      below.
+      <center><br><table border=1 cellspacing=0 width="80%">
+       <tr><th>Parameter</th><th>Description</th></tr>
+       <tr><td align=center><code>nx120</code></td>
+           <td>Size of the common block <a href="uc120.html">UC120</a>
+               that determines the maximum number of magnetic field lines
+               used to describe a magnetic drift shell</td></tr>
+       <tr><td align=center><code>nx130</code></td>
+           <td>Size of the common block <a href="uc130.html">UC130</a> 
+               that determines the maximum number of stored points
+               for a magnetic drift shell</td></tr>
+       <tr><td align=center><code>nx140</code></td>
+           <td>Maximum size for the spherical harmonic expansion 
+               of the geomagnetic field model, used in the definition
+               of the TYPE <a href="#zimf">zimf</a></td></tr>
+       <tr><td align=center><code>nx170</code></td>
+           <td>Size of the common block <a href="uc170.html">UC170</a> 
+               that determines the maximum number of geographic locations
+               used to describe a magnetic field line segments</td></tr>
+      </table><br></center>
+    Note that after version 2.09, UNILIB uses FORTRAN 90 derived types instead 
+    of the <code>STRUCTURE</code> and <code>RECORD</code> extensions to FORTRAN 77.
+    <p>
+    In the next section, the different <code>TYPE</code> used in the UNILIB
+    library are described.  When declaring a <code>TYPE</code> without
+    the help of the file <code>structure.h</code>,
+    be aware to check the order of the variable list. 
+</ul> <h2> <a name="definitions"> Definitions </a> </h2> <h6>
+    [  <a href="#zatm">zatm</a> 
+    |  <a href="#zdat">zdat</a> | <a href="#zemf">zemf</a>
+    |  <a href="#zfln">zfln</a> | <a href="#zgeo">zgeo</a>
+    |  <a href="#zimf">zimf</a> | <a href="#zind">zind</a>
+    |  <a href="#zlbl">zlbl</a> | <a href="#zpnt">zpnt</a>
+    |  <a href="#zseg">zseg</a> | <a href="#zsun">zsun</a>
+    |  <a href="#zvec">zvec</a> | <a href="#zxyz">zxyz</a>
+    ]                      
+</h6> <h4> TYPE <a name="zatm">zatm</a>, 
+refer to an atmospheric model </h4> <ul> <dl>
+<dt><code>REAL*8 UT   </code>
+<dd><li>Universal Time in degrees</li>
+<dt><code>REAL*8 RZSS    </code>
+<dd><li>Sun spots number</li>
+<dt><code>REAL*8 F107A, F107   </code>
+<dd><li>81-Day average of the radio flux F<sub>10.7</sub> and
+daily radio flux F<sub>10.7</sub> of the previous day</li>
+<dt><code>REAL*8 APIND(7)   </code>
+<dd><li>3-Hour A<sub>p</sub> index for different times, see table below</li>
+<dt><code>REAL*8 FKPX   </code>
+<dd><li>Maximum value of the 3-hour K<sub>p</sub> index</li>
+<dt><code>INTEGER*4 KATM    </code>
+<dd><li>Number of the atmospheric model</li>
+<dt><code>INTEGER*4 KION   </code>
+<dd><li>Number of the ionospheric and/or plasmaspheric model</li>
+<dt><code>INTEGER*4 KYEAR, KDAY   </code>
+<dd><li>Year and day of the year
+  <center><br><table border=1 cellspacing=0 width="80%">
+    <tr><th>Index in <code>APIND</code></th><th>Description</th></tr>
+    <tr><td align=center>1</td><td>Daily A<sub>p</sub> index </td></tr>
+    <tr><td align=center>2</td><td>3-Hour A<sub>p</sub> index for the current 
+                               time </td></tr>
+    <tr><td align=center>3</td><td>3-Hour A<sub>p</sub> index for the third
+                      hour before the current time</td></tr>
+    <tr><td align=center>4</td><td>3-Hour A<sub>p</sub> index for the sixth
+                      hour before the current time </td></tr>
+    <tr><td align=center>5</td><td>3-Hour A<sub>p</sub> index for the ninth
+                      hour before the current time  </td></tr>
+    <tr><td align=center>6</td><td>24-Hour average of the 3-hour 
+                      A<sub>p</sub> index 
+                      from the 12th to the 35th hour prior to the current 
+                      time</td></tr>
+    <tr><td align=center>7</td><td>24-Hour average of the 3-hour A<sub>p</sub> index 
+                      from the 36th to the 59th hour prior to the current 
+                      time </td></tr>
+  </table></center>
+</dl> </ul> <h4> TYPE <a name="zdat">zdat</a>, 
+refer to a date and time </h4> <ul> <dl>
+<dt><code>REAL*8       SECS</code>
+<dd><li>Time</li>
+<dt><code>REAL*8       AMJD</code>
+<dd><li>Modified Julian Day based on the 1st of January 1950</li>
+<dt><code>INTEGER*4    IYEAR, IMONTH, IDAY</code>
+<dd><li>Date, e.g. 1 January 1995 is coded <code>1995, 1, 1</code></li>
+<dt><code>INTEGER*4    IHOUR, IMIN, IDUMMY</code>
+</dl>see also <a href="ut540.html">UT540</a> </li> and <a href="ut545.html">UT545</a>
+</ul> <h4> TYPE <a name="zemf">zemf</a>,
+refer to an external magnetic field model </h4> <ul> <dl>
+<dt><code>REAL*8       VDST</code>
+<dd><li>Value of the storm activity index D<sub>st</sub> in nT</li>
+<dt><code>REAL*8       WDENS, WVEL</code>
+<dd><li>Value of the solar wind density and velocity</li>
+in cm<sup>-3</sup> and km/s, respectively
+<dt><code>REAL*8       VKP</code>
+<dd><li>Value of the planetary activity index K<sub>p</sub></li>
+<dt><code>REAL*8       VAL</code>
+<dd><li>Value for AL, see <a href="um520.html">UM520</a></li>
+<dt><code>REAL*8       PDYN</code>
+<dd><li>Solar wind pressure (nanoPascal)</li>
+<dt><code>REAL*8       BXIMF, BYIMF, BZIMF</code>
+<dd><li>Components of the interplanetary magnetic field (nanotesla)</li>
+<dt><code>REAL*8       STDOFF</code>
+<dd><li>Standoff distance to the subsolar point</li>
+<dt><code>REAL*8       G1, G2, W1, W2, W3, W4, W5, W6</code>
+<dd><li>Value for G1, G2, W1, W2, W3, W4, W5, W6, see <a href="um520.html">UM520</a></li>
+<dt><code>REAL*8       TRANS(3,3)</code>
+<dd><li>Transformation array from GEO to the <code>LBLTNS</code>
+        coordinate system</li>
+<dt><code>REAL*8       TILT</code></code>
+<dd><li>Magnetic dipole tilt angle in degrees</li>
+<dt><code>CHARACTER*20 LABEL</code>
+<dd><li>Name of the model</li>
+<dt><code>INTEGER*4    KOUTER</code>
+<dd><li>Number of the model</li>
+<dt><code>INTEGER*4    IKP</code>
+<dd><li>Internal parameter based on <code>VKP</code>, see
+<a href="um521.html">UM521</a></li>
+<dt><code>CHARACTER*4  LBLTNS</code>
+<dd><li>Coordinate system on which the model is based, e.g.
+'<code>SM</code>' or '<code>GSM</code>'</li>
+</dl> </ul> <h6> Warning </h6> <ul> 
+  The arguments <code>PDYN</code>, <code>BXIMF</code>, <code>BYIMF</code>, 
+  <code>BZIMF</code> and <code>STDOFF</code> were not present in version 
+  1.06 and earlier.
+</ul> <h4> TYPE <a name="zfln">zfln</a>,
+refer to the description of a magnetic field line segment </h4> <ul> <dl>
+<dt><code>      TYPE(<a href="#zpnt">ZPNT</a>) EQUAT</code>
+<dd><li>Geographic point which corresponds to the lowest magnetic field
+intensity along the field line</li>
+<dt><code>TYPE(<a href="#zgeo">ZGEO</a>) FOOTPN</code>
+<dd><li>Geographic position of the northern foot point of the magnetic field
+line</li>
+<dt><code>TYPE(<a href="#zgeo">ZGEO</a>) FOOTPS</code>
+<dd><li>Geographic position of the southern foot point of the magnetic field
+line</li>
+<dt><code>TYPE(<a href="#zvec">ZVEC</a>) DRIFT</code>
+<dd><li>Vector proportional to the drift velocity evaluated at the point 
+<code>EQUAT</code></li>
+<dt><code>REAL*8       DTDFT</code>
+<dd><li>Value proportional to the time need by a particle to drift to the
+next field line segment</li>  
+<dt><code>INTEGER*4    KWEST</code>
+<dd><li>Index of the western previous magnetic field line segment of the drift
+shell</li>
+<dt><code>INTEGER*4    KEAST</code>
+<dd><li>Index of the eastern next magnetic field line segment of the drift
+shell</li>
+<dt><code>TYPE(<a href="#zind">ZIND</a>) IND</code></code>
+<dd><li>Indices of the magnetic field line segment  
+</dl> </ul> <h4> TYPE <a name="zgeo">zgeo</a>,
+refer to a geographic location </h4> <ul> <dl>
+<dt><code>REAL*8       RADIUS</code>
+<dd><li> Geocentric radius in km </li>
+<dt><code>REAL*8       COLAT</code>
+<dd><li> Value of the co-latitude (90<sup>o</sup> - latitude) in degrees </li> 
+<dt><code>REAL*8       ELONG</code>
+<dd><li> Value of the longitude in degrees </li>
+</dl>
+When the TYPE <code>zgeo</code> refers to geodetic coordinates
+(e.g. in subroutine <a href="um535.html">UM535</a>), the argument 
+<code>RADIUS</code> corresponds to the geodetic altitude incremented by
+the mean Earth's radius (stored in the argument <code>RE</code> of the common 
+block <a href="uc160.html">UC160</a> and equal to 6371.2 km).
+ </ul> <h4> TYPE <a name="zimf">zimf</a>, 
+refer to a geomagnetic field model </h4> <ul> <dl> 
+<dt><code>CHARACTER*32 LABEL</code>
+<dd><li>Name of the geomagnetic field model</li>
+<dt><code>INTEGER*4    KINNER</code>
+<dd><li>Number of the geomagnetic field model</li>
+<dt><code>INTEGER*4    NORDER</code>
+<dd><li>Order of the spherical harmonic expansion increased by one</li>
+<dt><code>REAL*8       COEF(nx140,nx140)</code>
+<dd><li>Spherical harmonic expansion coefficients (<code>nx140</code> = 16)</li>
+<dt><code>REAL*8       COLAT</code>
+<dd><li>Co-latitude of the boreal dipole pole, in degrees</li>
+<dt><code>REAL*8       ELONG</code>
+<dd><li>East longitude of the boreal dipole pole, in degrees</li>
+<dt><code>REAL*8       GMMO</code>
+<dd><li>Moment of the magnetic dipole, in Gauss Re<sup>3</sup></li>
+<dt><code>REAL*8       TZERO</code>
+<dd><li>Base epoch of the model</li>
+<dt><code>REAL*8       EPOCH</code>
+<dd><li>Epoch of the geomagnetic field evaluation, in years</li>
+<dt><code>REAL*8       SAAROT</code>
+<dd><li>Longitude correction for the secular drift of the 
+South Atlantic Anomaly, in degrees</li>
+</dl> </ul> <h4> TYPE <a name="zind">zind</a>,
+refer to pointers into an array of TYPE zseg </h4> <ul> <dl>
+<dt><code>INTEGER*4    JBEG</code>
+<dd><li>Index of the first element of the field line segment  </li>
+<dt><code>INTEGER*4    JEND</code>
+<dd><li>Index of the last element of the field line segment</li>
+<dt><code>INTEGER*4    JMIRPN</code>
+<dd><li>Index of the northern mirror point</li>
+<dt><code>INTEGER*4    JMIRPS</code></code>
+<dd><li>Index of the southern mirror point</li>
+</dl> </ul> <h4> TYPE <a name="zlbl">zlbl</a>,
+refer to a magnetic drift shell </h4> <ul> <dl> 
+<dt><code>REAL*8       FINV</code>
+<dd><li>Value of the integral invariant <i>I</i></li>
+<dt><code>REAL*8       FBMP</code>
+<dd><li>Value of the magnetic field intensity at the mirror points</li>
+<dt><code>REAL*8       FKAUF</code>
+<dd><li>Value of the Kaufmann's adiabatic invariant <i>K</i></li>
+<dt><code>REAL*8       FLMI</code>
+<dd><li>Value of the McIlwain parameter <i>L</i> </li>
+<dt><code>REAL*8       FALP0</code>
+<dd><li>Value of the equatorial pitch angle </li>
+<dt><code>REAL*8       FPHI</code>
+<dd><li>Value of the third adiabatic invariant </li>
+<dt><code>REAL*8       FTIM</code></code>
+<dd><li>Not defined</li>
+<dt><code>      CHARACTER*1  LABEL</code>
+<dd><li>User's label of the drift shell</li>
+<dt><code>LOGICAL*1    LINV, LBMP, LKAUF, LLMI, LALP0, LPHI, LTIM</code>
+<dd><li>Booleans which validate <code>FINV, FBMP, FKAUF, FLMI, FALP0,
+FPHI, FTIM</code></li>
+</dl> </ul> <h4> TYPE <a name="zpnt">zpnt</a>,
+refer to a location on a magnetic field line </h4> <ul> <dl> 
+<dt><code>      TYPE(<a href="#zgeo">ZGEO</a>) COORD</code>
+<dd><li>Geographic position of the point</li>
+<dt><code>TYPE(<a href="#zvec">ZVEC</a>) B</code>
+<dd><li>Magnetic field vector at the point</li>
+<dt><code>REAL*8       RCURV</code></code>
+<dd><li>Radius of curvature of the magnetic field line at the point</li>
+</dl> </ul> <h4> TYPE <a name="zseg">zseg</a>,
+refer to an elementary segment of a magnetic field line segment </h4> <ul> <dl> 
+<dt><code>      TYPE(<a href="#zpnt">ZPNT</a>) BEG</code>
+<dd><li>Start location of the segment</li>
+<dt><code>REAL*8       ARCL</code>
+<dd><li>Arc length along the field line</li>
+<dt><code>REAL*8       CSALP</code>
+<dd><li>Cosine of the local pitch-angle</li>
+<dt><code>REAL*8       DTBND</code>
+<dd><li>Not defined</li>
+<dt><code>REAL*8       RKSTP(3)</code></code>
+<dd><li>Intermediate values of the magnetic field intensity obtained during the
+Runge-Kutta integration</li>
+</dl> </ul> <h4> TYPE <a name="zsun">zsun</a>,
+refer to the Sun location </h4> <ul> <dl>
+<dt><code>REAL*8       UTDEG</code>
+<dd><li>Universal Time in degrees</li>
+<dt><code>REAL*8       GHA</code>
+<dd><li>Greenwich angle of equinox in degrees</li>
+<dt><code>TYPE(<a href="#zxyz">ZXYZ</a>) DIR</code>
+<dd><li>Cartesian GEO direction of the Sun, normalized to unity</li>
+</dl> </ul> <h4> TYPE <a name="zvec">zvec</a>,
+refer to the spherical components of a vector </h4> <ul> <dl> 
+<dt><code>      REAL*8       DNRM</code>
+<dd><li>Norm of the vector</li>
+<dt><code>REAL*8       RHO</code>
+<dd><li>Radial component</li>
+<dt><code>REAL*8       THETA</code>
+<dd><li>Component along the co-latitude</li>
+<dt><code>REAL*8       PHI</code>
+<dd><li>Component along the longitude</li>
+</dl> </ul> <h6> Note </h6> <ul> 
+Both values of <code>DNRM</code>, <code>RHO</code>, <code>THETA</code>
+and <code>PHI</code> are expressed in the same units.  For example, they
+are all given in Gauss when they are used to characterize the magnetic 
+field vector.
+</ul> <h4> TYPE <a name="zxyz">zxyz</a>,
+refer to the cartesian components of a vector or to cartesian coordinates </h4> <ul> <dl> 
+<dt><code>      REAL*8       X, Y, Z</code>
+<dd><li>Values of the cartesian coordinates  </li>
+</dl> </ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="uc110.html">UC110</a>,
+      magnetic drift shell description<br> 
+      <a href="uc120.html">UC120</a>,
+      magnetic field line description<br> 
+      <a href="uc130.html">UC120</a>,
+      set of magnetic field line segments<br> 
+      <a href="uc140.html">UC140</a>,
+      magnetic field description<br> 
+      <a href="uc150.html">UC150</a>,
+      atmospheric model description<br>
+      <a href="uc170.html">UC170</a>, 
+      temporary magnetic field line
+</ul> <h2> <a name="examples"> Examples </a> </h2> <ul>
+      None
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

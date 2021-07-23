@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: bug02.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - Bug report
+   === --> 
+<!--meta name="Keywords" content="bug report"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      Bug Report
+</h1><h6>
+ [ <a href="#sign">Signature</a> 
+ | <a href="#diag">Diagnostic</a> 
+ | <a href="#solu">Solution</a> 
+ | <a href="#hist">History</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="sign"> Signature </a> </h2> <ul> 
+      R.02 - Erroneous behaviour of most of the external magnetic
+             field models
+</ul> <h2> <a name="diag"> Diagnostic </a> </h2> <ul>
+      An erroneous behaviour of the library occurs under some Unix
+      operating systems
+      with the external magnetic
+      field models:
+      <ul>
+       <li>Tsyganenko short [1987],
+       <li>Tsyganenko long [1987],
+       <li>Tsyganenko [1989], and
+       <li>Olson & Pfitzer quiet [1977].
+      </ul>
+      It has been detected by the comparison
+      of results obtained under HPUX and VMS with
+      the version <b>1.06</b> of the library.
+      <p>
+      The listed external magnetic
+      field models are implemented in the package 
+      <a href="ext530.html">EXT530</a> based on the
+      source code provided by the respective authors.
+      Unfortunately some subroutines make use of the
+      static property of the FORTRAN variables
+      to initialize variables only the first time
+      that the subroutine is called.
+      Under UNIX, the F77 compiler 
+      makes use sometimes  of dynamic variables by default, and
+      the FORTRAN statement <code>SAVE</code> has to
+      be used explicitely. <p>
+      The problem does not seem to appear under SunOS and DEC/OSF.
+</ul> <h2> <a name="solu"> Solution </a> </h2> <ul>
+      These external magnetic field models should not be
+      used with version 1.06 or earlier of the library.<p>
+      In the next versions, FORTRAN <code>SAVE</code> statements have been added
+      in the function <code>TKSI</code> and in
+      the subroutines <code>BXYZMU</code>, <code>DIPOLE</code>,
+      <code>INTERCON</code>, <code>R2_BIRK</code>,
+      <code>TSY87S</code>, <code>TSY87L</code> and
+      <code>TSY89</code>.       
+</ul> <h2> <a name="hist"> History </a> </h2> <ul>
+September 10, 1997 - Bug reported by D. Heynderickx and M. Kruglanski<br>
+September 16, 1997 - Bug fixed in version 1.07
+</ul> 
+<!-- +++ Navigation +++ -->
+  
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+

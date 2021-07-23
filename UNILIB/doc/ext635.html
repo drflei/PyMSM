@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- $Id: ext635.html 11 2015-07-31 18:30:01Z yves.christophe@aeronomie.be $ -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta name="mssmarttagspreventparsing" content="true" />
+    <link href="img/unilib_logo_16x16.png" rel="shortcut icon" type="image/gif" />
+    <link rel="stylesheet" href="print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>UNILIB</title>
+  </head>
+  <body>
+    <div id="topbar1"><h3 class="small">UNILIB</h3></div>
+    <div id="rightcolumn"><div id="content">
+      <hr>
+      <blockquote><b><font color=red>
+        This page essentially documents Unilib version 2.09.
+        It may be inaccurate and/or incomplete regarding newer releases!
+      </font></b></blockquote>
+      <hr>
+
+
+<!-- BEGIN OF MAIN CONTENT     inside div "rightcolumn/content" -->
+
+
+	<!-- === UNILIB Library - EXT635
+   === --> 
+<!--meta name="keywords" content="external subroutine,IRI,resources"-->
+<!-- End of Head, Begin of Body -->
+ <h1>
+      EXT635 
+</h1> <h6>
+ [ <a href="#name">Name</a> 
+ | <a href="#description">Description</a> 
+ | <a href="#synopsis">Synopsis</a> 
+ | <a href="#dependencies">Dependencies</a> 
+ | <a href="#seealso">See Also</a> 
+<!-- *** Navigation *** -->  
+] </h6> <h2> <a name="name"> Name </a> </h2> <ul>
+      Package EXT635 - International Reference Ionosphere IRI-90
+</ul>  <h2> <a name="description"> Description </a> </h2> <ul>
+     The International Reference Ionosphere (IRI) is the empirical reference 
+     model of ionospheric densities and temperatures (electrons and ions) 
+     recommended for international use by the Committee on Space Research 
+     (COSPAR) and the International Union of Radio Science (URSI). It was 
+     established in a world-wide collaboration starting in the late sixties. 
+     IRI is up-dated bi-yearly during special IRI workshops to 
+     incorporate newly available measurements. IRI is based on all the 
+     important ionospheric data sources including ground-based (ionosonde, 
+     absorption, incoherent scatter) and spacecraft (Alouette, ISIS, AE, 
+     AEROS, DE, rockets) measurements. IRI provides monthly mean values 
+     for magnetically quiet conditions at non-auroral latitudes in the 
+     altitude range 50km to 2000km. 
+     <p>
+     The IRI models are maintained by
+      <ul><address>
+      Dieter Bilitza 
+      (<a href="mailto:BILITZA@NSSDCA.GSFC.NASA.GOV">BILITZA@NSSDCA.GSFC.NASA.GOV</a>)<br>
+      NASA/GSFC, NSSDC code 633/HSTX, Greenbelt <br>
+       Maryland 20771 - USA <br>
+      </address></ul>
+     and may be retrieved from NSSDC's anonymous FTP site.
+     The model implemented in the UNILIB libray
+     is an addapted version of IRI-90. The code has been modified 
+     (but not the data sets) in order to retrieve CCIR and URSI data
+     from common blocks instead of ASCII files.
+     Since the original code does not include explicit declarations of 
+     arguments and internal variables, all the floating variables of 
+     the IRI-90 model have been also forced to type <code>REAL*4</code>.
+     <p>
+     Note that the package EXT635 was not present in version 1.05 and earlier
+     of the library.
+</ul> <h4> References </h4> <ul>
+      <li>K. Rawer, D. Bilitza and S. Ramakrishnan, <i>Goals and Status of 
+          the International Reference Ionosphere</i>, Rev.
+          Geophys. <b>16</b> (1978) 177-181
+      <li>D. Bilitza, K. Rawer, L. Bossy and T. Gulyaeva, <i>International 
+          Reference Ionosphere - Past, Present, Future</i>,
+          Adv. Space Res. <b>13</b> (1993) 3-23         
+</ul> <h2> <a name="synopsis"> Synopsis </a> </h2> <pre>    
+      LOGICAL*4      jf(12)
+      INTEGER*4      jmag, mmdd, dhour
+      REAL*4         alati, along, rz12, heibeg, heiend, heistp
+      REAL*4         outf(11,50), oarr(30)
+
+      CALL IRIS12 (jf, jmag, alati, along, rz12, mmdd, dhour,
+     :             heibeg, heiend, heistp, outf, oarr)
+</pre> <h2> <a name="dependencies"> Dependencies </a> </h2> <ul>
+      The different subroutines, functions, common blocks and block data
+      used by the subroutine <code>IRIS12</code> are listed
+      in the table below
+      <center> <table border=1 cellspacing=0 width="80%">
+        <tr><th colspan=3>Common blocks</th></tr>
+        <tr><td>ARGEXP </td><td>BLO10 </td><td>BLOCK1 </td></tr>
+        <tr><td>BLOCK2 </td><td>BLOCK3 </td><td>BLOCK4 </td></tr>
+        <tr><td>BLOCK5 </td><td>BLOCK6 </td><td>BLOCK7 </td></tr>
+        <tr><td>BLOCK8 </td><td>BLOTE </td><td>BLOTN </td></tr>
+        <tr><td>CCIR </td><td>CONST </td><td>URSI </td></tr>
+        <tr><th colspan=3>Subroutines</th></tr>
+        <tr><td>CIRA86 </td><td>F2OUT </td><td>FIELDG </td></tr>
+        <tr><td>GGM </td><td>INILAY </td><td>IONCOM </td></tr>
+        <tr><td>KOEFP1 </td><td>KOEFP2 </td><td>KOEFP3 </td></tr>
+        <tr><td>LNGLSN </td><td>LSKNM </td><td>MODA </td></tr>
+        <tr><td>RDHHE </td><td>REGFA1 </td><td>ROGUL </td></tr>
+        <tr><td>SOCO </td><td>SPHARM </td><td>SUFE </td></tr>
+        <tr><td>TAL </td><td>TEBA </td><td>VALGUL </td></tr>
+        <tr><th colspan=3>Functions</th></tr>
+        <tr><td>B0POL </td><td>D1LAY </td><td>D2LAY </td></tr>
+        <tr><td>DXE1N </td><td>EPLA </td><td>ELTE </td></tr>
+        <tr><td>EPST </td><td>EPSTEP </td><td>EPTR </td></tr>
+        <tr><td>FOEEDI </td><td>FOF1ED </td><td>GAMMA1 </td></tr>
+        <tr><td>HMF2ED </td><td>HPOL </td><td>RDNO </td></tr>
+        <tr><td>RLAY </td><td>RPID </td><td>TEDE </td></tr>
+        <tr><td>TEDER </td><td>TI </td><td>XE </td></tr>
+        <tr><td>XE1 </td><td>XE2 </td><td>XE2TO5 </td></tr>
+        <tr><td>XE3 </td><td>XE4 </td><td>XE5 </td></tr>
+        <tr><td>XE6 </td><td>XEN </td><td>XMDED </td></tr>
+        <tr><th colspan=3>Block Data</th></tr>
+        <tr><td>CCIRBD </td><td>URSIBD </td><td> </td></tr>
+      </table></center>
+</ul> <h2> <a name="seealso"> See also </a> </h2> <ul>
+      <a href="faq04.html">G.04</a> How to install the IRI model ? <br> 
+      <a href="http://ccmc.gsfc.nasa.gov/modelweb/" target="x">Catalog of Space Physics Model</a>
+</ul> 
+<!-- +++ Navigation +++ -->
+ 
+<!-- END OF MAIN CONTENT -->
+    </div></div>
+
+    <div id="leftcolumn"><div class="moduletable_menu">
+
+        <h3>UNILIB</h3>
+        <ul class="menu">
+          <li><a alt="Home" href="home.html">Home</a></li>
+          <li><a alt="TOC" href="toc.html">TOC</a></li>      
+          <li><a alt="Index" href="index.html">Index</a></li>
+          <li><a alt="FAQ" href="faq.html">FAQ</a></li>
+        </ul>
+
+        <h3>Links</h3>
+        <ul class="menu">
+          <li><a href="http://www.aeronomie.be/">BIRA-IASB</a></li>
+          <li><a href="http://www.spenvis.oma.be/">SPENVIS</a></li>
+        </ul>
+
+    </div></div>
+    <div id="footer"><div id="rightfooter">
+	    <div class="moduletable">Last update: $Date: 2015-07-31 19:30:01 +0100 (Fri, 31 Jul 2015) $</div>
+    </div></div>
+
+  </body>
+</html>
+
