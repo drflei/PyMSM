@@ -72,7 +72,7 @@ class PyMSM(object):
          Note: the lengthes of the first 3 inputs should match
         
         '''
-        self.cyears = ['1955','1960','1965','1970','1975','1980','1985','1990','1995','2000','2005','2010','2015']
+        self.cyears = ['1955','1960','1965','1970','1975','1980','1985','1990','1995','2000','2005','2010','2015','2020','2025']
         self.cuts = ['00','03','06','09','12','15','18','21']
         self.ckps = ['0','1','2','3','4','5','6','7','8','9','X']
         if rc == None:
@@ -97,7 +97,7 @@ class PyMSM(object):
             omni['Kp'] = np.array(kps,dtype='float64')       # set the kps to user specified values
             self.omni = omni
             self.kps = kps 
-            # get the Lms at actual positions, they wil be used for altitude scaling 
+            # get the Lms at actual positions, they will be used for altitude scaling 
             t_dic = ib.get_Lm(times,positions,90,'T89',omnivals=omni) # alternatively alpha=[90] 
             b_dic = ib.get_Bfield(times,coords,extMag='T89',omnivals=omni) 
         # 
@@ -137,7 +137,7 @@ class PyMSM(object):
         for i in range(len(self.times)):
             year = t_utc[i].year
             if year < 1955: year = 1955
-            if year > 2015: year = 2015
+            if year > 2025: year = 2025
             iy = int((year - 1955)/5)
             ir = (year - 1955)%5
             cyear = self.cyears [iy]
@@ -165,7 +165,7 @@ class PyMSM(object):
             w =(ir + (self.times[i].DOY + t_utc[i].hour/24.)/365.)/5. 
             # the next map at +5 years if required
             #
-            if 1955 < year < 2015 and w < 1.:
+            if 1955 < year < 2025 and w < 1.:
                 cyear = self.cyears [iy+1]
                 self.dbMgr.getMap(cyear,ckp,cut)
                 mkey = cyear+ckp+cut
@@ -305,126 +305,7 @@ class PyMSM(object):
         #
         return emlats    
     
-# import Spenvis
-# #
-# class SpenvisCSVFileHandler():
-#     '''
-#     classdocs
-#     This class allows to read/write Spenvis CSV file
-#     It make use of the C++_to_python interface Spenvis.so 
-#     '''
-#      
-#     def __init__(self):
-#         '''
-#         Constructor
-#         '''
-#         self.list_blocks=[]
-#          
-#     def ReadFile(self,file_name):
-#         theCSVCollection=Spenvis.SpenvisCSVCollection()
-#         self.list_blocks=[]
-#         if (not os.path.exists(file_name)):
-#             print("The CSV file that you want to open does not exist!") 
-#             return False
-#         list_CSV=theCSVCollection.ReadFile(file_name)
-#         for name in list_CSV:
-#             self.list_blocks+=[SpenvisCSVBlock(list_CSV[name])]
-#         return True
-#      
-#     def ReadSpenvisOrbitFile(self,file_name):
-#         aBool=self.ReadFile(file_name)
-#         if (not aBool):
-#             print("Problem when reading the file ", file_name)
-#             return None,None
-#         aBool=False
-#         if (len(self.list_blocks)==1):
-#             meta_var_bl1=self.list_blocks[0].MetaVariables
-#             if "MOD_ABB" in meta_var_bl1:
-#                 if (meta_var_bl1["MOD_ABB"]['values'][0].replace("'","")=="ORB"):
-#                     aBool=True
-#         if (not aBool):
-#             print("The file ", file_name, "is not a SPENVIS orbit file")
-#             return None,None
-#         orbit_data=self.list_blocks[0].Variables
-#         return orbit_data
-#      
-# class SpenvisCSVBlock():
-#     '''
-#     This class is copied from CIRSOS
-#       
-#     '''
-#      
-#     def __init__(self,aSpenvisBlock):
-#         '''
-#         Constructor
-#         ''' 
-#          
-#         #Get the variable names and characteristic
-#         ######################
-#         self.Comments=[]
-#         for i in range(aSpenvisBlock.GetNumTextLines()):
-#             self.Comments+=[aSpenvisBlock.GetComment(i)]
-#         #Get the meta variable
-#         ######################
-#         self.MetaVariables=dict()
-#          
-#         for i in range(aSpenvisBlock.GetNumMetaVariables()):
-#             name=aSpenvisBlock.GetMetaVariableName(i)
-#             line=aSpenvisBlock.GetMetaVarLine(name)
-#             words=line.split(",")
-#             new_words=[]
-#             ii=0
-#             while ii<len(words):
-#                 word=words[ii]
-#                 if (word[0] =="'" and word[-1]!="'"):
-#                     word+=","+words[ii+1]
-#                     ii+=1
-#                 new_words+=[word]   
-#                 ii+=1    
-#             ndim=int(new_words[1])
-#             values=[]
-#             if ndim >0:
-#                 for i in range(ndim):
-#                     values+=[float(new_words[2+i])]    
-#             else:
-#                 for i in range(abs(ndim)):
-#                     values+=[new_words[2+i]]        
-#                  
-#             self.MetaVariables[name]={"dim":ndim,"values":np.array(values)}
-#              
-#         #Get the variable names and characteristic
-#         ######################
-#         self.Variables=dict()
-#          
-#         nrows=aSpenvisBlock.GetNumDataLines()
-#         ncol=aSpenvisBlock.GetNumDataColumns()
-#         data=np.array([])
-#         if (nrows >0 and ncol>0):
-#             data=np.zeros((nrows,ncol))
-#         for i in range(aSpenvisBlock.GetNumVariables()):           
-#             line=aSpenvisBlock.GetVariableLine(i) 
-#             words=line.split(",")
-#             new_words=[]
-#             ii=0
-#             while ii<len(words):
-#                 word=words[ii]
-#                 if (word[0] =="'" and word[-1]!="'"):
-#                     word+=","+words[i+1]
-#                     ii+=1
-#                 new_words+=[word]   
-#                 ii+=1    
-#             ndim=int(new_words[2]) 
-#             name=  new_words[0].replace("'","") 
-#             data=np.array([])
-#             if (nrows >0 and ndim>0):
-#                 data=np.zeros((nrows,ndim))    
-#             for j in range(nrows):
-#                 data[j,:]=np.array(aSpenvisBlock.GetDataRecordForPython(name,j))
-#             if (ndim ==1):
-#                 data=np.reshape(data,nrows)
-#             self.Variables[name]={"dim":ndim,"desc":new_words[3],"unit":new_words[1],"data":data}
-             
-#
+
     def calculateRInv(self,B,L):
             '''
             calculte the invariant radial distance (R) and the magnetic latitude lambda based on the method of 
@@ -683,7 +564,7 @@ def main():
     N = 19*36 
     mapMgr = MapDB()
     times = np.empty(N,dtype='object')
-    kps = np.empty(N,dtype=np.int)
+    kps = np.empty(N,dtype=int)
 #     mjd = 55000.5
 #     for i in range(N):
 #         mjd += 0.00000001*i
@@ -698,7 +579,8 @@ def main():
             coords.append([alti, i, j ]) 
     t = spt.Ticktock(times)
     y = spc.Coords(coords,'GDZ','sph') 
-    pm = PyMSM(t,y,kps)
+    pm = PyMSM(t,y)
+    # pm = PyMSM(t,y,kps)
         
 #     results = ib.get_Lm(t,y,90,'T89') # alternatively alpha=[90]
 #     print (results.pop('Lm'))  
