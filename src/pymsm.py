@@ -1,14 +1,17 @@
 import os, sys
 from math import sqrt, acos, cos, pow, log10
+import datetime
 import numpy as np
-#from astropy.units import centiyear
-#from _pylief import NONE
-#from statsmodels.formula.api import wls
-#from astropy.wcs.docstrings import lat
-import spacepy.time as spt
-import spacepy.coordinates as spc
-import spacepy.irbempy as ib
-import spacepy.omni as om
+from IRBEM import MagFields, Coords
+
+# #from astropy.units import centiyear
+# #from _pylief import NONE
+# #from statsmodels.formula.api import wls
+# #from astropy.wcs.docstrings import lat
+# import spacepy.time as spt
+# import spacepy.coordinates as spc
+# import spacepy.irbempy as ib
+# import spacepy.omni as om
 
 # map size
 nlon = 73
@@ -39,7 +42,7 @@ class MapDB():
         '''
         tag = year+kp+ut
         if tag not in MapDB.maps:
-            file = "./MAPS/"+year+"/AVKP"+kp+"T"+ut+".AVG"
+            file = "../MAPS/"+year+"/AVKP"+kp+"T"+ut+".AVG"
             print(file)
             MapDB.maps[tag] = self.readMap(file)
         return MapDB.maps[tag]    
@@ -59,68 +62,67 @@ class MapDB():
             print(e, sys.stderr)
             
 class PyMSM(object):
-    def __init__(self, times, positions, kps=None, rc=None):
+    def __init__(self, times, positions, kps, rc=None):
         '''
-        main method to obtain the vertical rigidity for a given time and location
         
         Inputs:
-         times: a SpacyPy Ticktock instance
-         positions: a SpacePy Coords instance
-         kps: a list of kps
-         rc: rigidity cut offs for which the transmission factor to be calculated. In a list or numpy 1D array 
+         times: 1D numpy arrary of date and time in datetime.datetime format
+         positions: 2D numpy array locations corresponding to the times in GDZ coordinates, e.g., [[alt0, lat0, lon0],[alt1, lat1, lon1],...]
+         kps: 1D numpy array of Kp indices, corresponding to the times  
+         rc: 1D numpy array of rigidity cut offs, in GV, for which the transmission factor to be calculated. This is optional, if not specified, the defaults are:
+                         [0.1, 0.2, 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 5.5, \
+                          6., 6.5, 7., 7.5, 8., 9., 10., 11., 12., 13, 14., 15., 16., 17., \
+                        20., 25., 20., 30., 40., 50., 60.]
          
-         Note: the lengthes of the first 3 inputs should match
+         Note: the length of the first 3 inputs should match!
         
         '''
+        self.times = times
+        self.model = MagFields(options = [0,30,0,0,0], kext=4, verbose = False)
         self.cyears = ['1955','1960','1965','1970','1975','1980','1985','1990','1995','2000','2005','2010','2015','2020','2025']
         self.cuts = ['00','03','06','09','12','15','18','21']
         self.ckps = ['0','1','2','3','4','5','6','7','8','9','X']
-        if rc == None:
-            # The rigidity values to be used for calculating the transmission function
-            self.rc = [0.1, 0.2, 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 5.5, \
-                       6., 6.5, 7., 7.5, 8., 9., 10., 11., 12., 13, 14., 15., 16., 17., \
-                       20., 25., 20., 30., 40., 50., 60.]
-        else:
-            self.rc = rc
-        #    
-        self.times = times
-        positions.ticks = times  # need to set the ticks before convert
-        #
-        omni = om.get_omni(times)  # need these to set the external field conditions
-        self.coords = positions.convert('GDZ','sph')
+        self.kps = kps
         try:
-            if kps == None:
-                self.kps=omni['Kp'].astype(int)
-                t_dic = ib.get_Lm(times,positions,90,'T89') # alternatively alpha=[90]
-                b_dic = ib.get_Bfield(self.times,self.coords,extMag='T89')
+            if rc == None:
+                # The rigidity values to be used for calculating the transmission function
+                self.rc = [0.1, 0.2, 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 5.5, \
+                           6., 6.5, 7., 7.5, 8., 9., 10., 11., 12., 13, 14., 15., 16., 17., \
+                           20., 25., 20., 30., 40., 50., 60.]
         except ValueError:
-            omni['Kp'] = np.array(kps,dtype='float64')       # set the kps to user specified values
-            self.omni = omni
-            self.kps = kps 
-            # get the Lms at actual positions, they will be used for altitude scaling 
-            t_dic = ib.get_Lm(times,positions,90,'T89',omnivals=omni) # alternatively alpha=[90] 
-            b_dic = ib.get_Bfield(times,coords,extMag='T89',omnivals=omni) 
-        # 
-        self.lm = np.abs(t_dic['Lm'].flatten())
-        self.bm = b_dic['Blocal'].flatten()
-        
+            self.rc = rc
+        #  positions are in  GDZ 
+        self.positions = Coords().coords_transform(times, positions, 'GDZ', 'GDZ')
+        self.radius = Coords().coords_transform(times, self.positions, 'GDZ', 'RLL')[:,0]
+        #
+        self.lla = {}
+        self.lla['x1'] = self.positions[:,0]
+        self.lla['x2'] = self.positions[:,1]
+        self.lla['x3'] = self.positions[:,2]
+        self.lla['dateTime'] = times
+        self.maginput = {'Kp':kps*10.}
+        self.model.make_lstar(self.lla, self.maginput)
+        # the (B,L) for the inputs times and positions
+        self.lm = np.abs(self.model.make_lstar_output['Lm'])
+        self.bm = np.abs(self.model.make_lstar_output['blocal'])        
         #
         self.dbMgr = MapDB()
     
     def getTransmissionFunctions(self):
         '''
+        Main method to obtain the vertical rigidity for the given times and locations ...
+        
         Return: 
-         TF: the  
+         LMs: the   
         '''
-        TF = []
         # first obtain the interpolated vertical cutoffs
         Rcv = self.getRc()
         # 2nd get the magnetic latitude, ether using the getEMLat() or calculateRInv method
         Mlats = self.getEMLat()
         # 3rd 
         TF = self.getTransfact(Mlats, Rcv)
-        # 4th get the Earth shadowing factors
-        ES = self.facshadow((self.coords.radi*1000.+self.coords.Re)/self.coords.Re)  # Don't know why Re is in metter!
+        # 4th get the Earth shadowing factors       
+        ES = self.facshadow(self.radius)  
         #
         return self.lm, self.bm, Mlats, Rcv, ES, TF
         
@@ -129,12 +131,13 @@ class PyMSM(object):
                
         ''' 
 
-        t_utc = self.times.UTC
+        t_utc = self.lla['dateTime']
 
         rclist = []
+        local = {}
         #
                      
-        for i in range(len(self.times)):
+        for i in range(len(t_utc)):
             year = t_utc[i].year
             if year < 1955: year = 1955
             if year > 2025: year = 2025
@@ -148,32 +151,28 @@ class PyMSM(object):
             ckp = self.ckps[self.kps[i]]
             self.dbMgr.getMap(cyear,ckp,cut)
             mkey = cyear+ckp+cut
-#             isotime = [cyear+'-01-01T'+cut+':00:00']  # time-date of the map
-            #atime = spt.Ticktock(['2002-02-02T12:00:00'],'ISO')
-            atime = spt.Ticktock(datetime.datetime(year,1,1),'UTC')
-            #y = spc.Coords([[3,0,0],[2,0,0],[1,0,0]],'GEO','car')
-            aposi = self.coords[i]
-            aposi.radi = [450.] # at 450 km altitudes coords are in GDZ
-            aomni = om.get_omni(atime)
-            aomni['Kp'] =[self.kps[i]]
-            t_dic = ib.get_Lm(atime,aposi,90,'T89',omnivals=aomni)
-            lm = abs(t_dic['Lm'].flatten()[0])
-            lon = aposi.long
-            lat = aposi.lati 
-            rc = self.getRC450km(mkey,lon,lat,lm)
+            #  in first map 
+            local['x1'] = 450.
+            local['x2'] = self.lla['x2'][i]
+            local['x3'] = self.lla['x3'][i]
+            local['dateTime'] = datetime.datetime(int(cyear),1,1,int(cut)).isoformat()
+            maginput = {'Kp':self.maginput['Kp'][i]}
+            self.model.make_lstar(local, maginput)
+            lm = np.abs(self.model.make_lstar_output['Lm'])
+            rc = self.getRC450km(mkey, self.lla['x2'][i], self.lla['x3'][i],lm)
             #
-            w =(ir + (self.times[i].DOY + t_utc[i].hour/24.)/365.)/5. 
+            w =(ir + (t_utc[i].timetuple().tm_yday + (t_utc[i].hour + t_utc[i].minute/60.)/24.)/365.)/5. 
             # the next map at +5 years if required
             #
             if 1955 < year < 2025 and w < 1.:
                 cyear = self.cyears [iy+1]
                 self.dbMgr.getMap(cyear,ckp,cut)
                 mkey = cyear+ckp+cut
-#                 isotime = [cyear+'-01-01T'+cut+':00:00']  # time-date of the map
-                atime = spt.Ticktock(datetime.datetime(int(cyear),1,1),'UTC')
-                t_dic = ib.get_Lm(atime,aposi,90,'T89',omnivals=aomni)
-                lm1 = abs(t_dic['Lm'].flatten()[0])
-                rc1 = self.getRC450km(mkey,lon,lat,lm1)
+                # in 2nd map  
+                local['dateTime'] =  datetime.datetime(int(cyear),1,1,int(cut)).isoformat()  
+                self.model.make_lstar(local, maginput)
+                lm1 = np.abs(self.model.make_lstar_output['Lm'])
+                rc1 = self.getRC450km(mkey,self.lla['x2'][i], self.lla['x3'][i],lm1)
                 lm = lm*w + (1.- w)*lm1
                 rc = rc*w + (1.- w)*rc1 
             #    
@@ -199,7 +198,7 @@ class PyMSM(object):
                This "ad-hoc" exponential function is not going to be reliable
                beyond geosynchronous distances."
             '''
-            radist = aposi.radi[0]/aposi.Re+1.                    
+            radist = self.radius[i]+1.                    
             rcorr = log10(radist*radist)/14.   # Don used 11. but 14. is better
             rcr -= rcorr 
             if rcr < 0.: rcr = 0.
@@ -210,7 +209,7 @@ class PyMSM(object):
             #
             rclist.append(rct)
             
-        return rclist          
+        return np.array(rclist)          
             
     def getRC450km(self,mkey,lon,lat,lm):
         '''
@@ -268,7 +267,7 @@ class PyMSM(object):
 
     def getEMLat(self):
         '''    
-        calculate the equivalent magnetic latitude of the given locations using SpacePy
+        calculate the equivalent magnetic latitude of the given locations 
     
             Get Corrected geomagnetic latitude (GMLATC) at sub-satellite point
             Then, get Invariant latitude at satellite position
@@ -278,21 +277,16 @@ class PyMSM(object):
         Inputs:
             
         Returns:
-            Emlats: list of the equivalent magnetic latitudes in radians
+            Emlats: np.array of the equivalent magnetic latitudes in radians
         ''' 
         # calculate the corrected magnetic latitude
-        # to to reset the altitudes = Re    
-        radia = np.empty(len(self.times))
-        radia.fill (self.coords.Re)
-        radi_old = self.coords.radi
-        self.coords.radi = radia
+        # need reset the altitudes = Re    
+
         #
-        # GDZ -> MAG
-        mpos = ib.coord_trans(self.coords,'MAG','sph')
-        # restore the radi in coords
-        self.coords.radi = radi_old      
+        # GEO -> MAG ->sph
+        mpos = Coords().coords_transform(self.times, self.positions, 'GEO', 'MAG')
+        mpos = Coords().coords_transform(self.times, self.positions, 'MAG', 'RLL')
         
-        #
         # mpos[:,1] are the magnetic latitude in degrees. Note this is not the same as 
         # the corrected geomagnetic latitude, but the difference should be small
         gmlatcr = mpos[:,1]/57.2957795 # convert to radians
@@ -303,7 +297,7 @@ class PyMSM(object):
             if abs(gmlatcr[i])< abs(glmdar):  glmdar = abs(gmlatcr[i])
             emlats.append(glmdar)
         #
-        return emlats    
+        return np.array(emlats)    
     
 
     def calculateRInv(self,B,L):
@@ -313,6 +307,8 @@ class PyMSM(object):
             "Roberts, C. S. (1964), Coordinates for the study of particles trapped in
             the Earth’s magnetic field: A method of converting from B, L to R, l
             coordinates, J. Geophys. Res., 69, 5089-- 5090."
+            
+            Not used at the moment, Need to compare lambda vs emlats above!
             
             Inputs: 
                 B, L: in numpy 1D arrays  
@@ -494,103 +490,37 @@ def plotscatter(x,y,xtit='x-axis',ytit='y-axis',title='x-y scatter plot'):
     plt.xscale('log')
     plt.show()
 
-def test1():
-    '''
-    This is s test of the spacepy.time module
-    
-    Spacepy.time is not working as expected, i.e., 'ISO', option is not working as expected.
-    '''
-    cyear ='2005'
-    cut = '12'
-#    isotime = [cyear+'-01-01T'+cut+':00:00.000000']  # time-date of the map
-    # case 1 - iso 
-    try: 
-        atime = spt.Ticktock(['2002-02-02T12:00:00.000000'],'ISO')
-        print('case1 - ',atime.getDOY())
-    except:
-        pass
-    # case 2 - d-m-y
-    try:
-        atime = spt.Ticktock(['01-01-2013'], lambda x: datetime.datetime.strptime(x, '%d-%m-%Y'))
-        print('case2 - ',atime.getDOY())
-    except:
-        pass
-    # case 3 - mjd 
-    try: 
-        atime = spt.Ticktock([55100.2], 'MJD')
-        print('case3 - ',atime.getDOY())
-    except:
-        print ('test1 failed!')
-        sys.exit()
-
-#    atime = spt.Ticktock(isotime)
-    aposi = spc.Coords([450,22,351],'GDZ','sph')
-    aomni = om.get_omni(atime)
-    aomni['Kp'] =[3.]
-    try:
-        t_dic = ib.get_Lm(atime,aposi,90,'T89',omnivals=bomni)
-    except:
-        t_dic = ib.get_Lm(atime,aposi,90,'T89')
-    lm = abs(t_dic['Lm'].flatten()[0])
-    print(lm,'Test1 completed!')
-    #
-    N = 11*1 
-    times = np.empty(N,dtype='object')
-    kps = np.empty(N,dtype=np.int)
-    mjd = 55000.5
-    for i in range(N):
-        mjd += 0.00000001*i
-        times[i] = mjd  
-#    times.fill('2019-02-02T12:00:00')
-    kps.fill(1)      
-    coords =[]
-    alti = 1000.
-    for i in range(-90,91,18): 
-        for j in range(0,360,360):
-            coords.append([alti, i, j ]) 
-    t = spt.Ticktock(times,'MJD')
-    y = spc.Coords(coords,'GDZ','sph') 
-    aomni = om.get_omni(t)
-    #aomni['Kp'] =kps
-    t_dic = ib.get_Lm(t,y,90,'T89',omnivals=aomni)
-#    t_dic = ib.get_Lm(t,y,90,'T89')
-    print (np.nan_to_num(np.abs(t_dic.pop('Lm')),nan=30.)) 
-
-    
+ 
 def main():
     '''
 
     '''
-    N = 19*36 
+    N = 19*37
+    res = 10  # grid size
+#
     mapMgr = MapDB()
-    times = np.empty(N,dtype='object')
+#
     kps = np.empty(N,dtype=int)
-#     mjd = 55000.5
-#     for i in range(N):
-#         mjd += 0.00000001*i
-#         times[i] = mjd  
-    times.fill('2002-02-02T12:00:00')
     kps.fill(1)
-#       
-    coords =[]
-    alti = 1000.
-    for i in range(0,91,10): 
-        for j in range(0,360,10):
-            coords.append([alti, i, j ]) 
-    t = spt.Ticktock(times)
-    y = spc.Coords(coords,'GDZ','sph') 
-    pm = PyMSM(t,y)
-    # pm = PyMSM(t,y,kps)
-        
-#     results = ib.get_Lm(t,y,90,'T89') # alternatively alpha=[90]
-#     print (results.pop('Lm'))  
-#     t = spt.Ticktock(['2002-02-02T12:00:00','2012-02-02T12:00:00','2019-02-02T12:00:00'])
-#     t = spt.Ticktock(['2012-02-02T12:00:00','2012-02-02T12:00:00','2012-02-02T12:00:00'])
-#     y = spc.Coords([[1000,45,0],[1000,-45,90],[500,45,-100]],'GDZ','sph')
-#     kp = [0,1,2]
-#     rc = [0., 0.2, 1, 10., 30.]
+    # rc = [0.1, 0.2, 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 5.5, \
+    #   6., 6.5, 7., 7.5, 8., 9., 10., 11., 12., 13, 14., 15., 16., 17., \
+    #   20., 25., 20., 30., 40., 50., 60.] 
+#
+    times = np.empty(N,dtype='object')   
+    #dat = datetime.datetime(2012,7,1,12,0,0)
+    dat = datetime.datetime.fromisoformat('2012-07-01T12:00:00')
     
-#     pm = PyMSM(t,y, kp,rc)
+    times.fill(dat)
+#      
+    coord = []
+    alti = 500.
+    for i in range(90,-100,-res): 
+        for j in range(0,370,res):
+            coord.append([alti,i,j])  # [alti, lati, longi]
+
+#  
+    pm = PyMSM(times,np.array(coord),kps)
+
 
     print (pm.getTransmissionFunctions())
     print ('completed')
