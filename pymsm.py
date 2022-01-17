@@ -1,25 +1,9 @@
 import os, sys
-from math import sqrt, acos, cos, pow, log10
+from math import sqrt, acos, asin, cos, pow, log10
 import datetime
 import numpy as np
+
 from IRBEM import MagFields, Coords
-
-# #from astropy.units import centiyear
-# #from _pylief import NONE
-# #from statsmodels.formula.api import wls
-# #from astropy.wcs.docstrings import lat
-# import spacepy.time as spt
-# import spacepy.coordinates as spc
-# import spacepy.irbempy as ib
-# import spacepy.omni as om
-
-# map size
-nlon = 73
-nlat = 37
-ndata = nlon*nlat
-# make up the grid
-xi = np.linspace(0, 365, 73)    # X grid
-yi = np.linspace(90, -95, 37)   # Y grid
 
     
 class MapDB():
@@ -40,22 +24,25 @@ class MapDB():
             kp: string
             ut: string
         '''
+        currentdir = os.path.dirname(os.path.realpath(__file__))
         tag = year+kp+ut
         if tag not in MapDB.maps:
-            file = "../MAPS/"+year+"/AVKP"+kp+"T"+ut+".AVG"
+            file = currentdir+"/MAPS/"+year+"/AVKP"+kp+"T"+ut+".AVG"
             print(file)
             MapDB.maps[tag] = self.readMap(file)
-        return MapDB.maps[tag]    
+        return MapDB.maps[tag]  
     
     def readMap(self, file):
         '''
-        read in the map file
+        read in the map file:
+         nlat = 37, nlon = 73
+         col-3 is the Lm, and col-5 is the Rc
          
         '''
         try:
             lm, rc = np.loadtxt(file,skiprows=0,usecols = (3,5),unpack=True)
-            lm = lm.reshape((nlat,nlon))
-            rc = rc.reshape((nlat,nlon))             
+            lm = lm.reshape((37,73)).transpose()
+            rc = rc.reshape((37,73)).transpose()             
 #            return lm.transpose(),rc.transpose()
             return lm,rc,rc*lm**2
         except Exception as e:
@@ -77,8 +64,6 @@ class PyMSM(object):
          Note: the length of the first 3 inputs should match!
         
         '''
-        self.times = times
-        self.model = MagFields(options = [0,30,0,0,0], kext=4, verbose = False)
         self.cyears = ['1955','1960','1965','1970','1975','1980','1985','1990','1995','2000','2005','2010','2015','2020','2025']
         self.cuts = ['00','03','06','09','12','15','18','21']
         self.ckps = ['0','1','2','3','4','5','6','7','8','9','X']
@@ -91,15 +76,20 @@ class PyMSM(object):
                            20., 25., 20., 30., 40., 50., 60.]
         except ValueError:
             self.rc = rc
+        t = []
+        for tm in times:
+            t.append(datetime.datetime.fromisoformat(tm))
+        self.times = t
+        self.model = MagFields(options = [0,30,0,0,0], kext=4, verbose = False)
         #  positions are in  GDZ 
-        self.positions = Coords().coords_transform(times, positions, 'GDZ', 'GDZ')
-        self.radius = Coords().coords_transform(times, self.positions, 'GDZ', 'RLL')[:,0]
+        self.coords = Coords().coords_transform(times, positions, 'GDZ', 'GDZ')
+        self.radius = Coords().coords_transform(times, self.coords, 'GDZ', 'RLL')[:,0]
         #
         self.lla = {}
-        self.lla['x1'] = self.positions[:,0]
-        self.lla['x2'] = self.positions[:,1]
-        self.lla['x3'] = self.positions[:,2]
-        self.lla['dateTime'] = times
+        self.lla['x1'] = self.coords[:,0]
+        self.lla['x2'] = self.coords[:,1]
+        self.lla['x3'] = self.coords[:,2]
+        self.lla['dateTime'] = self.times
         self.maginput = {'Kp':kps*10.}
         self.model.make_lstar(self.lla, self.maginput)
         # the (B,L) for the inputs times and positions
@@ -110,10 +100,13 @@ class PyMSM(object):
     
     def getTransmissionFunctions(self):
         '''
-        Main method to obtain the vertical rigidity for the given times and locations ...
+        Return all relevant results for the specified (times, locations) series:
+        Lm: the McIlwain's L-parameter, in a list
+        Bm: the magnetic field intensity at the mirror point, in a list
+        Mlat: the magnetic latitude, in a list
+        ES: the Earth's shadowing factor, in a list
+        TF: the transmission function, in 2D array [len(times) x len(rc)]. The default rc is of the size 34.  
         
-        Return: 
-         LMs: the   
         '''
         # first obtain the interpolated vertical cutoffs
         Rcv = self.getRc()
@@ -128,7 +121,12 @@ class PyMSM(object):
         
     def getRc(self):
         '''
-               
+        Internal function for calculating the vertical cutoff rigidities for the specified series of (times, locations)
+        
+        Return:
+        
+        Rcv: a list of the vertical cutoff rigidity in units of GV 
+                       
         ''' 
 
         t_utc = self.lla['dateTime']
@@ -227,8 +225,7 @@ class PyMSM(object):
         '''
         # get the left-top box corner idxs
         i, j = self.getGridIdx(lon, lat)
-        #get the weights
-        wl,wr,wt,wb = self.getWeights(lon,lat)
+
         # get the Lm and Rc from the maps
         # left-top corner
         rclm_LT = self.dbMgr.maps[mkey][2][i,j]
@@ -252,17 +249,23 @@ class PyMSM(object):
     def getWeights(self,lon,lat):
         
         # weights in longitude
-        wl = (lon%5)/5. # left side of the box 
-        wr = 1.0 - wl # right side of the box
+        wr = (lon%5)/5. # left side of the box 
+        wl = 1.0 - wr # right side of the box
         # weights in latitude
-        wb = (-lat%5)/5. # bottom side of the box 
-        wt = 1. - wb 
+        wt = ((lat+90)%5)/5. # top side of the box 
+        wb = 1. - wt 
+        if lat == 90.:
+            wt = 1.
+            wb = 0.
         return wl,wr, wt, wb
         
               
     def getGridIdx(self,lon, lat):
         ix = int(lon/5)
-        iy = int(18 -lat/5)
+        if ix > 71: ix = 0
+        iy = int(18 + lat/5)
+        if iy < 0: iy = 0
+        if iy > 35: iy =35
         return ix, iy 
 
     def getEMLat(self):
@@ -280,16 +283,25 @@ class PyMSM(object):
             Emlats: np.array of the equivalent magnetic latitudes in radians
         ''' 
         # calculate the corrected magnetic latitude
-        # need reset the altitudes = Re    
-
+        # # need reset the altitudes = 0    
+        # radia = np.empty(len(self.times))
+        # radia.fill (0.)
+        # radi_old = self.coords.radi
+        # self.coords.radi = radia
         #
-        # GEO -> MAG ->sph
-        mpos = Coords().coords_transform(self.times, self.positions, 'GEO', 'MAG')
-        mpos = Coords().coords_transform(self.times, self.positions, 'MAG', 'RLL')
+        # GDZ -> MAG ->sph
+        mpos = Coords().coords_transform(self.times, self.coords, 'GDZ', 'MAG')
+        #mpos = Coords().coords_transform(self.times, mpos, 'MAG', 'RLL')
+        # restore the radi in coords
+        # self.coords.radi = radi_old
         
-        # mpos[:,1] are the magnetic latitude in degrees. Note this is not the same as 
-        # the corrected geomagnetic latitude, but the difference should be small
-        gmlatcr = mpos[:,1]/57.2957795 # convert to radians
+        #      
+        #   
+        # mpos are in Cardician coordinates  # convert to radians
+        gmlatcr = []
+        for mp in mpos:
+            r = sqrt(mp[0]*mp[0]+mp[1]*mp[1]+mp[2]*mp[2])
+            gmlatcr.append(asin(mp[2]/r))
         emlats = []
         for i in range(len(self.lm)):
             glmdar = 0.0
@@ -297,7 +309,7 @@ class PyMSM(object):
             if abs(gmlatcr[i])< abs(glmdar):  glmdar = abs(gmlatcr[i])
             emlats.append(glmdar)
         #
-        return np.array(emlats)    
+        return emlats    
     
 
     def calculateRInv(self,B,L):
@@ -407,127 +419,3 @@ class PyMSM(object):
         return fac
                  
         
-def plotmap(zi):
-    
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from matplotlib.colors import LogNorm
-    
-    plt.subplot(aspect=1, title='Global_map', ylim=[-90, 90], xlim=[0, 360])
-    pc = plt.pcolor(xi, yi, zi, norm=LogNorm(vmin=1e-4, vmax=1e2))
-    cs = plt.contour(xi, yi, zi, np.logspace(-5, 2, 8), colors='pink', linewidth=0.5, linesytle='dashed')
-    plt.clabel(cs, inline=1)
-
-    plt.colorbar(pc)
-    plt.show()
-
-    #plt.savefig('plot_density_meridian.png')#
-    
-def plotmap_b(zi):
-    import sys 
-    from mpl_toolkits.basemap import Basemap
-    
-    import matplotlib as mpl
-    import matplotlib.pyplot as plt
-    #from matplotlib.mlab import griddata
-
-    # create figure, axes instances.
-    fig = plt.figure()
-    ax = fig.add_axes([0.05,0.05,0.9,0.9])
-    # create Basemap instance for Robinson projection.
-    # coastlines not used, so resolution set to None to skip
-    # continent processing (this speeds things up a bit)
-    m = Basemap(projection='robin',lon_0=0.0,resolution=None)
-    # compute map projection coordinates of grid.
-    x, y = m(xi, yi)
-    # draw line around map projection limb.
-    # color background of map projection region.
-    # missing values over land will show up this color.
-    m.drawmapboundary(fill_color='0.1')
-
-    mycmap=mpl.cm.jet
-    #mycmap.set_clim(0.,1.5)
-    cmax = zi.max()
-    #if cmax > 1.0: cmax = 1.0
-    mynorm = mpl.colors.Normalize(vmin=0.,vmax=cmax)
-    im1 = m.pcolor(x,y,zi,cmap=mycmap, norm=mynorm)
-    #im2 = m.pcolor(x,y,ice,shading='flat',cmap=plt.cm.gist_gray)
-    # draw parallels and meridians
-    m.drawparallels(np.arange(-90,90,30),labels=[1,1,0,1])
-    m.drawmeridians(np.arange(-180,180.,90.),labels=[1,1,0,1] )
-    # add colorbar
-    cb = m.colorbar(im1,"bottom", size="5%", pad="6%")
-    # add a title.
-    ax.set_title(' Map for file: %s'%("Global Map"))
-    plt.show()
-
-def plotmap_c(zi,Title="Global Map"):    
-
-    import matplotlib.pyplot as plt
-    
-    # contour the gridded data, plotting dots at the nonuniform data points.
-    plt.figure(figsize=(11,7))
-    plt.subplots_adjust(right=1.0)
-    CS = plt.contour(xi,yi,zi,20,linewidths=0.5,colors='k')
-    plt.clabel(CS, inline=1, fontsize=10)
-    CS = plt.contourf(xi,yi,zi,20,cmap=plt.cm.rainbow,
-                  vmax=abs(zi).max(), vmin=-abs(zi).max())
-    plt.colorbar() # draw colorbar
-    plt.xlabel("Longitude [Deg]")
-    plt.ylabel("Latitude [Deg]")
-    plt.title(Title)
-    plt.show()    
-    #plt.savefig('rigidity_map.png')#
-    
-def plotscatter(x,y,xtit='x-axis',ytit='y-axis',title='x-y scatter plot'):
-    import matplotlib.pyplot as plt
-    plt.style.use('seaborn-whitegrid')
-    plt.figure(figsize=(11,7))
-    plt.plot(x, y, '.', color='black')
-    plt.xlabel(xtit)
-    plt.ylabel(ytit)
-    plt.title(title)
-    plt.xscale('log')
-    plt.show()
-
- 
-def main():
-    '''
-
-    '''
-    N = 19*37
-    res = 10  # grid size
-#
-    mapMgr = MapDB()
-#
-    kps = np.empty(N,dtype=int)
-    kps.fill(1)
-    # rc = [0.1, 0.2, 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 5.5, \
-    #   6., 6.5, 7., 7.5, 8., 9., 10., 11., 12., 13, 14., 15., 16., 17., \
-    #   20., 25., 20., 30., 40., 50., 60.] 
-#
-    times = np.empty(N,dtype='object')   
-    #dat = datetime.datetime(2012,7,1,12,0,0)
-    dat = datetime.datetime.fromisoformat('2012-07-01T12:00:00')
-    
-    times.fill(dat)
-#      
-    coord = []
-    alti = 500.
-    for i in range(90,-100,-res): 
-        for j in range(0,370,res):
-            coord.append([alti,i,j])  # [alti, lati, longi]
-
-#  
-    pm = PyMSM(times,np.array(coord),kps)
-
-
-    print (pm.getTransmissionFunctions())
-    print ('completed')
-    
-#    lm, rc, rclm2 = mapMgr.getMap('2000','9','12')
-#    plotscatter(lm,rc)
-#    plotmap_c(rc)
-
-if __name__ == '__main__':
-    main() 
