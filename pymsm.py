@@ -10,23 +10,6 @@ import spacepy.coordinates as spc
 import spacepy.irbempy as ib
 import spacepy.omni as om
 import datetime
-
-# map size
-nlon = 73
-nlat = 37
-ndata = nlon*nlat
-# make up the grid
-xi = []
-yi = []
-for j in range(90,-95,-5):   # Y grid
-    for i in range(0, 365, 5):    # X grid
-        yi.append(j)
-        xi.append(i)
-xi = np.array(xi).reshape(nlat,nlon)
-yi = np.array(yi).reshape(nlat,nlon)
-xi = xi.transpose()
-yi = yi.transpose()
-
     
 class MapDB():
     # all instancs share the same map dict!
@@ -55,13 +38,15 @@ class MapDB():
     
     def readMap(self, file):
         '''
-        read in the map file
+        read in the map file:
+         nlat = 37, nlon = 73
+         col-3 is the Lm, and col-5 is the Rc
          
         '''
         try:
             lm, rc = np.loadtxt(file,skiprows=0,usecols = (3,5),unpack=True)
-            lm = (lm.reshape((nlat,nlon))).transpose()
-            rc = (rc.reshape((nlat,nlon))).transpose()             
+            lm = (lm.reshape((37,73))).transpose()
+            rc = (rc.reshape((37,73))).transpose()             
 #            return lm.transpose(),rc.transpose()
             return lm,rc,rc*lm**2
         except Exception as e:
@@ -70,7 +55,7 @@ class MapDB():
 class PyMSM(object):
     def __init__(self, times, positions, kps=None, rc=None):
         '''
-        main method to obtain the vertical rigidity for a given time and location
+        initialisation required to obtain the vertical rigidity for a given series of time and location
         
         Inputs:
          times: a SpacyPy Ticktock instance
@@ -105,7 +90,7 @@ class PyMSM(object):
             self.omni = omni
             self.kps = kps 
             # get the Lms at actual positions, they will be used for altitude scaling 
-            t_dic = ib.get_Lm(self.times,self.coords,90,'T89',omnivals=omni) # alternatively alpha=[90] 
+            t_dic = ib.get_Lm(self.times,self.coords,90,'T89',omnivals=omni)  
             b_dic = ib.get_Bfield(self.times,self.coords,extMag='T89',omnivals=omni) 
         # 
         self.lm = np.abs(t_dic['Lm'].flatten())
@@ -116,8 +101,13 @@ class PyMSM(object):
     
     def getTransmissionFunctions(self):
         '''
-        Return: 
-         TF: the  
+        Return all relevant results for the specified (times, locations) series:
+        Lm: the McIlwain's L-parameter, in a list
+        Bm: the magnetic field intensity at the mirror point, in a list
+        Mlat: the magnetic latitude, in a list
+        ES: the Earth's shadowing factor, in a list
+        TF: the transmission function, in 2D array [len(times) x len(rc)]. The default rc is of the size 34.  
+           
         '''
         TF = []
         # first obtain the interpolated vertical cutoffs
@@ -127,13 +117,18 @@ class PyMSM(object):
         # 3rd 
         TF = self.getTransfact(Mlats, Rcv)
         # 4th get the Earth shadowing factors
-        ES = self.facshadow((self.coords.radi*1000.+self.coords.Re)/self.coords.Re)  # Don't know why Re is in metter!
+        ES = self.facshadow((self.coords.radi*1000.+self.coords.Re)/self.coords.Re)  # Don't know why Re is in meter!
         #
         return self.lm, self.bm, Mlats, Rcv, ES, TF
         
     def getRc(self):
         '''
-               
+        Internal function for calculating the vertical cutoff rigidities for the specified series of (times, locations)
+        
+        Return:
+        
+        Rcv: a list of the vertical cutoff rigidity in units of GV 
+              
         ''' 
 
         t_utc = self.times.UTC
@@ -422,246 +417,3 @@ class PyMSM(object):
     
         return fac
                  
-        
-def plotmap(zi):
-    
-    import numpy as np
-    import matplotlib.pyplot as plt
-        
-    plt.subplot(aspect=1, title='Global_map', ylim=[-90, 90], xlim=[0, 360])
-    pc = plt.pcolor(x, y, zi, norm=LogNorm(vmin=1e-4, vmax=1e2))
-    cs = plt.contour(x, y, zi, np.logspace(-5, 2, 8), colors='pink', linewidth=0.5, linesytle='dashed')
-    plt.clabel(cs, inline=1)
-
-    plt.colorbar(pc)
-    plt.show()
-
-    #plt.savefig('plot_density_meridian.png')#
-    
-def plotmap_basemap(zi):
-
-    import matplotlib as mpl
-    import matplotlib.pyplot as plt
-    from mpl_toolkits.basemap import Basemap
-
-    # create figure, axes instances.
-    fig = plt.figure()
-    ax = fig.add_axes([0.05,0.05,0.9,0.9])
-        
-    # create Basemap instance for Robinson projection.
-    # coastlines not used, so resolution set to None to skip
-    # continent processing
-    m = Basemap(projection='robin',lon_0=0.0,resolution=None)
-    # compute map projection coordinates of grid.
-    #
-    x, y = m(xi, yi)
-
-    # draw line around map projection limb.
-    # color background of map projection region.
-    # missing values over land will show up this color.
-    m.drawmapboundary(fill_color='0.1')
-
-    mycmap=mpl.cm.jet
-    #mycmap.set_clim(0.,1.5)
-    cmax = zi.max()
-    #if cmax > 1.0: cmax = 1.0
-    mynorm = mpl.colors.Normalize(vmin=0.,vmax=cmax)
-    im1 = m.pcolor(xi,yi,zi,cmap=mycmap, norm=mynorm)
-    #im2 = m.pcolor(x,y,ice,shading='flat',cmap=plt.cm.gist_gray)
-    # draw parallels and meridians
-    m.drawparallels(np.arange(-90,90,30),labels=[1,1,0,1])
-    m.drawmeridians(np.arange(-180,180.,90.),labels=[1,1,0,1] )
-    # add colorbar
-    cb = m.colorbar(im1,"bottom", size="5%", pad="6%")
-    # add a title.
-    ax.set_title(' Map for file: %s'%("Global Map"))
-    plt.show()
-
-def plotmap_contour(zi,Title="Global Map"):    
-
-    import matplotlib.pyplot as plt   
-    from scipy.interpolate import griddata
-
-#    grid_z0 = griddata(points, values, (grid_x, grid_y), method='nearest')
-#    grid_z1 = griddata(points, values, (grid_x, grid_y), method='linear')
-#    grid_z2 = griddata(points, values, (grid_x, grid_y), method='cubic')
-    # grid the data.
-    grid_x, grid_y = np.mgrid[0:360:360j, -90:90:180j]
-    grid_z = griddata((xi.flatten(),yi.flatten()),zi.flatten(),(grid_x,grid_y), method='cubic')
-
-    # contour the gridded data, plotting dots at the nonuniform data points.
-    plt.figure(figsize=(11,7))
-    plt.subplots_adjust(right=1.0)
-    CS = plt.contour(grid_x,grid_y,grid_z,30,linewidths=0.5,colors='k')
-    plt.clabel(CS, inline=1, fontsize=10)
-    CS = plt.contourf(grid_x,grid_y,grid_z,30,cmap=plt.cm.rainbow,
-                  vmax=abs(grid_z).max(), vmin=-abs(grid_z).max())
-    plt.colorbar() # draw colorbar
-    plt.xlabel("Longitude [Deg]")
-    plt.ylabel("Latitude [Deg]")
-    plt.title(Title)
-    plt.show()    
-    #plt.savefig('rigidity_map.png')#
-    
-def plotmapfile(file):
-    
-    from scipy.interpolate import griddata
-    import matplotlib.pyplot as plt
-    
-    x,y,z = np.loadtxt(file,skiprows=0,usecols = (1,0,5),unpack=True)
-    
-    # define grid.
-#    xi = np.linspace(-0.1,360.1,360)
-#    yi = np.linspace(-90.1,90.1,180)
-    xg, yg = np.mgrid[0:360:360j, -90:90:180j]
-    # grid the data.
-    zg = griddata((x,y),z,(xg,yg),method='cubic')
-    
-    # contour the gridded data, plotting dots at the nonuniform data points.
-    plt.figure(figsize=(11,7))
-    plt.subplots_adjust(right=1.0)
-    CS = plt.contour(xg,yg,zg,30,linewidths=0.5,colors='k')
-    plt.clabel(CS, inline=1, fontsize=10)
-    CS = plt.contourf(xg,yg,zg,30,cmap=plt.cm.rainbow,
-                      vmax=abs(zg).max(), vmin=-abs(zg).max())
-    plt.colorbar() # draw colorbar
-    
-    plt.xlabel("Longitude [Deg]")
-    plt.ylabel("Latitude [Deg]")
-    plt.title(' File: ' + file)
-    plt.show()
-    
-def plotscatter(x,y,xtit='x-axis',ytit='y-axis',title='x-y scatter plot'):
-    import matplotlib.pyplot as plt
-    plt.style.use('seaborn-whitegrid')
-    plt.figure(figsize=(11,7))
-    plt.plot(x, y, '.', color='black')
-    plt.xlabel(xtit)
-    plt.ylabel(ytit)
-    plt.title(title)
-    plt.xscale('log')
-    plt.show()
-
-def testspacepy():
-    '''
-    This is s test of the spacepy.time module
-    
-    Spacepy.time is not working as expected, i.e., 'ISO', option is not working as expected.
-    '''
-    cyear ='2005'
-    cut = '12'
-#    isotime = [cyear+'-01-01T'+cut+':00:00.000000']  # time-date of the map
-    # case 1 - iso 
-    try: 
-        atime = spt.Ticktock(['2002-02-02T12:00:00.000000'],'ISO')
-        print('case1 - ',atime.getDOY())
-    except:
-        print('case1 - failed ')
-        pass
-    # case 2 - d-m-y
-    try:
-        atime = spt.Ticktock(['01-01-2013'], lambda x: datetime.datetime.strptime(x, '%d-%m-%Y'))
-        print('case2 - ',atime.getDOY())
-    except:
-        print('case2 - failed ')
-        pass
-    # case 3 - mjd 
-    try: 
-        atime = spt.Ticktock([55100.2], 'MJD')
-        print('case3 - ',atime.getDOY())
-    except:
-        print ('case3 - failed!')
-        pass
-
-#    atime = spt.Ticktock(isotime)
-    aposi = spc.Coords([450,22,351],'GDZ','sph')
-    aomni = om.get_omni(atime)
-    aomni['Kp'] =[3.]
-    try:
-        t_dic = ib.get_Lm(atime,aposi,90,'T89',omnivals=bomni)
-    except:
-        t_dic = ib.get_Lm(atime,aposi,90,'T89')
-    lm = abs(t_dic['Lm'].flatten()[0])
-    print(lm,'Test1 on Lm completed!')
-    #
-    N = 11*1 
-    times = np.empty(N,dtype='object')
-    kps = np.empty(N,dtype=int)
-    mjd = 55000.5
-    for i in range(N):
-        mjd += 0.00000001*i
-        times[i] = mjd  
-#    times.fill('2019-02-02T12:00:00')
-    kps.fill(1)      
-    coords =[]
-    alti = 1000.
-    for i in range(-90,91,18): 
-        for j in range(0,360,360):
-            coords.append([alti, i, j ]) 
-    t = spt.Ticktock(times,'MJD')
-    y = spc.Coords(coords,'GDZ','sph') 
-    aomni = om.get_omni(t)
-    #aomni['Kp'] =kps
-    t_dic = ib.get_Lm(t,y,90,'T89',omnivals=aomni)
-#    t_dic = ib.get_Lm(t,y,90,'T89')
-    print (np.nan_to_num(np.abs(t_dic.pop('Lm')),nan=30.)) 
-
-
-
-
-    
-def main():
-    '''
-
-    '''    
-    mapMgr = MapDB()
-    
-    # test-1: plot a pre-calculated map
-    lm, rc, rclm2 = mapMgr.getMap('2000','9','12')
- #   plotscatter(lm,rc)
-    plotmap_contour(rc)
-    plotmap_basemap(rc)
- #   plotmap_c("./MAPS/2000/AVKP9T12.AVG")
-        
-    print("test-1 Completed!")
-    
-    exit()
-    #
-    N = 19*37 
-    mapMgr = MapDB()
-    times = np.empty(N,dtype='object')
-    kps = np.empty(N,dtype=int)
-    mjd = 55000.5
-    for i in range(N):
-        mjd += 0.00000001*i
-        times[i] = mjd  
-#    times.fill('2002-02-02T12:00:00.0')
-    kps.fill(1)
-#       
-    coords =[]
-    alti = 1000.
-    for i in range(-90,91,10): 
-        for j in range(0,361,10):
-            coords.append([alti, i, j ]) 
-    t = spt.Ticktock(times,'MJD')
-    y = spc.Coords(coords,'GDZ','sph')
-    y.ticks = t
-    pm = PyMSM(times=t,positions=y, kps=kps)
-    # pm = PyMSM(t,y,kps)
-        
-#     results = ib.get_Lm(t,y,90,'T89') # alternatively alpha=[90]
-#     print (results.pop('Lm'))  
-#     t = spt.Ticktock(['2002-02-02T12:00:00','2012-02-02T12:00:00','2019-02-02T12:00:00'])
-#     t = spt.Ticktock(['2012-02-02T12:00:00','2012-02-02T12:00:00','2012-02-02T12:00:00'])
-#     y = spc.Coords([[1000,45,0],[1000,-45,90],[500,45,-100]],'GDZ','sph')
-#     kp = [0,1,2]
-#     rc = [0., 0.2, 1, 10., 30.]
-    
-#     pm = PyMSM(t,y, kp,rc)
-
-    print (pm.getTransmissionFunctions())
-    print ('completed')
-    
-
-if __name__ == '__main__':
-    main() 
