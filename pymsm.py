@@ -1,10 +1,7 @@
 import os, sys
 from math import sqrt, acos, cos, pow, log10
 import numpy as np
-#from astropy.units import centiyear
-#from _pylief import NONE
-#from statsmodels.formula.api import wls
-#from astropy.wcs.docstrings import lat
+
 import spacepy.time as spt
 import spacepy.coordinates as spc
 import spacepy.irbempy as ib
@@ -58,12 +55,12 @@ class PyMSM(object):
         initialisation required to obtain the vertical rigidity for a given series of time and location
         
         Inputs:
-         times: a SpacyPy Ticktock instance
-         positions: a SpacePy Coords instance
+         times: a list of time in ISO format
+         positions: a list of location in GDZ coordinates
          kps: a list of kps
          rc: rigidity cut offs for which the transmission factor to be calculated. In a list or numpy 1D array 
          
-         Note: the lengthes of the first 3 inputs should match
+         Note: the length of the first 3 inputs should match
         
         '''
         self.cyears = ['1955','1960','1965','1970','1975','1980','1985','1990','1995','2000','2005','2010','2015','2020','2025']
@@ -76,11 +73,15 @@ class PyMSM(object):
                        20., 25., 20., 30., 40., 50., 60.]
         else:
             self.rc = rc
-        #    
-        self.times = times
+        # 
+        t = spt.Ticktock(times,'ISO')
+        y = spc.Coords(positions,'GDZ','sph')
+        y.ticks = t   
+        self.times = t
         #
-        omni = om.get_omni(times)  # need these to set the external field conditions
-        self.coords = positions.convert('GDZ','sph')
+        omni = om.get_omni(t)  # need these to set the external field conditions
+        self.coords = y
+        self.radius = ib.coord_trans(self.coords, 'RLL', 'sph')[:,0]
         if kps is None:
             self.kps=omni['Kp'].astype(int)
             t_dic = ib.get_Lm(self.times,self.coords,90,'T89',omnivals=omni) 
@@ -109,7 +110,6 @@ class PyMSM(object):
         TF: the transmission function, in 2D array [len(times) x len(rc)]. The default rc is of the size 34.  
            
         '''
-        TF = []
         # first obtain the interpolated vertical cutoffs
         Rcv = self.getRc()
         # 2nd get the magnetic latitude, ether using the getEMLat() or calculateRInv method
@@ -117,7 +117,7 @@ class PyMSM(object):
         # 3rd 
         TF = self.getTransfact(Mlats, Rcv)
         # 4th get the Earth shadowing factors
-        ES = self.facshadow((self.coords.radi*1000.+self.coords.Re)/self.coords.Re)  # Don't know why Re is in meter!
+        ES = self.facshadow(self.radius)
         #
         return self.lm, self.bm, Mlats, Rcv, ES, TF
         
@@ -150,10 +150,7 @@ class PyMSM(object):
             ckp = self.ckps[self.kps[i]]
             self.dbMgr.getMap(cyear,ckp,cut)
             mkey = cyear+ckp+cut
-#             isotime = [cyear+'-01-01T'+cut+':00:00']  # time-date of the map
-            #atime = spt.Ticktock(['2002-02-02T12:00:00'],'ISO')
-            atime = spt.Ticktock(datetime.datetime(year,1,1),'UTC')
-            #y = spc.Coords([[3,0,0],[2,0,0],[1,0,0]],'GEO','car')
+            atime = spt.Ticktock(datetime.datetime(int(cyear),1,1,int(cut)).isoformat(),'ISO')
             aposi = self.coords[i]
             aposi.radi = [450.] # at 450 km altitudes coords are in GDZ
             aomni = om.get_omni(atime)
@@ -171,8 +168,8 @@ class PyMSM(object):
                 cyear = self.cyears [iy+1]
                 self.dbMgr.getMap(cyear,ckp,cut)
                 mkey = cyear+ckp+cut
-#                 isotime = [cyear+'-01-01T'+cut+':00:00']  # time-date of the map
-                atime = spt.Ticktock(datetime.datetime(int(cyear),1,1),'UTC')
+                # time-date of the map
+                atime = spt.Ticktock(datetime.datetime(int(cyear),1,1,int(cut)).isoformat(),'ISO')
                 t_dic = ib.get_Lm(atime,aposi,90,'T89',omnivals=aomni)
                 lm1 = abs(t_dic['Lm'].flatten()[0])
                 rc1 = self.getRC450km(mkey,lon,lat,lm1)
@@ -288,16 +285,16 @@ class PyMSM(object):
             Emlats: list of the equivalent magnetic latitudes in radians
         ''' 
         # calculate the corrected magnetic latitude
-        # to to reset the altitudes = Re    
-        radia = np.empty(len(self.times))
-        radia.fill (self.coords.Re)
-        radi_old = self.coords.radi
-        self.coords.radi = radia
+        # need to reset the altitudes = 0    
+        # radia = np.empty(len(self.times))
+        # radia.fill (0.)
+        # radi_old = self.coords.radi
+        # self.coords.radi = radia
         #
         # GDZ -> MAG
         mpos = ib.coord_trans(self.coords,'MAG','sph')
         # restore the radi in coords
-        self.coords.radi = radi_old      
+        # self.coords.radi = radi_old      
         
         #
         # mpos[:,1] are the magnetic latitude in degrees. Note this is not the same as 

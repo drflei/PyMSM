@@ -14,11 +14,13 @@ PyMSM should be imported and instanciated from another python code, e.g.:
 import PyMSM as pm
 
 #   
-#     t = spt.Ticktock(['2002-02-02T12:00:00','2012-02-02T12:00:00','2019-02-02T12:00:00'])
-#     y = spc.Coords([[1000,45,0],[1000,-45,90],[500,45,-100]],'GDZ','sph')
-#     y.ticks = t
+#     t = ['2002-02-02T12:00:00','2012-02-02T12:00:00','2019-02-02T12:00:00']
+#       in ISO string format
+#     y = [[1000,45,0],[1000,-45,90],[500,45,-100]] 
+#       in GDZ coordinates
 #     kp = [0,1,2]
 #     rc = [0., 0.2, 1, 10., 30.]
+#       in GV units
 #     pmsm = pm.PyMSM(t,y, kp,rc)
 ...
 

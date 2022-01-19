@@ -1,8 +1,3 @@
-import spacepy.time as spt
-import spacepy.coordinates as spc
-import spacepy.irbempy as ib
-import spacepy.omni as om
-import datetime
 
 import numpy as np
 
@@ -46,11 +41,9 @@ def testpymsm():
     N = 4*5 
     times = np.empty(N,dtype='object')
     kps = np.empty(N,dtype=int)
-    mjd = 55000.5
     for i in range(N):
-        mjd += 0.00000001*i
-        times[i] = mjd  
-#    times.fill('2002-02-02T12:00:00.0')
+        times[i] = f"2002-02-02T12:{i:02}:00"  
+#    times.fill('2002-02-02T12:00:00')
     kps.fill(1)
 #       
     coords =[]
@@ -58,25 +51,15 @@ def testpymsm():
     for i in range(-60,60,30): 
         for j in range(0,360,72):
             coords.append([alti, i, j ]) 
-    t = spt.Ticktock(times,'MJD')
-    y = spc.Coords(coords,'GDZ','sph')
-    y.ticks = t
-    pmsm = pm.PyMSM(times=t,positions=y, kps=kps)
-        
-#     t = spt.Ticktock(['2002-02-02T12:00:00','2012-02-02T12:00:00','2019-02-02T12:00:00'])
-#     y = spc.Coords([[1000,45,0],[1000,-45,90],[500,45,-100]],'GDZ','sph')
-#     y.ticks = t
-#     kp = [0,1,2]
-#     rc = [0., 0.2, 1, 10., 30.]
-#     pm = PyMSM(t,y, kp,rc)
+
+    pmsm = pm.PyMSM(times=times,positions=coords, kps=kps)
 
     lm, bm, mlats, rcv, es, tf = pmsm.getTransmissionFunctions()
-    
-    pt.plotscatter(times,lm, xtit='MJD', ytit='Lm (Re)', title = ' ')
-    pt.plotscatter(times,bm, xtit='MJD', ytit='Bm ', title = ' ')
-    pt.plotscatter(times,mlats,xtit='MJD', ytit='MLat (rad)', title = ' ')
-    pt.plotscatter(times,rcv, xtit='MJD', ytit='Rc (Gv)', title = ' ')
-    pt.plotscatter(times,es, xtit='MJD', ytit='ES ()', title = ' ')
+    pt.plotscatter(times,lm, xtit='Date-Time', ytit='Lm (Re)', title = ' ')
+    pt.plotscatter(times,bm, xtit='Date-Time', ytit='Bm ', title = ' ')
+    pt.plotscatter(times,mlats,xtit='Date-Time', ytit='MLat (rad)', title = ' ')
+    pt.plotscatter(times,rcv, xtit='Date-Time', ytit='Rc (Gv)', title = ' ')
+    pt.plotscatter(times,es, xtit='Date-Time', ytit='ES ()', title = ' ')
     
     colname = [0.1, 0.2, 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 5.5, \
         6., 6.5, 7., 7.5, 8., 9., 10., 11., 12., 13, 14., 15., 16., 17., \
@@ -90,8 +73,8 @@ def testpymsm():
     for i in range(len(rowname)):
         if i%2 == 0: rn.append(rowname[i])  
     
-    pt.plot3D(tf, xgrid = colname,xtit='Rigidity (GV)', ytit=' Time (MJD)',ztit='Transmission', title='Transmission Functions' )
-    pt.plotbar3d(tf, colname = cn, rowname= rn, xtit='Rigidity (GV)', ytit=' Time (MJD)',ztit='Transmission', title='Transmission Functions')
+    pt.plot3D(tf, xgrid = colname, xtit='Rigidity (GV)', ytit='Date-Time',ztit='Transmission', title='Transmission Functions' )
+    pt.plotbar3d(tf, colname = cn, rowname= rn, xtit='Rigidity (GV)', ytit='Date-Time',ztit='Transmission', title='Transmission Functions')
     
     print ('Test completed')
     
