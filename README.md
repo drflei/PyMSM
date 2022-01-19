@@ -29,13 +29,12 @@ import PyMSM as pm
 #   
 	lm, bm, mlats, rcv, es, tf = pmsm.getTransmissionFunctions()
 
-#     Returns are list correspond to the specified times and positions series:
-#        Lm: the McIlwain's L-parameter, in a list
-#        Bm: the magnetic field intensity at the mirror point, in a list
-#        Mlat: the magnetic latitude, in a list
-#        ES: the Earth's shadowing factor, in a list
-#        TF: the transmission function, in 2D array [len(times) x len(rc)]. The default rc is of the 
-#            size 34. 
+#        Return all relevant results for the specified (times, locations) series:
+#        Lm: the McIlwain's L-parameter, in np.array
+#        Bm: the magnetic field intensity at the location, in np.array
+#        Mlat: the magnetic latitude, in np.array
+#        ES: the Earth's shadowing factor, in np.array
+#        TF: the transmission function, in 2D np.array [len(times) x len(rc)]. The default rc is of the size 34. 
 
 ```
 
@@ -47,3 +46,6 @@ There is a build-in test folder, and the main test is the testpymsm.py which can
 
 testpymsm.py uses the plotting utilities from plotools.py to display the various results. 
  
+The other script testglobalmap.py produces the vertical cut-off rigidity map at 36000km altitude: 
+
+` $> python testglobalmap.py ` 

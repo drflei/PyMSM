@@ -82,7 +82,6 @@ class PyMSM(object):
         #
         omni = om.get_omni(t)  # need these to set the external field conditions
         self.coords = y
-        self.radius = ib.coord_trans(self.coords, 'RLL', 'sph')[:,0]
         if kps is None:
             self.kps=omni['Kp'].astype(int)
             t_dic = ib.get_Lm(self.times,self.coords,90,'T89',omnivals=omni) 
@@ -104,12 +103,11 @@ class PyMSM(object):
     def getTransmissionFunctions(self):
         '''
         Return all relevant results for the specified (times, locations) series:
-        Lm: the McIlwain's L-parameter, in a list
-        Bm: the magnetic field intensity at the mirror point, in a list
-        Mlat: the magnetic latitude, in a list
-        ES: the Earth's shadowing factor, in a list
-        TF: the transmission function, in 2D array [len(times) x len(rc)]. The default rc is of the size 34.  
-           
+        Lm: the McIlwain's L-parameter, in np.array
+        Bm: the magnetic field intensity at the location, in np.array
+        Mlat: the magnetic latitude, in np.array
+        ES: the Earth's shadowing factor, in np.array
+        TF: the transmission function, in 2D np.array [len(times) x len(rc)]. The default rc is of the size 34.             
         '''
         # first obtain the interpolated vertical cutoffs
         Rcv = self.getRc()
@@ -118,7 +116,8 @@ class PyMSM(object):
         # 3rd 
         TF = self.getTransfact(Mlats, Rcv)
         # 4th get the Earth shadowing factors
-        ES = self.facshadow(self.radius)
+        radius = self.coords.radi/self.coords.Re*1000. + 1. # radi is in fact the altitude in km and Re in meters!
+        ES = self.facshadow(radius)
         #
         return self.lm, self.bm, Mlats, Rcv, ES, TF
         
@@ -153,14 +152,14 @@ class PyMSM(object):
             mkey = cyear+ckp+cut
             atime = spt.Ticktock(datetime.datetime(int(cyear),1,1,int(cut)).isoformat(),'ISO')
             aposi = self.coords[i]
-            aposi.radi = [450.] # at 450 km altitudes coords are in GDZ
+            aposi.radi = [450.] # FIXME-shiould it be in Re? at 450 km altitudes coords are in GDZ
             aomni = om.get_omni(atime)
             aomni['Kp'] =[self.kps[i]]
             t_dic = ib.get_Lm(atime,aposi,90,'T89',omnivals=aomni)
             lm = abs(t_dic['Lm'].flatten()[0])
             lon = aposi.long
             lat = aposi.lati 
-            rc = self.getRC450km(mkey,lon,lat,lm)
+            rc = self.getRC450km(mkey,lat,lon,lm)
             #
             w =(ir + (self.times[i].DOY + t_utc[i].hour/24.)/365.)/5. 
             # the next map at +5 years if required
@@ -173,7 +172,7 @@ class PyMSM(object):
                 atime = spt.Ticktock(datetime.datetime(int(cyear),1,1,int(cut)).isoformat(),'ISO')
                 t_dic = ib.get_Lm(atime,aposi,90,'T89',omnivals=aomni)
                 lm1 = abs(t_dic['Lm'].flatten()[0])
-                rc1 = self.getRC450km(mkey,lon,lat,lm1)
+                rc1 = self.getRC450km(mkey,lat,lon,lm1)
                 lm = lm*w + (1.- w)*lm1
                 rc = rc*w + (1.- w)*rc1 
             #    
@@ -199,7 +198,7 @@ class PyMSM(object):
                This "ad-hoc" exponential function is not going to be reliable
                beyond geosynchronous distances."
             '''
-            radist = aposi.radi[0]/aposi.Re+1.                    
+            radist = self.coords.radi[i]/self.coords.Re*1000. + 1.  # Re is in units of meter!             
             rcorr = log10(radist*radist)/14.   # Don used 11. but 14. is better
             rcr -= rcorr 
             if rcr < 0.: rcr = 0.
@@ -210,16 +209,16 @@ class PyMSM(object):
             #
             rclist.append(rct)
             
-        return rclist          
+        return np.array(rclist)          
             
-    def getRC450km(self,mkey,lon,lat,lm):
+    def getRC450km(self,mkey, lat, lon, lm):
         '''
         interpolation to obtain Rc for the given location at 450km 
         it should be called after the mkey map has been prepared, e.g., after use of dbMgr.getMap()
         
         inputs:
             string mkey:  the map key which is cyear+ckp+cut
-            float lon, lat: longitude and latitude in degrees
+            float lat, lon: latitude and longitude in degrees
             float lm: the L shell number of the position at 450km altitude 
             
         outputs:
@@ -227,7 +226,7 @@ class PyMSM(object):
              
         '''
         # get the idxs
-        i, j = self.getGridIdx(lon, lat)
+        i, j = self.getGridIdx(lat, lon)
 
         # get the Lm and Rc from the maps
         # left-top corner
@@ -249,7 +248,7 @@ class PyMSM(object):
         # 
         return rclm/lm**2
      
-    def getWeights(self,lon,lat):
+    def getWeights(self,lat,lon):
         
         # weights in longitude
         wr = (lon%5)/5. # left side of the box 
@@ -263,7 +262,7 @@ class PyMSM(object):
         return wl,wr, wt, wb
         
               
-    def getGridIdx(self,lon, lat):
+    def getGridIdx(self,lat, lon):
         ix = int(lon/5)
         if ix > 71: ix = 0
         iy = int(18 + lat/5)
@@ -308,7 +307,7 @@ class PyMSM(object):
             if abs(gmlatcr[i])< abs(glmdar):  glmdar = abs(gmlatcr[i])
             emlats.append(glmdar)
         #
-        return emlats    
+        return np.array(emlats)    
     
 
     def calculateRInv(self,B,L):
