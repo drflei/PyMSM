@@ -1,4 +1,9 @@
 
+import sys, os
+
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
 import numpy as np
 
 import pymsm as pm
@@ -33,7 +38,7 @@ def testpymsm():
     pt.plotmap(xi,yi,rc)
     pt.plotmap_contour(xi,yi,rc)
     pt.plotmap_basemap(xi,yi,rc)
-    pt.plotmapfile("./MAPS/2000/AVKP9T12.AVG")
+    pt.plotmapfile("../MAPS/2000/AVKP9T12.AVG")
         
     print("Plotting test Completed!")
     
