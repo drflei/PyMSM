@@ -26,9 +26,10 @@ class MapDB():
             kp: string
             ut: string
         '''
+        currentdir = os.path.dirname(os.path.realpath(__file__))
         tag = year+kp+ut
         if tag not in MapDB.maps:
-            file = "./MAPS/"+year+"/AVKP"+kp+"T"+ut+".AVG"
+            file = currentdir+"/MAPS/"+year+"/AVKP"+kp+"T"+ut+".AVG"
             print(file)
             MapDB.maps[tag] = self.readMap(file)
         return MapDB.maps[tag]    

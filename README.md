@@ -41,7 +41,7 @@ import PyMSM as pm
 
 ## Test:
 
-There is a build-in test, testpymsm.py, and it can be executed directly: 
+There is a build-in test folder, and the main test is the testpymsm.py which can executed directly: 
 
 ` $> python testpymsm.py ` 
 
