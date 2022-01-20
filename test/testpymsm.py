@@ -42,24 +42,42 @@ def testpymsm():
         
     print("Plotting test Completed!")
     
-    #
-    N = 4*5 
+#
+# This is to simulation a flight path/orbit trajactry case.
+#  times: the time stamp of each orbital positions, in ISO format
+#  coords: the coordinates of each orbital positions in GDZ coordinates
+#  kps: the Kp indices for each position  
+#       
+    coords =[]
+    alti = 1000.
+    xi = []
+    yi = []
+    nlat = 0
+    for i in range(-60,61,30): 
+        nlat+=1 
+        for j in range(0,361,45):
+            coords.append([alti, i, j ])  #
+            yi.append(i)
+            xi.append(j)
+    nlon = int(len(xi)/nlat)
+    xi = np.array(xi)
+    yi = np.array(yi)
+    
+    N = nlat*nlon 
     times = np.empty(N,dtype='object')
     kps = np.empty(N,dtype=int)
     for i in range(N):
         times[i] = f"2002-02-02T12:{i:02}:00"  
 #    times.fill('2002-02-02T12:00:00')
     kps.fill(1)
-#       
-    coords =[]
-    alti = 1000.
-    for i in range(-60,60,30): 
-        for j in range(0,360,72):
-            coords.append([alti, i, j ]) 
             
     pmsm = pm.PyMSM(times=times,positions=coords, kps=kps)
         
     lm, bm, mlats, rcv, es, tf = pmsm.getTransmissionFunctions()
+    
+    # the vertical rigidity cutoff
+    pt.plotmap_contour(xi,yi,rcv)
+    # Other plots
     pt.plotscatter(times,lm, xtit='Date-Time', ytit='Lm (Re)', title = ' ')
     pt.plotscatter(times,bm, xtit='Date-Time', ytit='Bm ', title = ' ')
     pt.plotscatter(times,mlats,xtit='Date-Time', ytit='MLat (rad)', title = ' ')
@@ -77,7 +95,7 @@ def testpymsm():
     rn = []
     for i in range(len(rowname)):
         if i%2 == 0: rn.append(rowname[i])  
-    
+    # The transmission functions
     pt.plot3D(tf, xgrid = colname,xtit='Rigidity (GV)', ytit=' Date-Time',ztit='Transmission', title='Transmission Functions' )
     pt.plotbar3d(tf, colname = cn, rowname= rn, xtit='Rigidity (GV)', ytit=' Date-Time',ztit='Transmission', title='Transmission Functions')
     

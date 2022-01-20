@@ -8,8 +8,8 @@ def plotmap(xi, yi, zi):
     plt.subplots_adjust(right=1.0)
         
     plt.subplot(aspect=1, title='Global_map', ylim=[-90, 90], xlim=[0, 360])
-    pc = plt.pcolor(xi, yi, zi, norm=LogNorm(vmin=1e-4, vmax=1e2))
-    cs = plt.contour(xi, yi, zi, np.logspace(-5, 2, 8), colors='grey')
+    pc = plt.pcolor(xi, yi, zi, norm=LogNorm(vmin=1e-1, vmax=20))
+    cs = plt.contour(xi, yi, zi, np.logspace(-5, 2, 8), colors='orange')
     plt.clabel(cs, inline=1)
 
     plt.colorbar(pc)
