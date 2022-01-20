@@ -2,8 +2,11 @@
 
 ## Usage:
 
-This version of PyMSM requires the IRBEM package. See [Here](https://github.com/PRBEM/IRBEM/tree/main/python) for its installation.
+This version of PyMSM requires the IRBEM package. See [https://github.com/PRBEM/IRBEM/tree/main/python](https://github.com/PRBEM/IRBEM/tree/main/python) for its installation.
 
+Also you may want o use my forked version of IRBEM which has the TS89 model extended to Kp> 6. 
+
+[https://github.com/drflei/IRBEM/tree/ts89c-ext/python](https://github.com/drflei/IRBEM/tree/ts89c-ext/python)
 
 PyMSM should be imported and instanciated from another python code, e.g.:
 
