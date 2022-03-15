@@ -239,6 +239,9 @@ class PyMSM(object):
         rclm_LB = self.dbMgr.maps[mkey][2][i,j+1]
         # right-bot corner
         rclm_RB = self.dbMgr.maps[mkey][2][i+1,j+1]
+        
+        if any(map(lambda x: x == 99.99, (rclm_LT, rclm_RT, rclm_LB, rclm_RB, lm))): 
+            lm = rclm_LT = rclm_RT = rclm_LB = rclm_RB = 99.99
         # 
         # get the weights
         wl,wr, wt, wb = self.getWeights(lat, lon)
