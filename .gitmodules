@@ -1,0 +1,3 @@
+[submodule "MAP_maps"]
+	path = MAP_maps
+	url = https://github.com/drflei/MSM_maps
