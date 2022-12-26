@@ -3,11 +3,11 @@ This is the Python reimplementation of the MSM code, which was devellopped in th
 
 https://spitfire.estec.esa.int/trac/ESHIEM/browser/msm
 
-https://spitfire.estec.esa.int/trac/ESHIEM/browser/doc/Deliverables/WP4000/TN2a%20v1.5.pdf
+However, access to the above links are restricted by ESA at the momemt. However you can learn from the techinical note on its development:
 
-However, access to the above links are restricted by ESA at the momemt.
+https://github.com/drflei/PyMSM/files/10304134/TN2a.v1.5.pdf
 
-There are serveral branches/versions of the implementation. Please use the version in the irbem or spacepy branches for now. 
+There are serveral branches/versions of the python implementation. Please use the version in the irbem or spacepy branches for now. 
 
 Implementaion in other branches is still incomplete ...
 
