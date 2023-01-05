@@ -3,13 +3,13 @@ This is the Python reimplementation of the MSM code, which was devellopped in th
 
 https://spitfire.estec.esa.int/trac/ESHIEM/browser/msm
 
-However, access to the above links are restricted by ESA at the momemt. However you can learn from the techinical note on its development:
+However, access to the above links are restricted by ESA at the momemt. Meanwhile you can learn about all the algorithms and implementation from the techinical note:
 
 https://github.com/drflei/PyMSM/files/10304134/TN2a.v1.5.pdf
 
 There are serveral branches/versions of the python implementation. Please use the version in the irbem or spacepy branches for now. 
 
-Implementaion in other branches is still incomplete ...
+Implementaion in the other branches are still incomplete ...
 
-Note: the maps a softlink and should lead to them in another repository. If not working they are available here: https://github.com/drflei/MSM_maps   
+Note: the MAPS a softlink and it should lead to another repository. If not working they are available here: https://github.com/drflei/MSM_maps   
 
