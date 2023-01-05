@@ -11,5 +11,5 @@ There are serveral branches/versions of the python implementation. Please use th
 
 Implementaion in other branches is still incomplete ...
 
-   
+Note: the maps a softlink and should lead to them in another repository. If not working they are available here: https://github.com/drflei/MSM_maps   
 
