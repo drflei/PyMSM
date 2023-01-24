@@ -1,6 +1,3 @@
-[submodule "MSM_maps"]
-	path = MSM_maps
-	url = https://github.com/drflei/MSM_maps
 [submodule "MAPS"]
 	path = MAPS
 	url = https://github.com/drflei/MSM_maps.git
