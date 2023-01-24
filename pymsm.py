@@ -25,7 +25,7 @@ class MapDB():
             kp: string
             ut: string
         '''
-        if self.mapdir is None:
+        if self.mapdir == None:
             mdir = os.path.dirname(os.path.realpath(__file__))+"/MAPS"
         else:
             mdir = self.mapdir    
