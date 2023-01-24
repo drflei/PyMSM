@@ -10,10 +10,11 @@ class MapDB():
     # all instancs share the same map dict!
     maps = {}
     
-    def __init__(self):
+    def __init__(self, mapdir = None):
         '''
         Constructor
         '''
+        self.mapdir = mapdir
     
     def getMap(self, year, kp, ut):
         '''
@@ -24,10 +25,13 @@ class MapDB():
             kp: string
             ut: string
         '''
-        currentdir = os.path.dirname(os.path.realpath(__file__))
+        if self.mapdir is None:
+            mdir = os.path.dirname(os.path.realpath(__file__))+"/MAPS"
+        else:
+            mdir = self.mapdir    
         tag = year+kp+ut
         if tag not in MapDB.maps:
-            file = currentdir+"/MAPS/"+year+"/AVKP"+kp+"T"+ut+".AVG"
+            file = mdir+"/"+year+"/AVKP"+kp+"T"+ut+".AVG"
             print(file)
             MapDB.maps[tag] = self.readMap(file)
         return MapDB.maps[tag]  
@@ -49,19 +53,19 @@ class MapDB():
             print(e, sys.stderr)
             
 class PyMSM(object):
-    def __init__(self, times, positions, kps, rc=None):
+    def __init__(self, times, positions, kps=None, rc=None, mapdir=None):
         '''
         
         Inputs:
          times: 1D numpy arrary of date and time in datetime.datetime format
          positions: 2D numpy array locations corresponding to the times in GDZ coordinates, e.g., [[alt0, lat0, lon0],[alt1, lat1, lon1],...]
-         kps: 1D numpy array of Kp indices, corresponding to the times  
+         kps: 1D numpy array of Kp indices, corresponding to the times. 
          rc: 1D numpy array of rigidity cut offs, in GV, for which the transmission factor to be calculated. This is optional, if not specified, the defaults are:
                          [0.1, 0.2, 0.5, 1., 1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 5.5, \
                           6., 6.5, 7., 7.5, 8., 9., 10., 11., 12., 13, 14., 15., 16., 17., \
                         20., 25., 20., 30., 40., 50., 60.]
          
-         Note: the length of the first 3 inputs should match!
+         mapdir: if not None, the location of alternative/user precalculated maps
         
         '''
         self.cyears = ['1955','1960','1965','1970','1975','1980','1985','1990','1995','2000','2005','2010','2015','2020','2025']
@@ -98,7 +102,7 @@ class PyMSM(object):
         self.lm = np.abs(self.model.make_lstar_output['Lm'])
         self.bm = np.abs(self.model.make_lstar_output['blocal'])        
         #
-        self.dbMgr = MapDB()
+        self.dbMgr = MapDB(mapdir)
     
     def getTransmissionFunctions(self):
         '''
