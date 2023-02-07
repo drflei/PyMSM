@@ -4,6 +4,7 @@
 
 It should be installed with `pip`:
 `pip install -r requirements.txt`
+`pip install -e ./`
 
 Note: This version of PyMSM requires the IRBEM package. See [https://github.com/PRBEM/IRBEM/tree/main/python](https://github.com/PRBEM/IRBEM/tree/main/python) for its installation.
 

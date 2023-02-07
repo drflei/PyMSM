@@ -15,7 +15,7 @@ setup(
     packages=find_packages(','),
     
     # package_data={"":["DLRISOmodel/neutronMonitorData/*.dat","DLRISOmodel/neutronMonitorData/*.pkl"]},
-    include_package_data=True,
+    # include_package_data=True,
     version='0.1.1',
     description='Python library for calculating the geomagnetic rigidity cutoff',
     author='drflei',
