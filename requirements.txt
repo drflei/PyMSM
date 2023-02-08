@@ -4,3 +4,5 @@ pandas>=1.4.4
 python_dateutil>=2.8.2
 scipy>=1.9.1
 setuptools>=45.2.0
+-e git+https://github.com/drflei/IRBEM.git@9e6b675cbdd6cdac69adcdbaaee856166a22f94b#egg=IRBEM&subdirectory=python
+-e git+https://github.com/drflei/PyMSM.git@7400837e977d4d4895c403ef1b9c74b6a0e4cb5e#egg=pymsm
