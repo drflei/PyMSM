@@ -7,12 +7,11 @@ Easy one step installation using `pip`:
 `pip install --upgrade https://github.com/drflei/PyMSM/tarball/irbem`
 
 
-Note: This version of PyMSM requires the IRBEM package. See [https://github.com/PRBEM/IRBEM/tree/main/python](https://github.com/PRBEM/IRBEM/tree/main/python) for its installation.
+Note: This version of PyMSM uses the IRBEM package. See [https://github.com/PRBEM/IRBEM/tree/main/python](https://github.com/PRBEM/IRBEM/tree/main/python)
 
-Also it is suggested to use my forked version of IRBEM which has the TS89 model extended to Kp> 6. 
+What's used in the installation is actually a forked version of IRBEM which has the TS89 model extended to Kp> 6. 
 [https://github.com/drflei/IRBEM/tree/ts89c-ext/python](https://github.com/drflei/IRBEM/tree/ts89c-ext/python)
 
-This is what's been included in the `requirements.txt` file.
 ## Usage:
 PyMSM should be imported and instanciated from another python code, e.g.:
 
