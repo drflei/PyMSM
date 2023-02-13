@@ -4,7 +4,7 @@
 
 Easy one step installation using `pip`:
 
-`pip install -r requirements.txt`
+`pip install --upgrade https://github.com/drflei/PyMSM/tarball/irbem`
 
 
 Note: This version of PyMSM requires the IRBEM package. See [https://github.com/PRBEM/IRBEM/tree/main/python](https://github.com/PRBEM/IRBEM/tree/main/python) for its installation.
