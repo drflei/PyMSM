@@ -8,7 +8,7 @@ Easy one step installation using `pip`:
 
 The above is not working properly. Has to be done in mutiple steps:
 ```
-$ git clone https://github.com/drflei/PyMSM.git
+$ git clone --recurse-submodules https://github.com/drflei/PyMSM.git
 $ cd PyMSM
 $ pip install -r requirements.txt -e ./
 ```
