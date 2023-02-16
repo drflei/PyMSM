@@ -21,6 +21,8 @@ A forked version of IRBEM which has the TS89 model extended to Kp> 6 is best to 
 ```
 $  git clone -b ts89c-ext --single-branch https://github.com/drflei/IRBEM.git
 $  cd IRBEM/
+$  make OS=linux64 ENV=gfortran64 all
+$  make install
 $  cd python/
 $  pip install -r requirements.txt
 ```
