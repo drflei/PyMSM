@@ -13,10 +13,11 @@ $ cd PyMSM
 $ pip install -r requirements.txt -e ./
 ```
 
-==Note==: This version of PyMSM uses the IRBEM package and it must have been installed. See [https://github.com/PRBEM/IRBEM/tree/main/python](https://github.com/PRBEM/IRBEM/tree/main/python)
+==Note 1:== This version of PyMSM uses the IRBEM package and it must have been installed. See [https://github.com/PRBEM/IRBEM/tree/main/python](https://github.com/PRBEM/IRBEM/tree/main/python)
 
 A forked version of IRBEM which has the TS89 model extended to Kp> 6 is best to be used together with PyMSM
-[https://github.com/drflei/IRBEM/tree/ts89c-ext/python](https://github.com/drflei/IRBEM/tree/ts89c-ext/python)
+[https://github.com/drflei/IRBEM/tree/ts89c-ext/python](https://github.com/drflei/IRBEM/tree/ts89c-ext/python) 
+which can be install following these steps:
 
 ```
 $  git clone -b ts89c-ext --single-branch https://github.com/drflei/IRBEM.git
@@ -25,6 +26,36 @@ $  make OS=linux64 ENV=gfortran64 all
 $  make install
 $  cd python/
 $  pip install -r requirements.txt
+```
+==Note 2:==
+The above installation is not working in a Ubuntu docker container! The reason is still unknow. One work-around solution is to install it in a virtual env instead:
+
+```
+cd /opt/ # or any tmp folder
+git clone --recurse-submodules https://github.com/drflei/PyMSM.git
+cd /opt
+git clone -b ts89c-ext --single-branch https://github.com/drflei/IRBEM.git
+cd IRBEM/
+make OS=linux64 ENV=gfortran64 all
+make install
+#
+apt update
+apt install python3-virtualenv
+cd /opt
+virtualenv -p python3 msmtest
+# msmtest is the virtual enve
+source msmtest/bin/activate
+cd PyMSM
+pip install -r requirements.txt -e ./
+cd ../IRBEM/python/
+pip install -r requirements.txt
+cd /opt
+# Installation completed and run the tests
+# you may needed to set your DISPLAY pointing to you x11 server before run below
+python3 /opt/PyMSM/test/testglobalmap.py
+wget http://distfiles.macports.org/py-matplotlib-basemap/basemap-1.2.2.tar.gz
+python3.8 -m pip install basemap-1.2.2.tar.gz
+python3 /opt/PyMSM/test/testpymsm.py
 ```
 
 ## Usage:
