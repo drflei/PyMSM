@@ -38,7 +38,7 @@ def testpymsm():
     pt.plotmap(xi,yi,rc)
     pt.plotmap_contour(xi,yi,rc)
     pt.plotmap_basemap(xi,yi,rc)
-    pt.plotmapfile("../MAPS/2000/AVKP9T12.AVG")
+    pt.plotmapfile(f"{parentdir}/MAPS/2000/AVKP9T12.AVG")
         
     print("Plotting test Completed!")
     
