@@ -15,3 +15,5 @@ pip install -r requirements.txt -e ./
 cd ../IRBEM/python/
 pip install -r requirements.txt
 cd /opt
+wget http://distfiles.macports.org/py-matplotlib-basemap/basemap-1.2.2.tar.gz
+python3.8 -m pip install basemap-1.2.2.tar.gz
