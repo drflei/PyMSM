@@ -1,7 +1,7 @@
 # IRBEM version of PyMSM
 ## Instroduction
 Please see the technical report for a description of the model and all the technical details
-[Technical Report](https://github.com/drflei/PyMSM/irbem/MSM_Technical_Report.pdf)
+[Technical Report](https://github.com/drflei/PyMSM/irbem/"MSM Technical Report.pdf")
 
 ## Installation:
 
