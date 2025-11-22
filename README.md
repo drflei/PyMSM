@@ -12,6 +12,7 @@ The above is not working properly. Has to be done in mutiple steps:
 ```
 $ git clone --recurse-submodules https://github.com/drflei/PyMSM.git
 $ cd PyMSM
+$ ./scripts/update_maps.sh
 $ pip install -r requirements.txt -e ./
 ```
 
