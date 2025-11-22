@@ -1,9 +1,9 @@
 
-This is the Python reimplementation of the MSM code, which was devellopped in the ESHIEM project funded by ESA.
+This is the Python reimplementation of the MSM code, which was developped in the ESHIEM project funded by ESA.
 
 https://spitfire.estec.esa.int/trac/ESHIEM/browser/msm
 
-However, access to the above links are restricted by ESA at the momemt. Meanwhile you can learn about all the algorithms and implementation from the techinical note:
+However, access to MSM is restricted to ESA at the momemt. Meanwhile you can learn about all the algorithms and implementation from this techinical note of the project:
 
 https://github.com/drflei/PyMSM/files/10304134/TN2a.v1.5.pdf
 
@@ -11,5 +11,5 @@ There are serveral branches/versions of the python implementation. Please use th
 
 Implementaion in the other branches are still incomplete ...
 
-Note: the MAPS a softlink and it should lead to another repository. If not working they are available here: https://github.com/drflei/MSM_maps   
+Note: the MAPS is a softlink and it should lead to another repository. If not working they are available here: https://github.com/drflei/MSM_maps   
 
