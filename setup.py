@@ -1,27 +1,50 @@
-from distutils.core import setup
-from setuptools import find_packages
+"""Setup script for PyMSM package."""
 import os
+from setuptools import setup, find_packages
 
-# get requirements for installation
+# Get requirements for installation
 lib_folder = os.path.dirname(os.path.realpath(__file__))
-requirement_path = lib_folder + '/requirements.txt'
-install_requires = [] # Here we'll get: ["gunicorn", "docutils>=0.3", "lxml==0.5a7"]
+requirement_path = os.path.join(lib_folder, 'requirements.txt')
+install_requires = []
 if os.path.isfile(requirement_path):
     with open(requirement_path) as f:
         install_requires = f.read().splitlines()
 
+# Read long description from README
+readme_path = os.path.join(lib_folder, 'README.md')
+long_description = ''
+if os.path.isfile(readme_path):
+    with open(readme_path, encoding='utf-8') as f:
+        long_description = f.read()
+
 setup(
     name='pymsm',
-    packages=find_packages(','),
-    
-    # package_data={"":["DLRISOmodel/neutronMonitorData/*.dat","DLRISOmodel/neutronMonitorData/*.pkl"]},
-    # include_package_data=True,
     version='0.1.1',
     description='Python library for calculating the geomagnetic rigidity cutoff',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author='drflei',
+    author_email='',
+    url='https://github.com/drflei/PyMSM',
     license='LGPL',
+    packages=find_packages(exclude=['test', 'test.*']),
     install_requires=install_requires,
-    setup_requires=['pytest-runner'],
-    tests_require=['pytest'],
-    test_suite='test',
+    python_requires='>=3.6',
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Topic :: Scientific/Engineering :: Physics',
+    ],
+    keywords='geomagnetic rigidity cutoff magnetosphere space physics',
+    project_urls={
+        'Source': 'https://github.com/drflei/PyMSM',
+        'Bug Reports': 'https://github.com/drflei/PyMSM/issues',
+    },
 )
