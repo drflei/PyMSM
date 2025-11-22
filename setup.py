@@ -27,8 +27,10 @@ setup(
     author_email='',
     url='https://github.com/drflei/PyMSM',
     license='LGPL',
-    packages=find_packages(exclude=['test', 'test.*']),
+    py_modules=['pymsm'],
+    package_data={'': ['MAPS/**/*.AVG']},
     install_requires=install_requires,
+    include_package_data=True,
     python_requires='>=3.6',
     classifiers=[
         'Development Status :: 3 - Alpha',
