@@ -187,7 +187,7 @@ class PyMSM:
                 lm1 = np.abs(self.model.make_lstar_output['Lm'])
                 rc1 = self.getRC450km(mkey, self.lla['x2'][i], self.lla['x3'][i], lm1)
                 lm = lm * w + (1. - w) * lm1
-                rc = rc * w + (1. - w) * rc1 Now apply altitude interpolation
+                rc = rc * w + (1. - w) * rc1  # Now apply altitude interpolation
             lmr = self.lm[i]  # For real time and altitude
             rcr = rc * (lm / lmr)**2  # Scaled by LM^2
             
