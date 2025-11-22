@@ -1,19 +1,26 @@
 # IRBEM version of PyMSM
-## Instroduction
+## Introduction
 Please see the technical report for a description of the model and all the technical details
 [Technical Report](https://github.com/drflei/PyMSM/blob/irbem/MSM%20Technical%20Report.pdf)
 ## Installation:
 
-Easy one step installation using `pip`:
+### Quick Installation (Recommended)
 
-~~`pip install --upgrade https://github.com/drflei/PyMSM/tarball/irbem`~~
+Install directly from GitHub using pip:
 
-The above is not working properly. Has to be done in mutiple steps:
+```bash
+pip install git+https://github.com/drflei/PyMSM.git@irbem
 ```
-$ git clone --recurse-submodules https://github.com/drflei/PyMSM.git
-$ cd PyMSM
-$ ./scripts/update_maps.sh
-$ pip install -r requirements.txt -e ./
+
+### Development Installation
+
+For development or to get the latest code:
+
+```bash
+git clone --recurse-submodules https://github.com/drflei/PyMSM.git
+cd PyMSM
+./scripts/update_maps.sh
+pip install -r requirements.txt -e ./
 ```
 
 ==Note 1:== This version of PyMSM uses the IRBEM package and it must have been installed separately already. See [https://github.com/PRBEM/IRBEM/tree/main/python](https://github.com/PRBEM/IRBEM/tree/main/python). However, a forked version of IRBEM which has the TS89 model extended to Kp> 6 is best to be used together with PyMSM [https://github.com/drflei/IRBEM/tree/ts89c-ext/python](https://github.com/drflei/IRBEM/tree/ts89c-ext/python) 
