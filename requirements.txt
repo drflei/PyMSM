@@ -1,0 +1,5 @@
+matplotlib
+numpy
+python_dateutil
+scipy
+setuptools
