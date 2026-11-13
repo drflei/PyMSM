@@ -29,6 +29,11 @@ pip install -r requirements.txt -e ./
 ## Usage:
 PyMSM should be imported and instanciated from another python code, e.g.:
 
+PyMSM uses IRBEM's Kp-based Dst estimate for the T89c Boberg model; it does not
+accept measured Dst as an input.
+Map values are linearly interpolated in time between five-year epochs from 1955
+through 2025; dates outside that range use the nearest endpoint map.
+
 ```
 ...    
 
@@ -59,14 +64,42 @@ import pymsm as pm
 
 ```
 
-## Tests:
+## Tests
 
-There is a build-in test folder, and the main test is the testpymsm.py which can executed directly: 
+Run these commands from the repository root, with PyMSM installed, the `MAPS`
+submodule initialized (`git submodule update --init -- MAPS`), and an IRBEM
+library that supports `kext=15` installed. The automated tests also require
+`pytest`, which is not included in `requirements.txt`.
 
-` $> python testpymsm.py ` 
+### Automated tests
 
-testpymsm.py uses the plotting utilities from plotools.py to display the various results. 
+```bash
+python -m pytest -q test/test_boberg_missing_dst.py \
+  test/test_epoch_interpolation.py test/test_kp_cutoff.py
+```
 
-The other script testglobalmap.py produces the vertical cut-off rigidity map at 36000km altitude: 
+For a headless environment, prefix the command with `MPLBACKEND=Agg`.
 
-` $> python testglobalmap.py ` 
+- `test/test_boberg_missing_dst.py`: checks low and high Kp, mixed-Kp
+  inputs, and the Boberg model's Kp-based estimate when Dst is missing.
+- `test/test_epoch_interpolation.py`: checks map-epoch interpolation at
+  endpoints, between epochs, across leap years, and outside the map range.
+- `test/test_kp_cutoff.py`: calculates and plots vertical cutoff rigidity for
+  Kp 0–9 at 50° N, 0° E, 400 km on 2020-01-01 00:00 UT; it also checks
+  individual versus batch calculations and PNG output.
+
+### Plotting scripts
+
+```bash
+python test/testpymsm.py
+python test/testglobalmap.py
+python test/test_kp_cutoff.py [output.png]
+```
+
+- `testpymsm.py` plots sample maps and an orbit trajectory's cutoff, magnetic
+  parameters, shadowing factor, and transmission functions. Its Basemap plot
+  requires the separately installed `basemap` package.
+- `testglobalmap.py` plots a global vertical cutoff map at 36,000 km for
+  2015-01-01 12:00 UT and Kp 2.
+- `test_kp_cutoff.py` prints the Kp sweep and saves its plot to the specified
+  path, or to `kp_cutoff_2020.png` in the current directory by default.
