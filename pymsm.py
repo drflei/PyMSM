@@ -98,7 +98,7 @@ class PyMSM:
         for tm in times:
             t.append(datetime.datetime.fromisoformat(tm))
         self.times = t
-        self.model = MagFields(options=[0, 30, 0, 0, 0], kext=4, verbose=False)
+        self.model = MagFields(options=[0, 30, 0, 0, 0], kext=15, verbose=False)
         # Positions are in GDZ
         self.coords = Coords().coords_transform(times, positions, 'GDZ', 'RLL')
         self.radius = self.coords[:, 0]
