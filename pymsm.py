@@ -98,7 +98,7 @@ class PyMSM:
         for tm in times:
             t.append(datetime.datetime.fromisoformat(tm))
         self.times = t
-        self.model = MagFields(options=[0, 30, 0, 0, 0], kext=4, verbose=False)
+        self.model = MagFields(options=[0, 30, 0, 0, 0], kext=15, verbose=False)
         # Positions are in GDZ
         self.coords = Coords().coords_transform(times, positions, 'GDZ', 'RLL')
         self.radius = self.coords[:, 0]
@@ -108,7 +108,7 @@ class PyMSM:
         self.lla['x2'] = self.coords[:, 1]
         self.lla['x3'] = self.coords[:, 2]
         self.lla['dateTime'] = self.times
-        self.maginput = {'Kp': kps * 10.}
+        self.maginput = {'Kp': kps * 10., 'Dst': np.full_like(kps, -1e31, dtype=float)}
         self.model.make_lstar(self.lla, self.maginput)
         # The (B, L) for the input times and positions
         self.lm = np.abs(self.model.make_lstar_output['Lm'])
@@ -155,7 +155,6 @@ class PyMSM:
             if year > 2025:
                 year = 2025
             iy = int((year - 1955) / 5)
-            ir = (year - 1955) % 5
             cyear = self.cyears[iy]
             iu = int((t_utc[i].hour + t_utc[i].minute / 60. + 1.5) / 3.)
             # UT=1 corresponds to ut: 1.5 - 4.5 hrs
@@ -170,14 +169,22 @@ class PyMSM:
             local['x2'] = self.lla['x2'][i]
             local['x3'] = self.lla['x3'][i]
             local['dateTime'] = datetime.datetime(int(cyear), 1, 1, int(cut)).isoformat()
-            maginput = {'Kp': self.maginput['Kp'][i]}
+            maginput = {key: values[i] for key, values in self.maginput.items()}
             self.model.make_lstar(local, maginput)
             lm = np.abs(self.model.make_lstar_output['Lm'])
             rc = self.getRC450km(mkey, self.lla['x2'][i], self.lla['x3'][i], lm)
             
-            w = (ir + (t_utc[i].timetuple().tm_yday + (t_utc[i].hour + t_utc[i].minute / 60.) / 24.) / 365.) / 5.
             # The next map at +5 years if required
-            if 1955 < year < 2025 and w < 1.:
+            if 1955 <= t_utc[i].year < 2025:
+                epoch = t_utc[i].replace(
+                    year=int(cyear), month=1, day=1, hour=0, minute=0,
+                    second=0, microsecond=0,
+                )
+                next_epoch = epoch.replace(year=epoch.year + 5)
+                w = (t_utc[i] - epoch) / (next_epoch - epoch)
+            else:
+                w = 0.
+            if w > 0.:
                 cyear = self.cyears[iy + 1]
                 self.dbMgr.getMap(cyear, ckp, cut)
                 mkey = cyear + ckp + cut
@@ -186,8 +193,8 @@ class PyMSM:
                 self.model.make_lstar(local, maginput)
                 lm1 = np.abs(self.model.make_lstar_output['Lm'])
                 rc1 = self.getRC450km(mkey, self.lla['x2'][i], self.lla['x3'][i], lm1)
-                lm = lm * w + (1. - w) * lm1
-                rc = rc * w + (1. - w) * rc1  # Now apply altitude interpolation
+                lm = (1. - w) * lm + w * lm1
+                rc = (1. - w) * rc + w * rc1
             lmr = self.lm[i]  # For real time and altitude
             rcr = rc * (lm / lmr)**2  # Scaled by LM^2
             
